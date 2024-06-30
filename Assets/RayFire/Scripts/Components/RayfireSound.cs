@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace RayFire
@@ -72,7 +72,7 @@ namespace RayFire
                 meshRenderer = GetComponent<MeshRenderer>();
             
             // Checks
-            WarningCheck();
+            // WarningCheck();
         }
 
         /// /////////////////////////////////////////////////////////
