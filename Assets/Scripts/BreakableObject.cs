@@ -8,7 +8,7 @@ public class BreakableObject : MonoBehaviour
     private RayfireBomb rayfireBomb;
     private RayfireSound rayfireSound;
 
-    void Start()
+    private void Start()
     {
         // RayfireRigid 컴포넌트 가져오기
         rayfireRigid = GetComponent<RayfireRigid>();
@@ -33,7 +33,7 @@ public class BreakableObject : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -45,7 +45,7 @@ public class BreakableObject : MonoBehaviour
         }
     }
 
-    void BreakObject()
+    private void BreakObject()
     {
         if (rayfireRigid != null)
         {
@@ -59,7 +59,7 @@ public class BreakableObject : MonoBehaviour
         // RayfireSound는 자동으로 재생됩니다.
     }
 
-    void AddComponentsToFragments(RayfireRigid[] fragments)
+    private void AddComponentsToFragments(RayfireRigid[] fragments)
     {
         foreach (RayfireRigid fragment in fragments)
         {
@@ -113,9 +113,9 @@ public class BreakableObject : MonoBehaviour
                 // RayfireSound 설정을 복사합니다.
 
                 // 명시적으로 RayfireSound 컴포넌트 활성화
-                
+
                 fragmentSound.enabled = true;
-                
+
 
                 // fragmentSound.enabled = rayfireSound.enabled;
                 // fragmentSound.initialization = rayfireSound.initialization;
@@ -123,6 +123,19 @@ public class BreakableObject : MonoBehaviour
                 fragmentSound.collision = rayfireSound.collision;
                 // 필요한 경우 추가 속성도 복사할 수 있습니다.
             }
+
         }
+    }
+
+    private T CopyComponent<T>(T original, GameObject destination) where T : Component
+    {
+        System.Type type = original.GetType();
+        Component copy = destination.AddComponent(type);
+        System.Reflection.FieldInfo[] fields = type.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        foreach (System.Reflection.FieldInfo field in fields)
+        {
+            field.SetValue(copy, field.GetValue(original));
+        }
+        return copy as T;
     }
 }
