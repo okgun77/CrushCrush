@@ -7,6 +7,7 @@ public class BreakableObject : MonoBehaviour
     private RayfireRigid rayfireRigid;
     private RayfireBomb rayfireBomb;
     private RayfireSound rayfireSound;
+    [SerializeField] private SlowMotionTrigger slowMotionTrigger; // SlowMotionTrigger 참조
 
     private void Start()
     {
@@ -30,6 +31,12 @@ public class BreakableObject : MonoBehaviour
         if (rayfireSound == null)
         {
             Debug.LogWarning("RayfireSound 컴포넌트가 없습니다!");
+        }
+
+        // SlowMotionTrigger 컴포넌트 가져오기
+        if (slowMotionTrigger == null)
+        {
+            slowMotionTrigger = GetComponent<SlowMotionTrigger>();
         }
     }
 
@@ -56,7 +63,9 @@ public class BreakableObject : MonoBehaviour
         {
             rayfireBomb.Explode(0f);  // 지연 없이 즉시 폭발하도록 0f 설정
         }
-        // RayfireSound는 자동으로 재생됩니다.
+
+        // 슬로우모션 트리거
+        slowMotionTrigger?.TriggerSlowMotion();
     }
 
     private void AddComponentsToFragments(RayfireRigid[] fragments)
@@ -112,18 +121,11 @@ public class BreakableObject : MonoBehaviour
                 fragmentSound = fragment.gameObject.AddComponent<RayfireSound>();
                 // RayfireSound 설정을 복사합니다.
 
-                // 명시적으로 RayfireSound 컴포넌트 활성화
-
                 fragmentSound.enabled = true;
-
-
-                // fragmentSound.enabled = rayfireSound.enabled;
-                // fragmentSound.initialization = rayfireSound.initialization;
                 fragmentSound.demolition = rayfireSound.demolition;
                 fragmentSound.collision = rayfireSound.collision;
                 // 필요한 경우 추가 속성도 복사할 수 있습니다.
             }
-
         }
     }
 
