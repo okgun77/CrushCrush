@@ -1,50 +1,70 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SlowMotionManager : MonoBehaviour
 {
-    [SerializeField] private float slowMotionScale = 0.2f; // 슬로우모션 상태에서의 타임스케일
-    [SerializeField] private float normalTimeScale = 1.0f; // 일반 상태에서의 타임스케일
-    [SerializeField] private float transitionSpeed = 2.0f; // 타임스케일 전환 속도
+    [SerializeField] private KeyCode activateSlowMotionKey = KeyCode.F; // �로�모�을 �성�하
+    [SerializeField] private KeyCode deactivateSlowMotionKey = KeyCode.D; // �로�모�을 비활�화�는 
+    [SerializeField] private float slowMotionScale = 0.2f; // �로�모�태�서��스케
+    [SerializeField] private float normalTimeScale = 1.0f; // �반 �태�서��스케
+    [SerializeField] private float transitionSpeed = 2.0f; // ��스케�환 �도
 
-    public UIManager uiManager; // UIManager 참조
-    private List<ISlowMotion> slowMotionObjects = new List<ISlowMotion>();
+    private bool isSlowMotionActive = false; // �로�모�태�추적�는 변
+    private UIManager uiManager; // UIManager 참조
+
+    private void Start()
+    {
+        // UIManager 컴포�트 가�오�
+        uiManager = FindObjectOfType<UIManager>();
+        if (uiManager == null)
+        {
+            Debug.LogError("UIManager�찾을 �습�다!");
+        }
+    }
 
     private void Update()
     {
-        float targetTimeScale = normalTimeScale;
-
-        foreach (var obj in slowMotionObjects)
+        if (Input.GetKeyDown(activateSlowMotionKey))
         {
-            if (obj.IsSlowMotionActive)
-            {
-                targetTimeScale = slowMotionScale;
-                break;
-            }
+            ActivateSlowMotion();
+        }
+        else if (Input.GetKeyDown(deactivateSlowMotionKey))
+        {
+            DeactivateSlowMotion();
         }
 
+        float targetTimeScale = isSlowMotionActive ? slowMotionScale : normalTimeScale;
         Time.timeScale = Mathf.Lerp(Time.timeScale, targetTimeScale, Time.deltaTime * transitionSpeed);
 
-        // 타임스케일 변경에 따라 고정 델타 타임도 조정
+        // ��스케변경에 �라 고정 �� ��도 조정
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
 
-        // UIManager에 타임스케일 업데이트 요청
+        // UIManager��스케�데�트 �청
         uiManager?.UpdateTimeScaleText(Time.timeScale);
     }
 
-    public void RegisterSlowMotionObject(ISlowMotion obj)
+    public void ToggleSlowMotion()
     {
-        if (!slowMotionObjects.Contains(obj))
+        if (isSlowMotionActive)
         {
-            slowMotionObjects.Add(obj);
+            DeactivateSlowMotion();
+        }
+        else
+        {
+            ActivateSlowMotion();
         }
     }
 
-    public void UnregisterSlowMotionObject(ISlowMotion obj)
+    private void ActivateSlowMotion()
     {
-        if (slowMotionObjects.Contains(obj))
-        {
-            slowMotionObjects.Remove(obj);
-        }
+        isSlowMotionActive = true;
+        uiManager?.ShowSlowMotionPanel(); // �로�모�널 �성
+    }
+
+    private void DeactivateSlowMotion()
+    {
+        isSlowMotionActive = false;
+        uiManager?.HideSlowMotionPanel(); // �로�모�널 비활�화
     }
 }

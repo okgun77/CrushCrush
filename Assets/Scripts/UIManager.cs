@@ -5,6 +5,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject slowMotionPanel; // 슬로우모션 패널
     [SerializeField] private TextMeshProUGUI timeScaleText; // 타임스케일을 표시할 TextMeshPro 텍스트
+    [SerializeField] private GameManager gameManager; // GameManager 참조
 
     public void ShowSlowMotionPanel()
     {
