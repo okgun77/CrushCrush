@@ -7,7 +7,6 @@ public class BreakableObject : MonoBehaviour
     private RayfireRigid rayfireRigid;
     private RayfireBomb rayfireBomb;
     private RayfireSound rayfireSound;
-    [SerializeField] private SlowMotionTrigger slowMotionTrigger; // SlowMotionTrigger 참조
 
     private void Start()
     {
@@ -33,11 +32,7 @@ public class BreakableObject : MonoBehaviour
             Debug.LogWarning("RayfireSound 컴포넌트가 없습니다!");
         }
 
-        // SlowMotionTrigger 컴포넌트 가져오기
-        if (slowMotionTrigger == null)
-        {
-            slowMotionTrigger = GetComponent<SlowMotionTrigger>();
-        }
+
     }
 
     private void Update()
@@ -64,8 +59,6 @@ public class BreakableObject : MonoBehaviour
             rayfireBomb.Explode(0f);  // 지연 없이 즉시 폭발하도록 0f 설정
         }
 
-        // 슬로우모션 트리거
-        slowMotionTrigger?.TriggerSlowMotion();
     }
 
     private void AddComponentsToFragments(RayfireRigid[] fragments)
