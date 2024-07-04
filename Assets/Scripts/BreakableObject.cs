@@ -7,6 +7,10 @@ public class BreakableObject : MonoBehaviour
     private RayfireRigid rayfireRigid;
     private RayfireBomb rayfireBomb;
     private RayfireSound rayfireSound;
+    private MoveToTargetPoint moveScript;
+
+    // 추가 속도 설정
+    [SerializeField] private float additionalSpeedMultiplier = 2.0f;
 
     private void Start()
     {
@@ -32,7 +36,8 @@ public class BreakableObject : MonoBehaviour
             Debug.LogWarning("RayfireSound 컴포넌트가 없습니다!");
         }
 
-
+        // MoveToTargetPoint 컴포넌트 가져오기
+        moveScript = GetComponent<MoveToTargetPoint>();
     }
 
     private void Update()
@@ -51,17 +56,25 @@ public class BreakableObject : MonoBehaviour
     {
         if (rayfireRigid != null)
         {
+            // 현재 속도 가져오기
+            Vector3 currentVelocity = Vector3.zero;
+            if (moveScript != null)
+            {
+                currentVelocity = moveScript.GetCurrentVelocity();
+                Destroy(moveScript); // 이동 스크립트 제거
+            }
+
+            // 파괴 및 파편에 속도 적용
             rayfireRigid.Demolish();
-            AddComponentsToFragments(rayfireRigid.fragments.ToArray());
+            AddComponentsToFragments(rayfireRigid.fragments.ToArray(), currentVelocity);
         }
         if (rayfireBomb != null)
         {
             rayfireBomb.Explode(0f);  // 지연 없이 즉시 폭발하도록 0f 설정
         }
-
     }
 
-    private void AddComponentsToFragments(RayfireRigid[] fragments)
+    private void AddComponentsToFragments(RayfireRigid[] fragments, Vector3 initialVelocity)
     {
         foreach (RayfireRigid fragment in fragments)
         {
@@ -112,12 +125,15 @@ public class BreakableObject : MonoBehaviour
             if (fragmentSound == null && rayfireSound != null)
             {
                 fragmentSound = fragment.gameObject.AddComponent<RayfireSound>();
-                // RayfireSound 설정을 복사합니다.
-
                 fragmentSound.enabled = true;
                 fragmentSound.demolition = rayfireSound.demolition;
                 fragmentSound.collision = rayfireSound.collision;
-                // 필요한 경우 추가 속성도 복사할 수 있습니다.
+            }
+
+            // 파편에 초기 속도 및 추가 속도 적용
+            if (rb != null)
+            {
+                rb.velocity = initialVelocity * additionalSpeedMultiplier;
             }
         }
     }
