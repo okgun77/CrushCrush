@@ -13,7 +13,7 @@ public class MoveToTargetPoint : MonoBehaviour
             // 타겟 포인트로 이동
             Vector3 direction = (targetPoint.position - transform.position).normalized;
             currentVelocity = direction * speed;
-            transform.Translate(currentVelocity * Time.deltaTime);
+            transform.Translate(currentVelocity * Time.deltaTime, Space.World);
         }
     }
 
