@@ -8,9 +8,11 @@ public class BreakableObject : MonoBehaviour
     private RayfireBomb rayfireBomb;
     private RayfireSound rayfireSound;
     private MoveToTargetPoint moveScript;
+    private ScoreManager scoreManager;
 
     // 추가 속도 설정
     [SerializeField] private float additionalSpeedMultiplier = 2.0f;
+    [SerializeField] private ScoreType scoreType; // 점수 타입
 
     private void Start()
     {
@@ -38,16 +40,42 @@ public class BreakableObject : MonoBehaviour
 
         // MoveToTargetPoint 컴포넌트 가져오기
         moveScript = GetComponent<MoveToTargetPoint>();
+
+        // ScoreManager 컴포넌트 가져오기
+        scoreManager = FindObjectOfType<ScoreManager>();
+        if (scoreManager == null)
+        {
+            Debug.LogError("ScoreManager를 찾을 수 없습니다!");
+            return;
+        }
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
+            if (Input.touchCount > 0)
             {
-                BreakObject();
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                    if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
+                    {
+                        BreakObject();
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
+                {
+                    BreakObject();
+                }
             }
         }
     }
@@ -61,7 +89,7 @@ public class BreakableObject : MonoBehaviour
             if (moveScript != null)
             {
                 currentVelocity = moveScript.GetCurrentVelocity();
-                // 이동 스크립트를 제거하지 않음
+                Destroy(moveScript); // 이동 스크립트 제거
             }
 
             // 파괴 및 파편에 속도 적용
@@ -72,16 +100,20 @@ public class BreakableObject : MonoBehaviour
         {
             rayfireBomb.Explode(0f);  // 지연 없이 즉시 폭발하도록 0f 설정
         }
+
+        // 점수 추가
+        scoreManager.AddScore(scoreType);
     }
 
     private void AddComponentsToFragments(RayfireRigid[] fragments, Vector3 initialVelocity)
     {
         foreach (RayfireRigid fragment in fragments)
         {
-            if (fragment.gameObject.GetComponent<BreakableObject>() == null)
-            {
-                fragment.gameObject.AddComponent<BreakableObject>();
-            }
+            //if (fragment.gameObject.GetComponent<BreakableObject>() == null)
+            //{
+            //    var fragmentScript = fragment.gameObject.AddComponent<BreakableObject>();
+            //    fragmentScript.scoreType = this.scoreType; // 점수 타입 설정
+            //}
 
             Rigidbody rb = fragment.GetComponent<Rigidbody>();
             if (rb == null)
@@ -134,6 +166,34 @@ public class BreakableObject : MonoBehaviour
             if (rb != null)
             {
                 rb.velocity = initialVelocity * additionalSpeedMultiplier;
+            }
+
+            // 파편의 알파 값 적용
+            Renderer renderer = fragment.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                foreach (var mat in renderer.materials)
+                {
+                    if (mat.HasProperty("_Color"))
+                    {
+                        mat.SetFloat("_Surface", 1); // Transparent
+                        mat.SetFloat("_Blend", 1); // Alpha Blend
+                        Color color = mat.color;
+                        color.a = 0.1f; // 알파 값 조정
+                        mat.color = color;
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                        mat.SetInt("_ZWrite", 0);
+                        mat.DisableKeyword("_ALPHATEST_ON");
+                        mat.EnableKeyword("_ALPHABLEND_ON");
+                        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                        mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    }
+                    else if (mat.HasProperty("_Alpha"))
+                    {
+                        mat.SetFloat("_Alpha", 0.1f); // 알파 값 조정
+                    }
+                }
             }
         }
     }

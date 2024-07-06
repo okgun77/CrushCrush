@@ -464,6 +464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   additionalSpeedMultiplier: 0.5
+  scoreType: 1
 --- !u!114 &5137773125884181020
 MonoBehaviour:
   m_ObjectHideFlags: 0

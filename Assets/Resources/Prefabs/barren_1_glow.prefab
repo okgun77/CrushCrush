@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 6953618736210351259}
   - component: {fileID: 1929254668422751010}
   - component: {fileID: 6431167000938724015}
+  - component: {fileID: 8789665396930372443}
   - component: {fileID: 7850308143884748837}
   m_Layer: 0
   m_Name: barren_1_glow
@@ -216,7 +217,7 @@ MonoBehaviour:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
   meshDemolition:
-    am: 30
+    am: 7
     var: 0
     dpf: 0.5
     bias: 0
@@ -481,6 +482,19 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
+--- !u!114 &8789665396930372443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5933090456765201557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d61a1296a1b9dc42864ad1954a129d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: {x: 50, y: 50, z: 50}
 --- !u!114 &7850308143884748837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,4 +507,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6257eeea04c3bb44b4c06f71d1fced9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  additionalSpeedMultiplier: 2
+  additionalSpeedMultiplier: 0.5
+  scoreType: 0

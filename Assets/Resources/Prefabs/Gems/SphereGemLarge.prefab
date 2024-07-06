@@ -146,7 +146,7 @@ MonoBehaviour:
   objectType: 0
   demolitionType: 1
   physics:
-    mt: 2
+    mt: 6
     material: {fileID: 0}
     massBy: 0
     mass: 1
@@ -468,6 +468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   additionalSpeedMultiplier: 0.5
+  scoreType: 0
 --- !u!114 &-3744164349521599491
 MonoBehaviour:
   m_ObjectHideFlags: 0
