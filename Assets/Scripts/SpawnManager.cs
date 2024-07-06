@@ -1,10 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class SpawnObject
 {
     public GameObject prefab;
-    public float spawnRate; // 스폰 확률
 }
 
 public class SpawnManager : MonoBehaviour
@@ -16,28 +16,27 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float spawnInterval = 2.0f; // 스폰 간격
 
     private int lastSpawnPointIndex = -1; // 마지막 스폰 포인트 인덱스
-    private float totalSpawnRate; // 총 스폰 확률
+    private List<int> availableIndexes = new List<int>(); // 사용 가능한 인덱스 리스트
 
     private void Start()
     {
-        CalculateTotalSpawnRate();
+        InitializeIndexes();
         InvokeRepeating(nameof(SpawnObject), 0f, spawnInterval);
     }
 
-    private void CalculateTotalSpawnRate()
+    private void InitializeIndexes()
     {
-        totalSpawnRate = 0f;
-        foreach (var spawnObject in spawnObjects)
+        for (int i = 0; i < spawnObjects.Length; i++)
         {
-            totalSpawnRate += spawnObject.spawnRate;
+            availableIndexes.Add(i);
         }
     }
 
     private void SpawnObject()
     {
-        if (spawnPoints.Length == 0)
+        if (spawnPoints.Length == 0 || spawnObjects.Length == 0)
         {
-            Debug.LogWarning("Spawn points are not set!");
+            Debug.LogWarning("Spawn points or spawn objects are not set!");
             return;
         }
 
@@ -68,17 +67,15 @@ public class SpawnManager : MonoBehaviour
 
     private GameObject GetRandomObject()
     {
-        float randomPoint = Random.value * totalSpawnRate;
-        float cumulativeRate = 0f;
-
-        foreach (var spawnObject in spawnObjects)
+        if (availableIndexes.Count == 0)
         {
-            cumulativeRate += spawnObject.spawnRate;
-            if (randomPoint <= cumulativeRate)
-            {
-                return spawnObject.prefab;
-            }
+            InitializeIndexes(); // 모든 인덱스를 사용했으면 다시 초기화
         }
-        return null;
+
+        int randomIndex = Random.Range(0, availableIndexes.Count);
+        int objectIndex = availableIndexes[randomIndex];
+        availableIndexes.RemoveAt(randomIndex); // 선택된 인덱스를 리스트에서 제거
+
+        return spawnObjects[objectIndex].prefab;
     }
 }
