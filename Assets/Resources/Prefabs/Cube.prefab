@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPoint: {fileID: 0}
-  speed: 10
+  speed: 5
 --- !u!114 &573538883658728311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,11 +142,11 @@ MonoBehaviour:
   objectType: 0
   demolitionType: 1
   physics:
-    mt: 2
+    mt: 3
     material: {fileID: 0}
     massBy: 0
     mass: 1
-    ct: 0
+    ct: 1
     pc: 1
     ine: 0
     gr: 0
@@ -178,7 +178,7 @@ MonoBehaviour:
     sol: 0.1
     tag: Untagged
     depth: 1
-    time: 0.2
+    time: 0.1
     size: 0.1
     vis: 0
     bld: 0
@@ -186,7 +186,7 @@ MonoBehaviour:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
   meshDemolition:
-    am: 30
+    am: 7
     var: 0
     dpf: 0.5
     bias: 0
@@ -463,7 +463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6257eeea04c3bb44b4c06f71d1fced9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  additionalSpeedMultiplier: 1
+  additionalSpeedMultiplier: 0.5
 --- !u!114 &5137773125884181020
 MonoBehaviour:
   m_ObjectHideFlags: 0

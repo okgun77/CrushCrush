@@ -61,7 +61,7 @@ public class BreakableObject : MonoBehaviour
             if (moveScript != null)
             {
                 currentVelocity = moveScript.GetCurrentVelocity();
-                Destroy(moveScript); // 이동 스크립트 제거
+                // 이동 스크립트를 제거하지 않음
             }
 
             // 파괴 및 파편에 속도 적용
@@ -136,17 +136,5 @@ public class BreakableObject : MonoBehaviour
                 rb.velocity = initialVelocity * additionalSpeedMultiplier;
             }
         }
-    }
-
-    private T CopyComponent<T>(T original, GameObject destination) where T : Component
-    {
-        System.Type type = original.GetType();
-        Component copy = destination.AddComponent(type);
-        System.Reflection.FieldInfo[] fields = type.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        foreach (System.Reflection.FieldInfo field in fields)
-        {
-            field.SetValue(copy, field.GetValue(original));
-        }
-        return copy as T;
     }
 }
