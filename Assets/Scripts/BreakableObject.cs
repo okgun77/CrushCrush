@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RayFire;
@@ -10,9 +11,8 @@ public class BreakableObject : MonoBehaviour
     private MoveToTargetPoint moveScript;
     private ScoreManager scoreManager;
 
-    // 추가 속도 설정
     [SerializeField] private float additionalSpeedMultiplier = 2.0f;
-    [SerializeField] private ScoreType scoreType; // 점수 타입
+    [SerializeField] private ScoreType scoreType;
 
     private void Start()
     {
@@ -52,6 +52,14 @@ public class BreakableObject : MonoBehaviour
 
     private void Update()
     {
+        ScreenTouch();
+    }
+
+    private void ScreenTouch()
+    {
+        bool inputDetected = false;
+        Vector3 inputPosition = Vector3.zero;
+
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
             if (Input.touchCount > 0)
@@ -59,11 +67,8 @@ public class BreakableObject : MonoBehaviour
                 Touch touch = Input.GetTouch(0);
                 if (touch.phase == TouchPhase.Began)
                 {
-                    Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                    if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
-                    {
-                        BreakObject();
-                    }
+                    inputDetected = true;
+                    inputPosition = touch.position;
                 }
             }
         }
@@ -71,11 +76,17 @@ public class BreakableObject : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
-                {
-                    BreakObject();
-                }
+                inputDetected = true;
+                inputPosition = Input.mousePosition;
+            }
+        }
+
+        if (inputDetected)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(inputPosition);
+            if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
+            {
+                BreakObject();
             }
         }
     }
@@ -92,107 +103,112 @@ public class BreakableObject : MonoBehaviour
                 Destroy(moveScript); // 이동 스크립트 제거
             }
 
-            // 파괴 및 파편에 속도 적용
+            // 오브젝트 파괴 및 파편 처리
             rayfireRigid.Demolish();
-            AddComponentsToFragments(rayfireRigid.fragments.ToArray(), currentVelocity);
+            foreach (RayfireRigid fragment in rayfireRigid.fragments)
+            {
+                SetFragmentProperties(fragment, currentVelocity);
+                InitializeFragment(fragment);
+            }
         }
+
         if (rayfireBomb != null)
         {
-            rayfireBomb.Explode(0f);  // 지연 없이 즉시 폭발하도록 0f 설정
+            rayfireBomb.Explode(0f); // 지연 없이 즉시 폭발
         }
 
         // 점수 추가
         scoreManager.AddScore(scoreType);
     }
 
-    private void AddComponentsToFragments(RayfireRigid[] fragments, Vector3 initialVelocity)
+    private void InitializeFragment(RayfireRigid fragment)
     {
-        foreach (RayfireRigid fragment in fragments)
+        if (fragment.gameObject.GetComponent<BreakableObject>() == null)
         {
-            //if (fragment.gameObject.GetComponent<BreakableObject>() == null)
-            //{
-            //    var fragmentScript = fragment.gameObject.AddComponent<BreakableObject>();
-            //    fragmentScript.scoreType = this.scoreType; // 점수 타입 설정
-            //}
+            var fragmentScript = fragment.gameObject.AddComponent<BreakableObject>();
+            fragmentScript.scoreType = this.scoreType;
+        }
 
-            Rigidbody rb = fragment.GetComponent<Rigidbody>();
-            if (rb == null)
+        Rigidbody rb = fragment.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = fragment.gameObject.AddComponent<Rigidbody>();
+        }
+
+        Collider col = fragment.GetComponent<Collider>();
+        if (col == null)
+        {
+            try
             {
-                rb = fragment.gameObject.AddComponent<Rigidbody>();
+                col = fragment.gameObject.AddComponent<MeshCollider>();
+                (col as MeshCollider).convex = true;
             }
-
-            Collider col = fragment.GetComponent<Collider>();
-            if (col == null)
+            catch
             {
-                try
+                Destroy(col);
+                col = fragment.gameObject.AddComponent<SphereCollider>();
+            }
+        }
+
+        RayfireRigid fragmentRigid = fragment.GetComponent<RayfireRigid>();
+        if (fragmentRigid == null)
+        {
+            fragmentRigid = fragment.gameObject.AddComponent<RayfireRigid>();
+            fragmentRigid.demolitionType = DemolitionType.Runtime;
+        }
+
+        RayfireBomb fragmentBomb = fragment.GetComponent<RayfireBomb>();
+        if (fragmentBomb == null && rayfireBomb != null)
+        {
+            fragmentBomb = fragment.gameObject.AddComponent<RayfireBomb>();
+            fragmentBomb.range = rayfireBomb.range;
+            fragmentBomb.strength = rayfireBomb.strength;
+            fragmentBomb.variation = rayfireBomb.variation;
+            fragmentBomb.chaos = rayfireBomb.chaos;
+        }
+
+        RayfireSound fragmentSound = fragment.GetComponent<RayfireSound>();
+        if (fragmentSound == null && rayfireSound != null)
+        {
+            fragmentSound = fragment.gameObject.AddComponent<RayfireSound>();
+            fragmentSound.enabled = true;
+            fragmentSound.demolition = rayfireSound.demolition;
+            fragmentSound.collision = rayfireSound.collision;
+        }
+    }
+
+    private void SetFragmentProperties(RayfireRigid fragment, Vector3 initialVelocity)
+    {
+        Rigidbody rb = fragment.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.velocity = initialVelocity * additionalSpeedMultiplier;
+        }
+
+        // 파편의 알파 값 적용
+        Renderer renderer = fragment.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            foreach (var mat in renderer.materials)
+            {
+                if (mat.HasProperty("_Color"))
                 {
-                    col = fragment.gameObject.AddComponent<MeshCollider>();
-                    (col as MeshCollider).convex = true;
+                    mat.SetFloat("_Surface", 1); // Transparent
+                    mat.SetFloat("_Blend", 1); // Alpha Blend
+                    Color color = mat.color;
+                    color.a = 0.1f; // 알파 값 조정
+                    mat.color = color;
+                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    mat.SetInt("_ZWrite", 0);
+                    mat.DisableKeyword("_ALPHATEST_ON");
+                    mat.EnableKeyword("_ALPHABLEND_ON");
+                    mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                 }
-                catch
+                else if (mat.HasProperty("_Alpha"))
                 {
-                    Destroy(col);
-                    col = fragment.gameObject.AddComponent<SphereCollider>();
-                }
-            }
-
-            RayfireRigid fragmentRigid = fragment.GetComponent<RayfireRigid>();
-            if (fragmentRigid == null)
-            {
-                fragmentRigid = fragment.gameObject.AddComponent<RayfireRigid>();
-                fragmentRigid.demolitionType = DemolitionType.Runtime;
-            }
-
-            RayfireBomb fragmentBomb = fragment.GetComponent<RayfireBomb>();
-            if (fragmentBomb == null && rayfireBomb != null)
-            {
-                fragmentBomb = fragment.gameObject.AddComponent<RayfireBomb>();
-                fragmentBomb.range = rayfireBomb.range;
-                fragmentBomb.strength = rayfireBomb.strength;
-                fragmentBomb.variation = rayfireBomb.variation;
-                fragmentBomb.chaos = rayfireBomb.chaos;
-            }
-
-            RayfireSound fragmentSound = fragment.GetComponent<RayfireSound>();
-            if (fragmentSound == null && rayfireSound != null)
-            {
-                fragmentSound = fragment.gameObject.AddComponent<RayfireSound>();
-                fragmentSound.enabled = true;
-                fragmentSound.demolition = rayfireSound.demolition;
-                fragmentSound.collision = rayfireSound.collision;
-            }
-
-            // 파편에 초기 속도 및 추가 속도 적용
-            if (rb != null)
-            {
-                rb.velocity = initialVelocity * additionalSpeedMultiplier;
-            }
-
-            // 파편의 알파 값 적용
-            Renderer renderer = fragment.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                foreach (var mat in renderer.materials)
-                {
-                    if (mat.HasProperty("_Color"))
-                    {
-                        mat.SetFloat("_Surface", 1); // Transparent
-                        mat.SetFloat("_Blend", 1); // Alpha Blend
-                        Color color = mat.color;
-                        color.a = 0.1f; // 알파 값 조정
-                        mat.color = color;
-                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                        mat.SetInt("_ZWrite", 0);
-                        mat.DisableKeyword("_ALPHATEST_ON");
-                        mat.EnableKeyword("_ALPHABLEND_ON");
-                        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                        mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-                    }
-                    else if (mat.HasProperty("_Alpha"))
-                    {
-                        mat.SetFloat("_Alpha", 0.1f); // 알파 값 조정
-                    }
+                    mat.SetFloat("_Alpha", 0.1f); // 알파 값 조정
                 }
             }
         }

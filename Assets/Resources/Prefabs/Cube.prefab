@@ -402,7 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseVolume: 1
-  sizeVolume: 0.2
+  sizeVolume: 1
   initialization:
     enable: 0
     once: 0
@@ -439,8 +439,8 @@ MonoBehaviour:
   collision:
     enable: 0
     once: 0
-    multiplier: 0.3
-    clip: {fileID: 8300000, guid: a6c002e1231cb23458bb2cf47b52ffae, type: 3}
+    multiplier: 1
+    clip: {fileID: 0}
     clips: []
     outputGroup: {fileID: 0}
     priority: 128
