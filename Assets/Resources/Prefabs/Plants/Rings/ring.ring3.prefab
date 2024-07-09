@@ -18,9 +18,9 @@ GameObject:
   - component: {fileID: 8423176994477539828}
   - component: {fileID: 3231986431348680227}
   - component: {fileID: 3725438383775254824}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ring.ring3
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4502542379364580347, guid: c4ab7848e99bf1f40bae812dffa2ca50, type: 3}
 --- !u!114 &-761063916607228128

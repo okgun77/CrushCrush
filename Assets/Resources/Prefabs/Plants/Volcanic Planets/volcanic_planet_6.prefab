@@ -18,9 +18,9 @@ GameObject:
   - component: {fileID: 4944750970100458205}
   - component: {fileID: -7450825917529637295}
   - component: {fileID: -5002003091135634951}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: volcanic_planet_6
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -452,6 +452,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   additionalSpeedMultiplier: 0.5
   scoreType: 1
+  touchLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &-7450825917529637295
 MonoBehaviour:
   m_ObjectHideFlags: 0

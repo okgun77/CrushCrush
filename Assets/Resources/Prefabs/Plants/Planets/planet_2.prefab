@@ -18,9 +18,9 @@ GameObject:
   - component: {fileID: -3372614567531344050}
   - component: {fileID: -6083004515059710857}
   - component: {fileID: -3344997685848546467}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: planet_2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -452,6 +452,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   additionalSpeedMultiplier: 0.5
   scoreType: 1
+  touchLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &-6083004515059710857
 MonoBehaviour:
   m_ObjectHideFlags: 0

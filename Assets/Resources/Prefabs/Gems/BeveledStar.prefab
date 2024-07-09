@@ -19,9 +19,9 @@ GameObject:
   - component: {fileID: 6055722739834016352}
   - component: {fileID: -3494140107816505923}
   - component: {fileID: -8024129608363864718}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BeveledStar
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -18,9 +18,9 @@ GameObject:
   - component: {fileID: 4696093785504469571}
   - component: {fileID: -5891537988240370028}
   - component: {fileID: 7740497008518854460}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: moon19
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -451,6 +451,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   additionalSpeedMultiplier: 0.5
   scoreType: 1
+  touchLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &-5891537988240370028
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -18,9 +18,9 @@ GameObject:
   - component: {fileID: 7313553698343529907}
   - component: {fileID: -80889662247613065}
   - component: {fileID: 974936485398631593}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Crystal_planet_1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -452,6 +452,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   additionalSpeedMultiplier: 0.5
   scoreType: 1
+  touchLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &-80889662247613065
 MonoBehaviour:
   m_ObjectHideFlags: 0

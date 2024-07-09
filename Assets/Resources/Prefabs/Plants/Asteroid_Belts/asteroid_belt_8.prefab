@@ -18,9 +18,9 @@ GameObject:
   - component: {fileID: 6161925888843393249}
   - component: {fileID: -5700243552089290588}
   - component: {fileID: 6382531123591346614}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: asteroid_belt_8
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

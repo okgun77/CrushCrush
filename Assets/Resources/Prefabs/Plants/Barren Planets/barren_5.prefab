@@ -18,9 +18,9 @@ GameObject:
   - component: {fileID: -6884624176942903470}
   - component: {fileID: 5696485677712798400}
   - component: {fileID: -1080362659712378881}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: barren_5
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -452,6 +452,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   additionalSpeedMultiplier: 0.5
   scoreType: 1
+  touchLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &5696485677712798400
 MonoBehaviour:
   m_ObjectHideFlags: 0

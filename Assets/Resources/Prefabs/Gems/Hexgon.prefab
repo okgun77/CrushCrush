@@ -19,9 +19,9 @@ GameObject:
   - component: {fileID: -6297206595664423212}
   - component: {fileID: 8138638669014735935}
   - component: {fileID: 6584495394868381671}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hexgon
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
