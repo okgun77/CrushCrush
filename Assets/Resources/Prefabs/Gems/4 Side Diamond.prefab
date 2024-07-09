@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4302508114246656330}
   m_Layer: 6
   m_Name: 4 Side Diamond
-  m_TagString: Enemy
+  m_TagString: BreakableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: -5439094285815984071}
   m_Layer: 6
   m_Name: HardStar
-  m_TagString: Enemy
+  m_TagString: BreakableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

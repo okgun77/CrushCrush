@@ -17,6 +17,7 @@ public class SpawnManager : MonoBehaviour
 
     private int lastSpawnPointIndex = -1; // 마지막 스폰 포인트 인덱스
     private List<int> availableIndexes = new List<int>(); // 사용 가능한 인덱스 리스트
+    private List<GameObject> spawnedObjects = new List<GameObject>(); // 스폰된 오브젝트 리스트
 
     public void Init()
     {
@@ -63,6 +64,16 @@ public class SpawnManager : MonoBehaviour
             moveScript = spawnedObject.AddComponent<MoveToTargetPoint>();
         }
         moveScript.SetTarget(targetPoint);
+
+        // 스폰된 오브젝트 리스트에 추가
+        spawnedObjects.Add(spawnedObject);
+    }
+
+    public List<GameObject> GetSpawnedObjects()
+    {
+        // 유효하지 않은 오브젝트를 리스트에서 제거
+        spawnedObjects.RemoveAll(obj => obj == null);
+        return spawnedObjects;
     }
 
     private GameObject GetRandomObject()

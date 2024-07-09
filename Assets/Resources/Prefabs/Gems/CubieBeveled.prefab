@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: -7731821987708996962}
   m_Layer: 6
   m_Name: CubieBeveled
-  m_TagString: Enemy
+  m_TagString: BreakableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
