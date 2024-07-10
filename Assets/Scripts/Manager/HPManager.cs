@@ -29,6 +29,9 @@ public class HPManager : MonoBehaviour
         }
         uiManager.UpdateHPUI(currentHP, maxHP);
 
+        // 데미지를 입을 때 HP 슬라이더를 깜빡이게 함
+        uiManager.BlinkHPSlider();
+
         if (currentHP == 0)
         {
             FindObjectOfType<GameManager>().GameOver();
