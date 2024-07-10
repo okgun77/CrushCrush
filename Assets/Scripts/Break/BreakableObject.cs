@@ -124,19 +124,20 @@ public class BreakableObject : MonoBehaviour
 
     private void AddScore()
     {
-        float multiplier = Mathf.Pow(0.5f, fragmentLevel); // 레벨에 따른 점수 배수 계산
-        int baseScore = scoreManager.GetScoreForScoreType(scoreType);
-        int calculatedScore = Mathf.CeilToInt(baseScore * multiplier);
+        int calculatedScore = scoreManager.CalculateScore(scoreType, fragmentLevel);
         scoreManager.AddScore(calculatedScore);
     }
 
     private void InitFragment(RayfireRigid fragment)
     {
-        if (fragment.gameObject.GetComponent<BreakableObject>() == null)
+        if (fragmentLevel < scoreManager.GetMaxFragmentLevel())
         {
-            var fragmentScript = fragment.gameObject.AddComponent<BreakableObject>();
-            fragmentScript.scoreType = this.scoreType;
-            fragmentScript.fragmentLevel = this.fragmentLevel + 1; // 파편 레벨 증가
+            if (fragment.gameObject.GetComponent<BreakableObject>() == null)
+            {
+                var fragmentScript = fragment.gameObject.AddComponent<BreakableObject>();
+                fragmentScript.scoreType = this.scoreType;
+                fragmentScript.fragmentLevel = this.fragmentLevel + 1; // 파편 레벨 증가
+            }
         }
 
         Rigidbody rb = fragment.GetComponent<Rigidbody>();

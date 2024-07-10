@@ -2794,6 +2794,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1410890764}
+  maxFragmentLevel: 5
 --- !u!4 &1674844819
 Transform:
   m_ObjectHideFlags: 0
