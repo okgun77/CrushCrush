@@ -13,6 +13,7 @@ public class BreakableObject : MonoBehaviour
 
     [SerializeField] private float additionalSpeedMultiplier = 2.0f;
     [SerializeField] private ScoreType scoreType;
+    [SerializeField] private int fragmentLevel = 0; // 파편 레벨 (0은 원래 오브젝트)
 
     private void Start()
     {
@@ -108,7 +109,7 @@ public class BreakableObject : MonoBehaviour
             foreach (RayfireRigid fragment in rayfireRigid.fragments)
             {
                 SetFragmentProperties(fragment, currentVelocity);
-                InitializeFragment(fragment);
+                InitFragment(fragment);
             }
         }
 
@@ -118,15 +119,24 @@ public class BreakableObject : MonoBehaviour
         }
 
         // 점수 추가
-        scoreManager.AddScore(scoreType);
+        AddScore();
     }
 
-    private void InitializeFragment(RayfireRigid fragment)
+    private void AddScore()
+    {
+        float multiplier = Mathf.Pow(0.5f, fragmentLevel); // 레벨에 따른 점수 배수 계산
+        int baseScore = scoreManager.GetScoreForScoreType(scoreType);
+        int calculatedScore = Mathf.CeilToInt(baseScore * multiplier);
+        scoreManager.AddScore(calculatedScore);
+    }
+
+    private void InitFragment(RayfireRigid fragment)
     {
         if (fragment.gameObject.GetComponent<BreakableObject>() == null)
         {
             var fragmentScript = fragment.gameObject.AddComponent<BreakableObject>();
             fragmentScript.scoreType = this.scoreType;
+            fragmentScript.fragmentLevel = this.fragmentLevel + 1; // 파편 레벨 증가
         }
 
         Rigidbody rb = fragment.GetComponent<Rigidbody>();

@@ -30,27 +30,27 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateTimeScaleText(float timeScale)
+    public void UpdateTimeScaleText(float _timeScale)
     {
         if (timeScaleText != null)
         {
-            timeScaleText.text = $"Time Scale: {timeScale:F2}";
+            timeScaleText.text = $"Time Scale: {_timeScale:F2}";
         }
     }
 
-    public void UpdateScoreText(int score)
+    public void UpdateScoreText(int _score)
     {
         if (scoreText != null)
         {
-            scoreText.text = $"Score: {score}";
+            scoreText.text = $"Score: {_score}";
         }
     }
 
-    public void UpdateHPText(int hp)
+    public void UpdateHPText(int _hp)
     {
         if (hpText != null)
         {
-            hpText.text = $"HP: {hp}";
+            hpText.text = $"HP: {_hp}";
         }
     }
 

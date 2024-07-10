@@ -12,9 +12,9 @@ public class SlowMotionManager : MonoBehaviour
     private bool isSlowMotionActive = false;
     private Action<bool> onSlowMotionChanged;
 
-    public void Init(Action<bool> slowMotionChangedCallback)
+    public void Init(Action<bool> _slowMotionChangedCallback)
     {
-        onSlowMotionChanged = slowMotionChangedCallback;
+        onSlowMotionChanged = _slowMotionChangedCallback;
     }
 
     private void Update()

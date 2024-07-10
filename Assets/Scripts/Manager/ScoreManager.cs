@@ -29,17 +29,10 @@ public class ScoreManager : MonoBehaviour
         };
     }
 
-    public void AddScore(ScoreType scoreType)
+    public void AddScore(int calculatedScore)
     {
-        if (scoreTable.TryGetValue(scoreType, out int value))
-        {
-            score += value;
-            UpdateScoreUI();
-        }
-        else
-        {
-            Debug.LogWarning("Unknown ScoreType: " + scoreType);
-        }
+        score += calculatedScore;
+        UpdateScoreUI();
     }
 
     private void UpdateScoreUI()

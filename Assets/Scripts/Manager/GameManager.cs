@@ -51,34 +51,35 @@ public class GameManager : MonoBehaviour
         uiManager.ShowGameOverUI();
     }
 
-    public void UpdateHP(int hp)
+    public void UpdateHP(int _hp)
     {
-        uiManager.UpdateHPText(hp);
+        uiManager.UpdateHPText(_hp);
     }
 
-    public void UpdateScore(int score)
+    public void UpdateScore(int _score)
     {
-        uiManager.UpdateScoreText(score);
+        uiManager.UpdateScoreText(_score);
     }
 
-    public void UpdateTimeScale(float timeScale)
+    public void UpdateTimeScale(float _timeScale)
     {
-        uiManager.UpdateTimeScaleText(timeScale);
+        uiManager.UpdateTimeScaleText(_timeScale);
     }
 
-    public int GetScore(ScoreType scoreType)
+    public int GetScore(ScoreType _scoreType)
     {
-        return scoreManager.GetScoreForScoreType(scoreType);
+        return scoreManager.GetScoreForScoreType(_scoreType);
     }
 
-    public void AddScore(ScoreType scoreType)
+    public void AddScore(ScoreType _scoreType)
     {
-        scoreManager.AddScore(scoreType);
+        int scoreToAdd = scoreManager.GetScoreForScoreType(_scoreType);
+        scoreManager.AddScore(scoreToAdd);
     }
 
-    private void OnSlowMotionChanged(bool isActive)
+    private void OnSlowMotionChanged(bool _isActive)
     {
-        if (isActive)
+        if (_isActive)
         {
             uiManager.ShowSlowMotionPanel();
         }
@@ -88,8 +89,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int _damage)
     {
-        hpManager.TakeDamage(damage);
+        hpManager.TakeDamage(_damage);
     }
 }

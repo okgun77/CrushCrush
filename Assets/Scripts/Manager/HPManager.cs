@@ -14,9 +14,9 @@ public class HPManager : MonoBehaviour
         UpdateHPUI();
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int _damage)
     {
-        currentHP -= damage;
+        currentHP -= _damage;
         if (currentHP < 0)
         {
             currentHP = 0;
@@ -29,9 +29,9 @@ public class HPManager : MonoBehaviour
         }
     }
 
-    public void Heal(int amount)
+    public void Heal(int _heal)
     {
-        currentHP += amount;
+        currentHP += _heal;
         if (currentHP > maxHP)
         {
             currentHP = maxHP;

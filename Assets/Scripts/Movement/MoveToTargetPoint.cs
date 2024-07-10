@@ -17,9 +17,9 @@ public class MoveToTargetPoint : MonoBehaviour
         }
     }
 
-    public void SetTarget(Transform target)
+    public void SetTarget(Transform _target)
     {
-        targetPoint = target;
+        targetPoint = _target;
     }
 
     public Vector3 GetCurrentVelocity()

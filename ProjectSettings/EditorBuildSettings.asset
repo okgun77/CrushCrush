@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Crush_Prototype_shape.unity
-    guid: bc3ba84272e0d9d47b99017f75fd3afd
+    path: Assets/Scenes/Crush_Prototype.unity
+    guid: a7e8a2c4fbf3f6841a124388610b78c0
   m_configObjects: {}
