@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateHP(int _hp)
     {
-        uiManager.UpdateHPText(_hp);
+        uiManager.UpdateHPUI(_hp, hpManager.GetCurrentHP()); // UpdateHPUI 호출로 변경
     }
 
     public void UpdateScore(int _score)

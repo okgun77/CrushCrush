@@ -4,14 +4,20 @@ using TMPro;
 public class HPManager : MonoBehaviour
 {
     [SerializeField] private int maxHP = 100;
-    [SerializeField] private TextMeshProUGUI hpText;
-
     private int currentHP;
+    private UIManager uiManager;
 
     public void Init()
     {
+        uiManager = FindObjectOfType<UIManager>();
+        if (uiManager == null)
+        {
+            Debug.LogError("UIManager를 찾을 수 없습니다!");
+            return;
+        }
+
         currentHP = maxHP;
-        UpdateHPUI();
+        uiManager.UpdateHPUI(currentHP, maxHP, true); // 초기화 시 즉시 업데이트
     }
 
     public void TakeDamage(int _damage)
@@ -21,7 +27,7 @@ public class HPManager : MonoBehaviour
         {
             currentHP = 0;
         }
-        UpdateHPUI();
+        uiManager.UpdateHPUI(currentHP, maxHP);
 
         if (currentHP == 0)
         {
@@ -36,15 +42,7 @@ public class HPManager : MonoBehaviour
         {
             currentHP = maxHP;
         }
-        UpdateHPUI();
-    }
-
-    private void UpdateHPUI()
-    {
-        if (hpText != null)
-        {
-            hpText.text = $"HP: {currentHP}";
-        }
+        uiManager.UpdateHPUI(currentHP, maxHP);
     }
 
     public int GetCurrentHP()
