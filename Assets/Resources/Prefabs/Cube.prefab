@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 530924207509078338}
   - component: {fileID: 8883571783701523832}
   - component: {fileID: 3339637405634917406}
-  - component: {fileID: 308471562463414557}
   - component: {fileID: 573538883658728311}
   - component: {fileID: 5398876923809163348}
   - component: {fileID: 439358761127788600}
+  - component: {fileID: 308471562463414557}
   - component: {fileID: 790072167063375665}
   - component: {fileID: 5137773125884181020}
   m_Layer: 6
@@ -111,20 +111,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &308471562463414557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3718829914289126338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 616aecdb52fcbcc45b0897fe46aafc44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetPoint: {fileID: 0}
-  speed: 5
 --- !u!114 &573538883658728311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,6 +437,20 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
+--- !u!114 &308471562463414557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3718829914289126338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 616aecdb52fcbcc45b0897fe46aafc44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPoint: {fileID: 0}
+  speed: 5
 --- !u!114 &790072167063375665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,6 +465,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   additionalSpeedMultiplier: 0.5
   scoreType: 1
+  fragmentLevel: 0
 --- !u!114 &5137773125884181020
 MonoBehaviour:
   m_ObjectHideFlags: 0
