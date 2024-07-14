@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using RayFire;
 
@@ -10,6 +8,7 @@ public class BreakableObject : MonoBehaviour
     private RayfireSound rayfireSound;
     private MoveToTargetPoint moveScript;
     private ScoreManager scoreManager;
+    private TouchManager touchManager;
 
     [SerializeField] private float additionalSpeedMultiplier = 2.0f;
     [SerializeField] private ScoreType scoreType;
@@ -49,47 +48,27 @@ public class BreakableObject : MonoBehaviour
             Debug.LogError("ScoreManager를 찾을 수 없습니다!");
             return;
         }
+
+        // TouchManager 컴포넌트 가져오기 및 등록
+        touchManager = FindObjectOfType<TouchManager>();
+        if (touchManager != null)
+        {
+            touchManager.RegisterBreakableObject(this);
+        }
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        ScreenTouch();
+        // TouchManager에서 등록 해제
+        if (touchManager != null)
+        {
+            touchManager.UnregisterBreakableObject(this);
+        }
     }
 
-    private void ScreenTouch()
+    public void OnTouch()
     {
-        bool inputDetected = false;
-        Vector3 inputPosition = Vector3.zero;
-
-        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-        {
-            if (Input.touchCount > 0)
-            {
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Began)
-                {
-                    inputDetected = true;
-                    inputPosition = touch.position;
-                }
-            }
-        }
-        else
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                inputDetected = true;
-                inputPosition = Input.mousePosition;
-            }
-        }
-
-        if (inputDetected)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(inputPosition);
-            if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
-            {
-                BreakObject();
-            }
-        }
+        BreakObject();
     }
 
     private void BreakObject()
@@ -152,7 +131,18 @@ public class BreakableObject : MonoBehaviour
             try
             {
                 col = fragment.gameObject.AddComponent<MeshCollider>();
-                (col as MeshCollider).convex = true;
+                if (col is MeshCollider meshCollider)
+                {
+                    meshCollider.convex = true;
+
+                    // Convex Hull 생성 가능한지 검증
+                    if (meshCollider.sharedMesh.vertexCount < 4)
+                    {
+                        Debug.LogWarning("Mesh does not have enough vertices for Convex Hull creation.");
+                        Destroy(col);
+                        col = fragment.gameObject.AddComponent<SphereCollider>();
+                    }
+                }
             }
             catch
             {
@@ -207,7 +197,7 @@ public class BreakableObject : MonoBehaviour
                     mat.SetFloat("_Surface", 1); // Transparent
                     mat.SetFloat("_Blend", 1); // Alpha Blend
                     Color color = mat.color;
-                    color.a = 0.1f; // 알파 값 조정
+                    color.a = 0.5f; // 알파 값 조정
                     mat.color = color;
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
@@ -219,7 +209,7 @@ public class BreakableObject : MonoBehaviour
                 }
                 else if (mat.HasProperty("_Alpha"))
                 {
-                    mat.SetFloat("_Alpha", 0.1f); // 알파 값 조정
+                    mat.SetFloat("_Alpha", 0.5f); // 알파 값 조정
                 }
             }
         }

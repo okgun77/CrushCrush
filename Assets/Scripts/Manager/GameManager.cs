@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private SlowMotionManager slowMotionManager;
     [SerializeField] private HPManager hpManager; // HPManager 추가
+    [SerializeField] private TouchManager touchManager; // TouchManager 추가
     // 다른 매니저 클래스들도 여기에 추가
 
     private void Awake()
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
         scoreManager.Init();
         slowMotionManager.Init(OnSlowMotionChanged);
         hpManager.Init();
+        touchManager = FindObjectOfType<TouchManager>(); // TouchManager 초기화
     }
 
     public void RestartGame()
