@@ -130,24 +130,21 @@ public class BreakableObject : MonoBehaviour
         {
             try
             {
-                col = fragment.gameObject.AddComponent<MeshCollider>();
-                if (col is MeshCollider meshCollider)
-                {
-                    meshCollider.convex = true;
+                MeshCollider meshCollider = fragment.gameObject.AddComponent<MeshCollider>();
+                meshCollider.convex = true;
 
-                    // Convex Hull 생성 가능한지 검증
-                    if (meshCollider.sharedMesh.vertexCount < 4)
-                    {
-                        Debug.LogWarning("Mesh does not have enough vertices for Convex Hull creation.");
-                        Destroy(col);
-                        col = fragment.gameObject.AddComponent<SphereCollider>();
-                    }
+                // Convex Hull 생성 가능한지 검증
+                if (meshCollider.sharedMesh.vertexCount < 4 || AreVerticesCoplanar(meshCollider.sharedMesh))
+                {
+                    Debug.LogWarning("Mesh does not have enough vertices or vertices are coplanar for Convex Hull creation.");
+                    Destroy(meshCollider);
+                    SphereCollider sphereCollider = fragment.gameObject.AddComponent<SphereCollider>();
                 }
             }
             catch
             {
                 Destroy(col);
-                col = fragment.gameObject.AddComponent<SphereCollider>();
+                SphereCollider sphereCollider = fragment.gameObject.AddComponent<SphereCollider>();
             }
         }
 
@@ -178,6 +175,22 @@ public class BreakableObject : MonoBehaviour
         }
     }
 
+    private bool AreVerticesCoplanar(Mesh mesh)
+    {
+        if (mesh.vertexCount < 4)
+            return true;
+
+        Vector3[] vertices = mesh.vertices;
+        Vector3 normal = Vector3.Cross(vertices[1] - vertices[0], vertices[2] - vertices[0]);
+
+        for (int i = 3; i < vertices.Length; i++)
+        {
+            if (Vector3.Dot(normal, vertices[i] - vertices[0]) != 0)
+                return false;
+        }
+        return true;
+    }
+
     private void SetFragmentProperties(RayfireRigid fragment, Vector3 initialVelocity)
     {
         Rigidbody rb = fragment.GetComponent<Rigidbody>();
@@ -197,7 +210,7 @@ public class BreakableObject : MonoBehaviour
                     mat.SetFloat("_Surface", 1); // Transparent
                     mat.SetFloat("_Blend", 1); // Alpha Blend
                     Color color = mat.color;
-                    color.a = 0.5f; // 알파 값 조정
+                    color.a = 0.1f; // 알파 값 조정
                     mat.color = color;
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
@@ -209,7 +222,7 @@ public class BreakableObject : MonoBehaviour
                 }
                 else if (mat.HasProperty("_Alpha"))
                 {
-                    mat.SetFloat("_Alpha", 0.5f); // 알파 값 조정
+                    mat.SetFloat("_Alpha", 0.1f); // 알파 값 조정
                 }
             }
         }
