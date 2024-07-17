@@ -183,7 +183,7 @@ public class BreakableObject : MonoBehaviour
         Rigidbody rb = fragment.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.velocity = initialVelocity * additionalSpeedMultiplier;
+            rb.linearVelocity = initialVelocity * additionalSpeedMultiplier;
         }
 
         // 파편의 알파 값 적용
