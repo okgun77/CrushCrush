@@ -210,7 +210,7 @@ public class BreakableObject : MonoBehaviour
                     mat.SetFloat("_Surface", 1); // Transparent
                     mat.SetFloat("_Blend", 1); // Alpha Blend
                     Color color = mat.color;
-                    color.a = 0.1f; // 알파 값 조정
+                    color.a = 0.3f; // 알파 값 조정
                     mat.color = color;
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
@@ -222,7 +222,7 @@ public class BreakableObject : MonoBehaviour
                 }
                 else if (mat.HasProperty("_Alpha"))
                 {
-                    mat.SetFloat("_Alpha", 0.1f); // 알파 값 조정
+                    mat.SetFloat("_Alpha", 0.3f); // 알파 값 조정
                 }
             }
         }
