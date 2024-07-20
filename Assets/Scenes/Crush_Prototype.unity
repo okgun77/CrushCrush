@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 8401881fcb9afd34eb383fc90bbbbddc, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 61426a51b8d41d4439d10d94c7b1ac04, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -3564,6 +3564,71 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1795292438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1795292440}
+  - component: {fileID: 1795292439}
+  m_Layer: 0
+  m_Name: SpawnManager_Planet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1795292439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795292438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3c7cd8b3ff07047a11c0b0c5ca879a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnObjects:
+  - prefab: {fileID: 944727615355717753, guid: 22b6c843ee9c8124ab9c4694d50cadba, type: 3}
+  - prefab: {fileID: 2669079176267437801, guid: bee16c48fb1637349b9846a39ccafceb,
+      type: 3}
+  - prefab: {fileID: 6369363261812798539, guid: f4d291e9fec6a124ca29322024c61325,
+      type: 3}
+  - prefab: {fileID: 2106265839389896493, guid: 4db99344e6de15f42b5685f0cfc3468f,
+      type: 3}
+  spawnPoints:
+  - {fileID: 496827441}
+  - {fileID: 34778929}
+  - {fileID: 1555190832}
+  - {fileID: 1456386365}
+  - {fileID: 889541265}
+  - {fileID: 197830296}
+  - {fileID: 1324909012}
+  - {fileID: 1904362818}
+  - {fileID: 676516987}
+  spawnRange: 2
+  targetPoint: {fileID: 1184883423}
+  spawnInterval: 1
+--- !u!4 &1795292440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795292438}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1824184486
 GameObject:
   m_ObjectHideFlags: 0
@@ -3851,9 +3916,9 @@ MonoBehaviour:
   - prefab: {fileID: 1000010171710194, guid: ac2ca6ebed858cc42b0357c9446ede71, type: 3}
   - prefab: {fileID: 2249724334349086868, guid: 536435420d26f6244bed64659089ea93,
       type: 3}
-  - prefab: {fileID: 8546097872917928589, guid: 161d8803d43bf074884ddcab9cf5afeb,
+  - prefab: {fileID: 5454694744021496138, guid: b6d498a6931245945990cea6375c69fd,
       type: 3}
-  - prefab: {fileID: 3407457183884081005, guid: 16d358adb15cdf24aaf82a47f116ecd8,
+  - prefab: {fileID: 4982104264264128687, guid: 1f09f93712ec4d04e84db4124f076e44,
       type: 3}
   - prefab: {fileID: 1000011872215508, guid: 568bd657a3e9912428012375a2322701, type: 3}
   - prefab: {fileID: 1000010456809442, guid: d313718bccba8804e967d5ee33315a1a, type: 3}
@@ -3865,11 +3930,15 @@ MonoBehaviour:
       type: 3}
   - prefab: {fileID: 8546097872917928589, guid: 161d8803d43bf074884ddcab9cf5afeb,
       type: 3}
-  - prefab: {fileID: 1000012510692222, guid: e54c9a35ebefe3445a612ddda5efa76f, type: 3}
-  - prefab: {fileID: 1000011501826600, guid: 8674df95fdde9d24aae28b8777ebe17d, type: 3}
-  - prefab: {fileID: 1000011841440206, guid: 5cd1facca60079946af1a3dda80aff34, type: 3}
-  - prefab: {fileID: 1000013765287000, guid: 9a89f7b304fe3744c99fba73bbe30118, type: 3}
-  - prefab: {fileID: 1000013356204050, guid: 189722b45bbf44e4d9d2db65193f0931, type: 3}
+  - prefab: {fileID: 8914076820894133640, guid: e9dd02f94cd4b8a448e3d67eeeba8fa5,
+      type: 3}
+  - prefab: {fileID: 1644375453210114, guid: af787d684af7e344aa42e4eab22c2054, type: 3}
+  - prefab: {fileID: 3407457183884081005, guid: 16d358adb15cdf24aaf82a47f116ecd8,
+      type: 3}
+  - prefab: {fileID: 3407457183884081005, guid: 16d358adb15cdf24aaf82a47f116ecd8,
+      type: 3}
+  - prefab: {fileID: 3407457183884081005, guid: 16d358adb15cdf24aaf82a47f116ecd8,
+      type: 3}
   spawnPoints:
   - {fileID: 496827441}
   - {fileID: 34778929}
@@ -5662,6 +5731,7 @@ SceneRoots:
   - {fileID: 1674844819}
   - {fileID: 1212696790}
   - {fileID: 1906694092}
+  - {fileID: 1795292440}
   - {fileID: 633202236}
   - {fileID: 1776408354}
   - {fileID: 1229847376}
