@@ -130,21 +130,19 @@ public class BreakableObject : MonoBehaviour
         {
             try
             {
-                MeshCollider meshCollider = fragment.gameObject.AddComponent<MeshCollider>();
-                meshCollider.convex = true;
-
-                // Convex Hull 생성 가능한지 검증
-                if (meshCollider.sharedMesh.vertexCount < 4 || AreVerticesCoplanar(meshCollider.sharedMesh))
+                // BoxCollider 또는 SphereCollider 사용
+                if (ShouldUseBoxCollider(fragment))
                 {
-                    Debug.LogWarning("Mesh does not have enough vertices or vertices are coplanar for Convex Hull creation.");
-                    Destroy(meshCollider);
-                    SphereCollider sphereCollider = fragment.gameObject.AddComponent<SphereCollider>();
+                    col = fragment.gameObject.AddComponent<BoxCollider>();
+                }
+                else
+                {
+                    col = fragment.gameObject.AddComponent<SphereCollider>();
                 }
             }
             catch
             {
-                Destroy(col);
-                SphereCollider sphereCollider = fragment.gameObject.AddComponent<SphereCollider>();
+                Debug.LogWarning("Failed to create BoxCollider or SphereCollider.");
             }
         }
 
@@ -175,20 +173,12 @@ public class BreakableObject : MonoBehaviour
         }
     }
 
-    private bool AreVerticesCoplanar(Mesh mesh)
+    private bool ShouldUseBoxCollider(RayfireRigid fragment)
     {
-        if (mesh.vertexCount < 4)
-            return true;
-
-        Vector3[] vertices = mesh.vertices;
-        Vector3 normal = Vector3.Cross(vertices[1] - vertices[0], vertices[2] - vertices[0]);
-
-        for (int i = 3; i < vertices.Length; i++)
-        {
-            if (Vector3.Dot(normal, vertices[i] - vertices[0]) != 0)
-                return false;
-        }
-        return true;
+        // BoxCollider를 사용할 조건을 정의합니다.
+        // 예: 특정 메쉬 이름 또는 태그를 기준으로 결정
+        // 여기에 해당 조건을 추가하세요.
+        return true; // 기본적으로 BoxCollider를 사용하도록 설정
     }
 
     private void SetFragmentProperties(RayfireRigid fragment, Vector3 initialVelocity)

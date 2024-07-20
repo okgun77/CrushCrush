@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 9066315669402730551}
   - component: {fileID: 5367689896985218962}
   - component: {fileID: 7897390478512962392}
-  - component: {fileID: 8013765670778017838}
   - component: {fileID: -4346000546877447211}
   - component: {fileID: -2038355888103955654}
   - component: {fileID: 7325666212501320137}
   - component: {fileID: 1035372062740846121}
   - component: {fileID: -8738273349542190395}
   - component: {fileID: 5855034978630200408}
+  - component: {fileID: 4389970414328477300}
   m_Layer: 6
   m_Name: pot-lid-medium
   m_TagString: BreakableObject
@@ -65,6 +65,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -92,28 +95,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8013765670778017838
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8546097872917928589}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 150781065506071988, guid: 7005778676e335641b4a9ca3be9fc913, type: 3}
 --- !u!114 &-4346000546877447211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,3 +463,24 @@ MonoBehaviour:
   additionalSpeedMultiplier: 0.5
   scoreType: 1
   fragmentLevel: 0
+--- !u!65 &4389970414328477300
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8546097872917928589}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.31361464, y: 0.14925931, z: 0.21844757}
+  m_Center: {x: -0.00006377697, y: 0.07462966, z: -0.000010121614}

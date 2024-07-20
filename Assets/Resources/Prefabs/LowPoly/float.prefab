@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4000012243039656}
   - component: {fileID: 33000012016846176}
   - component: {fileID: 23000011833924726}
-  - component: {fileID: 64755917405640010}
+  - component: {fileID: 3748911517526423190}
   - component: {fileID: 6791966698934356244}
   - component: {fileID: -71195788012554630}
   - component: {fileID: -2884409108412396729}
@@ -65,6 +65,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -90,8 +93,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64755917405640010
-MeshCollider:
+--- !u!65 &3748911517526423190
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -108,10 +111,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 198b887f48f5aac46a88aaeae4588056, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.15725872, y: 0.85835373, z: 0.35125852}
+  m_Center: {x: 0, y: 0.105551526, z: 0.0031451955}
 --- !u!114 &6791966698934356244
 MonoBehaviour:
   m_ObjectHideFlags: 0
