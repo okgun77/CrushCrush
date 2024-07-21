@@ -7,9 +7,9 @@ public class TouchManager : MonoBehaviour
     private List<BreakableObject> breakableObjects = new List<BreakableObject>();
     private GameManager gameManager;
 
-    public void Init(GameManager gm)
+    public void Init(GameManager _gameManager)
     {
-        gameManager = gm;
+        gameManager = _gameManager;
     }
 
     private void Update()
@@ -58,19 +58,19 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    public void RegisterBreakableObject(BreakableObject breakableObject)
+    public void RegisterBreakableObject(BreakableObject _breakableObject)
     {
-        if (!breakableObjects.Contains(breakableObject))
+        if (!breakableObjects.Contains(_breakableObject))
         {
-            breakableObjects.Add(breakableObject);
+            breakableObjects.Add(_breakableObject);
         }
     }
 
-    public void UnregisterBreakableObject(BreakableObject breakableObject)
+    public void UnregisterBreakableObject(BreakableObject _breakableObject)
     {
-        if (breakableObjects.Contains(breakableObject))
+        if (breakableObjects.Contains(_breakableObject))
         {
-            breakableObjects.Remove(breakableObject);
+            breakableObjects.Remove(_breakableObject);
         }
     }
 }

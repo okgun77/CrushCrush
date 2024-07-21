@@ -17,9 +17,9 @@ public class ScoreManager : MonoBehaviour
     private Dictionary<ScoreType, int> scoreTable;
     private GameManager gameManager;
 
-    public void Init(GameManager gm)
+    public void Init(GameManager _gameManager)
     {
-        gameManager = gm;
+        gameManager = _gameManager;
         score = 0;
         UpdateScoreUI();
 
@@ -31,25 +31,25 @@ public class ScoreManager : MonoBehaviour
         };
     }
 
-    public void AddScore(int calculatedScore)
+    public void AddScore(int _calculatedScore)
     {
-        score += calculatedScore;
+        score += _calculatedScore;
         UpdateScoreUI();
     }
 
-    public int GetScoreForScoreType(ScoreType scoreType)
+    public int GetScoreForScoreType(ScoreType _scoreType)
     {
-        if (scoreTable.TryGetValue(scoreType, out int value))
+        if (scoreTable.TryGetValue(_scoreType, out int value))
         {
             return value;
         }
         return 0;
     }
 
-    public int CalculateScore(ScoreType scoreType, int fragmentLevel)
+    public int CalculateScore(ScoreType _scoreType, int _fragmentLevel)
     {
-        int baseScore = GetScoreForScoreType(scoreType);
-        float multiplier = Mathf.Pow(0.5f, fragmentLevel);
+        int baseScore = GetScoreForScoreType(_scoreType);
+        float multiplier = Mathf.Pow(0.5f, _fragmentLevel);
         return Mathf.CeilToInt(baseScore * multiplier);
     }
 

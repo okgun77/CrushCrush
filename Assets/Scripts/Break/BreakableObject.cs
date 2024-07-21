@@ -178,7 +178,7 @@ public class BreakableObject : MonoBehaviour
         }
     }
 
-    private bool ShouldUseBoxCollider(RayfireRigid fragment)
+    private bool ShouldUseBoxCollider(RayfireRigid _fragment)
     {
         // BoxCollider를 사용할 조건을 정의합니다.
         // 예: 특정 메쉬 이름 또는 태그를 기준으로 결정
@@ -186,16 +186,16 @@ public class BreakableObject : MonoBehaviour
         return true; // 기본적으로 BoxCollider를 사용하도록 설정
     }
 
-    private void SetFragmentProperties(RayfireRigid fragment, Vector3 initialVelocity)
+    private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity)
     {
-        Rigidbody rb = fragment.GetComponent<Rigidbody>();
+        Rigidbody rb = _fragment.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.linearVelocity = initialVelocity * additionalSpeedMultiplier;
+            rb.linearVelocity = _initialVelocity * additionalSpeedMultiplier;
         }
 
         // 파편의 알파 값 적용
-        Renderer renderer = fragment.GetComponent<Renderer>();
+        Renderer renderer = _fragment.GetComponent<Renderer>();
         if (renderer != null)
         {
             foreach (var mat in renderer.materials)

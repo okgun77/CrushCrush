@@ -1253,7 +1253,6 @@ MonoBehaviour:
   - {fileID: 1904362818}
   - {fileID: 676516987}
   spawnRange: 2
-  targetPoint: {fileID: 1184883423}
   spawnInterval: 1
 --- !u!4 &633202236
 Transform:
@@ -2260,6 +2259,7 @@ MonoBehaviour:
   slowMotionManager: {fileID: 1086417761}
   hpManager: {fileID: 854758260}
   touchManager: {fileID: 607463028}
+  moveManager: {fileID: 1867383045}
 --- !u!4 &957836776
 Transform:
   m_ObjectHideFlags: 0
@@ -2547,7 +2547,6 @@ MonoBehaviour:
   - {fileID: 1904362818}
   - {fileID: 676516987}
   spawnRange: 2
-  targetPoint: {fileID: 1184883423}
   spawnInterval: 1
 --- !u!4 &1212696790
 Transform:
@@ -2621,7 +2620,6 @@ MonoBehaviour:
   - {fileID: 1904362818}
   - {fileID: 676516987}
   spawnRange: 2
-  targetPoint: {fileID: 1184883423}
   spawnInterval: 1
 --- !u!4 &1229847376
 Transform:
@@ -3130,6 +3128,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1331681252}
   m_CullTransparentMesh: 1
+--- !u!1 &1398928614
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1398928616}
+  - component: {fileID: 1398928615}
+  m_Layer: 0
+  m_Name: MoveZigZagHorizontal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1398928615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398928614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b68123ad91f09047916cbbee8744e5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalZigzagWidth: 20
+  frequency: 20
+  difficultyThreshold: 10
+--- !u!4 &1398928616
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398928614}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1867383046}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1410890762
 GameObject:
   m_ObjectHideFlags: 0
@@ -3268,6 +3313,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1410890762}
   m_CullTransparentMesh: 1
+--- !u!1 &1428403658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1428403660}
+  - component: {fileID: 1428403659}
+  m_Layer: 0
+  m_Name: MoveZigZagVertical
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1428403659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428403658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c194adc5b4b99b48a53d2f1798d56a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  verticalZigzagHeight: 20
+  frequency: 20
+  difficultyThreshold: 20
+--- !u!4 &1428403660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428403658}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1867383046}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1456386364
 GameObject:
   m_ObjectHideFlags: 0
@@ -3547,7 +3639,6 @@ MonoBehaviour:
   - {fileID: 1904362818}
   - {fileID: 676516987}
   spawnRange: 2
-  targetPoint: {fileID: 1184883423}
   spawnInterval: 1
 --- !u!4 &1776408354
 Transform:
@@ -3612,7 +3703,6 @@ MonoBehaviour:
   - {fileID: 1904362818}
   - {fileID: 676516987}
   spawnRange: 2
-  targetPoint: {fileID: 1184883423}
   spawnInterval: 1
 --- !u!4 &1795292440
 Transform:
@@ -3705,6 +3795,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824184486}
   m_CullTransparentMesh: 1
+--- !u!1 &1867383044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1867383046}
+  - component: {fileID: 1867383045}
+  m_Layer: 0
+  m_Name: MoveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1867383045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867383044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1570c77340c2b8e42924e2fbbf3584be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basicMovementBehaviors:
+  - {fileID: 2012381861}
+  - {fileID: 1988142602}
+  difficultyMovementBehaviors:
+  - {fileID: 1398928615}
+  - {fileID: 1428403659}
+  targetPoint: {fileID: 1184883423}
+--- !u!4 &1867383046
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867383044}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1398928616}
+  - {fileID: 1428403660}
+  - {fileID: 1988142603}
+  - {fileID: 2012381860}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1890929265
 GameObject:
   m_ObjectHideFlags: 0
@@ -3949,8 +4094,7 @@ MonoBehaviour:
   - {fileID: 1324909012}
   - {fileID: 1904362818}
   - {fileID: 676516987}
-  spawnRange: 2
-  targetPoint: {fileID: 1184883423}
+  spawnRange: 1
   spawnInterval: 1
 --- !u!4 &1906694092
 Transform:
@@ -3978,7 +4122,7 @@ GameObject:
   - component: {fileID: 1916270266}
   - component: {fileID: 1916270265}
   m_Layer: 0
-  m_Name: SkyboxMovement
+  m_Name: MoveSkybox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4012,6 +4156,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1988142601
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1988142603}
+  - component: {fileID: 1988142602}
+  m_Layer: 0
+  m_Name: MoveRotate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1988142602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988142601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d61a1296a1b9dc42864ad1954a129d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: {x: 100, y: 100, z: 100}
+--- !u!4 &1988142603
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988142601}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1867383046}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2012381859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2012381860}
+  - component: {fileID: 2012381861}
+  m_Layer: 0
+  m_Name: MoveTargetPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2012381860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012381859}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1867383046}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2012381861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012381859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 616aecdb52fcbcc45b0897fe46aafc44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
 --- !u!1 &2054626041
 GameObject:
   m_ObjectHideFlags: 0
@@ -5729,6 +5963,7 @@ SceneRoots:
   - {fileID: 412866663}
   - {fileID: 1086417762}
   - {fileID: 1674844819}
+  - {fileID: 1867383046}
   - {fileID: 1212696790}
   - {fileID: 1906694092}
   - {fileID: 1795292440}

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SlowMotionManager slowMotionManager;
     [SerializeField] private HPManager hpManager;
     [SerializeField] private TouchManager touchManager;
+    [SerializeField] private MoveManager moveManager;
 
     private void Awake()
     {
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
         slowMotionManager.Init(this);
         hpManager.Init(this);
         touchManager.Init(this);
+        moveManager.Init(this);
     }
 
     public void RestartGame()
@@ -57,5 +59,10 @@ public class GameManager : MonoBehaviour
     public void UpdateTimeScale(float timeScale)
     {
         uiManager.UpdateTimeScaleText(timeScale);
+    }
+
+    public MoveManager GetMoveManager()
+    {
+        return moveManager;
     }
 }

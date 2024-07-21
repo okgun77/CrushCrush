@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class MoveToTargetPoint : MonoBehaviour
 {
-    [SerializeField] private Transform targetPoint; // 타겟 포인트
-    [SerializeField] private float speed = 5.0f; // 이동 속도
+    [SerializeField] private float speed; // 이동 속도
+
+    private Transform targetPoint; // 타겟 포인트
     private Vector3 currentVelocity; // 현재 속도
 
     private void Update()

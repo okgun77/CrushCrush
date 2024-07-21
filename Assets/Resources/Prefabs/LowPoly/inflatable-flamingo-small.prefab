@@ -14,8 +14,6 @@ GameObject:
   - component: {fileID: -9010812948506568430}
   - component: {fileID: -6336990641211650973}
   - component: {fileID: 6469006711375123534}
-  - component: {fileID: -8054015121368648794}
-  - component: {fileID: 8869005867995714520}
   - component: {fileID: 9118753825079496672}
   - component: {fileID: 2530763020650657337}
   - component: {fileID: 6702911059342432383}
@@ -422,33 +420,6 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
---- !u!114 &-8054015121368648794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5454694744021496138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 616aecdb52fcbcc45b0897fe46aafc44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetPoint: {fileID: 0}
-  speed: 5
---- !u!114 &8869005867995714520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5454694744021496138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d61a1296a1b9dc42864ad1954a129d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: {x: 50, y: 50, z: 50}
 --- !u!114 &9118753825079496672
 MonoBehaviour:
   m_ObjectHideFlags: 0

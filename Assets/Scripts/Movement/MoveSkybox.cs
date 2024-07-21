@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SkyboxMovement : MonoBehaviour
+public class MoveSkybox : MonoBehaviour
 {
     [SerializeField] private float rotationSpeed = 1.0f;
 

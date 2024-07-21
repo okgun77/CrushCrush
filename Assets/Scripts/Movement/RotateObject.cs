@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RotateObject : MonoBehaviour
 {
-    [SerializeField] private Vector3 rotationSpeed = new Vector3(0, 100, 0); // 회전 속도 설정
+    [SerializeField] private Vector3 rotationSpeed; // 회전 속도 설정
 
     private void Update()
     {

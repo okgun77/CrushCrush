@@ -15,8 +15,6 @@ GameObject:
   - component: {fileID: 6740799520971116335}
   - component: {fileID: 3291455588273814758}
   - component: {fileID: 5793224710919718139}
-  - component: {fileID: -9064639461534841179}
-  - component: {fileID: -1279995705630643326}
   - component: {fileID: 7397268630336793748}
   m_Layer: 6
   m_Name: helmet-construction
@@ -440,33 +438,6 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
---- !u!114 &-9064639461534841179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2249724334349086868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 616aecdb52fcbcc45b0897fe46aafc44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetPoint: {fileID: 0}
-  speed: 5
---- !u!114 &-1279995705630643326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2249724334349086868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d61a1296a1b9dc42864ad1954a129d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: {x: 50, y: 50, z: 50}
 --- !u!114 &7397268630336793748
 MonoBehaviour:
   m_ObjectHideFlags: 0

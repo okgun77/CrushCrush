@@ -14,8 +14,6 @@ GameObject:
   - component: {fileID: 8722037720707663713}
   - component: {fileID: 2258135555026571837}
   - component: {fileID: -3035426959537120272}
-  - component: {fileID: 7086829459970278087}
-  - component: {fileID: 2800730290340955459}
   - component: {fileID: -533712356152685409}
   - component: {fileID: 5690561218962960656}
   m_Layer: 6
@@ -421,33 +419,6 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
---- !u!114 &7086829459970278087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6323407276188773432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 616aecdb52fcbcc45b0897fe46aafc44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetPoint: {fileID: 0}
-  speed: 5
---- !u!114 &2800730290340955459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6323407276188773432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d61a1296a1b9dc42864ad1954a129d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: {x: 50, y: 50, z: 50}
 --- !u!114 &-533712356152685409
 MonoBehaviour:
   m_ObjectHideFlags: 0

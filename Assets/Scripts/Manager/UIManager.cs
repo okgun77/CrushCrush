@@ -63,21 +63,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateHPUI(int currentHP, int maxHP, bool immediate = false)
+    public void UpdateHPUI(int _currentHP, int _maxHP, bool _immediate = false)
     {
         if (hpText != null)
         {
-            hpText.text = $"HP: {currentHP}";
+            hpText.text = $"HP: {_currentHP}";
         }
         if (hpSlider != null)
         {
-            if (immediate)
+            if (_immediate)
             {
-                hpSlider.value = currentHP;
+                hpSlider.value = _currentHP;
             }
             else
             {
-                StartCoroutine(SmoothSliderChange(hpSlider, hpSlider.value, currentHP, 0.5f));
+                StartCoroutine(SmoothSliderChange(hpSlider, hpSlider.value, _currentHP, 0.5f));
             }
         }
     }
@@ -90,16 +90,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator SmoothSliderChange(Slider slider, float fromValue, float toValue, float duration)
+    private IEnumerator SmoothSliderChange(Slider _slider, float _fromValue, float _toValue, float _duration)
     {
         float elapsed = 0f;
-        while (elapsed < duration)
+        while (elapsed < _duration)
         {
-            slider.value = Mathf.Lerp(fromValue, toValue, elapsed / duration);
+            _slider.value = Mathf.Lerp(_fromValue, _toValue, elapsed / _duration);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        slider.value = toValue;
+        _slider.value = _toValue;
     }
 
     public void BlinkHPSlider()
@@ -111,14 +111,14 @@ public class UIManager : MonoBehaviour
         blinkCoroutine = StartCoroutine(BlinkCoroutine(blinkColor, blinkDuration, blinkCount));
     }
 
-    private IEnumerator BlinkCoroutine(Color blinkColor, float duration, int blinkCount)
+    private IEnumerator BlinkCoroutine(Color _blinkColor, float _duration, int _blinkCount)
     {
         Color originalColor = fillImage.color;
-        float halfDuration = duration / (blinkCount * 2);
+        float halfDuration = _duration / (_blinkCount * 2);
 
-        for (int i = 0; i < blinkCount; i++)
+        for (int i = 0; i < _blinkCount; i++)
         {
-            fillImage.color = blinkColor;
+            fillImage.color = _blinkColor;
             yield return new WaitForSeconds(halfDuration);
             fillImage.color = originalColor;
             yield return new WaitForSeconds(halfDuration);

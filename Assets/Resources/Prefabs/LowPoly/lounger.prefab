@@ -15,8 +15,6 @@ GameObject:
   - component: {fileID: -5617461538658242598}
   - component: {fileID: -4038618000782651633}
   - component: {fileID: -6255379584841901771}
-  - component: {fileID: -2302362064191669169}
-  - component: {fileID: -7396851151109192671}
   - component: {fileID: 1776052249641744864}
   m_Layer: 6
   m_Name: lounger
@@ -442,33 +440,6 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
---- !u!114 &-2302362064191669169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000010456809442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 616aecdb52fcbcc45b0897fe46aafc44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetPoint: {fileID: 0}
-  speed: 5
---- !u!114 &-7396851151109192671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000010456809442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d61a1296a1b9dc42864ad1954a129d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: {x: 50, y: 50, z: 50}
 --- !u!114 &1776052249641744864
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -42,9 +42,9 @@ public class DamageZone : MonoBehaviour
         }
     }
 
-    private bool IsObjectPassed(GameObject _obj)
+    private bool IsObjectPassed(GameObject _object)
     {
         // 오브젝트가 데미지 존의 z 위치를 넘어갔는지 체크
-        return _obj.transform.position.z < transform.position.z;
+        return _object.transform.position.z < transform.position.z;
     }
 }

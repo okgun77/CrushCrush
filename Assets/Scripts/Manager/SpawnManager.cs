@@ -12,7 +12,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private SpawnObject[] spawnObjects;
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private float spawnRange = 10f;
-    [SerializeField] private Transform targetPoint;
     [SerializeField] private float spawnInterval = 2.0f;
     private GameManager gameManager;
 
@@ -20,9 +19,9 @@ public class SpawnManager : MonoBehaviour
     private List<int> availableIndexes = new List<int>();
     private List<GameObject> spawnedObjects = new List<GameObject>();
 
-    public void Init(GameManager gm)
+    public void Init(GameManager _gameManager)
     {
-        gameManager = gm;
+        gameManager = _gameManager;
         InitIndexes();
         InvokeRepeating(nameof(SpawnObject), 0f, spawnInterval);
     }
@@ -57,12 +56,17 @@ public class SpawnManager : MonoBehaviour
         Vector3 spawnPosition = selectedSpawnPoint.position + randomOffset;
 
         GameObject spawnedObject = Instantiate(objectToSpawn, spawnPosition, Quaternion.identity);
-        MoveToTargetPoint moveScript = spawnedObject.GetComponent<MoveToTargetPoint>();
-        if (moveScript == null)
+
+        // MoveManager를 통해 이동 방식 적용
+        var moveManager = gameManager.GetMoveManager();
+        if (moveManager != null)
         {
-            moveScript = spawnedObject.AddComponent<MoveToTargetPoint>();
+            moveManager.ApplyMovements(spawnedObject);
         }
-        moveScript.SetTarget(targetPoint);
+        else
+        {
+            Debug.LogError("MoveManager가 GameManager에 연결되어 있지 않습니다.");
+        }
 
         spawnedObjects.Add(spawnedObject);
     }
