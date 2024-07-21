@@ -4055,7 +4055,7 @@ MonoBehaviour:
       type: 3}
   - prefab: {fileID: 5219155158520868895, guid: c5068fd696881ce498d30ca1260d389d,
       type: 3}
-  - prefab: {fileID: 8515545433315260158, guid: 12a73d3f4c950ee4b8f6af3628a43575,
+  - prefab: {fileID: 3407457183884081005, guid: 16d358adb15cdf24aaf82a47f116ecd8,
       type: 3}
   - prefab: {fileID: 19709336277231693, guid: 45584427cc61c7843ba57b331bb25e1c, type: 3}
   - prefab: {fileID: 1000010171710194, guid: ac2ca6ebed858cc42b0357c9446ede71, type: 3}
@@ -4080,10 +4080,9 @@ MonoBehaviour:
   - prefab: {fileID: 1644375453210114, guid: af787d684af7e344aa42e4eab22c2054, type: 3}
   - prefab: {fileID: 3407457183884081005, guid: 16d358adb15cdf24aaf82a47f116ecd8,
       type: 3}
-  - prefab: {fileID: 3407457183884081005, guid: 16d358adb15cdf24aaf82a47f116ecd8,
+  - prefab: {fileID: 3667165656394162692, guid: 89028ef45a4a4f84c8538b7cc9435a7f,
       type: 3}
-  - prefab: {fileID: 3407457183884081005, guid: 16d358adb15cdf24aaf82a47f116ecd8,
-      type: 3}
+  - prefab: {fileID: 1000010894558518, guid: 2fc2beb5acfb43f44a46a1f9ee4b3924, type: 3}
   spawnPoints:
   - {fileID: 496827441}
   - {fileID: 34778929}
