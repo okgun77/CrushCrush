@@ -1,10 +1,16 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class TouchManager : MonoBehaviour
 {
-    [SerializeField] private float sphereCastRadius = 0.5f; // SphereCast 반지름
+    [SerializeField] private float sphereCastRadius = 0.5f;
     private List<BreakableObject> breakableObjects = new List<BreakableObject>();
+    private GameManager gameManager;
+
+    public void Init(GameManager gm)
+    {
+        gameManager = gm;
+    }
 
     private void Update()
     {

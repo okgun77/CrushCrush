@@ -6,9 +6,11 @@ public class HPManager : MonoBehaviour
     [SerializeField] private int maxHP = 100;
     private int currentHP;
     private UIManager uiManager;
+    private GameManager gameManager;
 
-    public void Init()
+    public void Init(GameManager gm)
     {
+        gameManager = gm;
         uiManager = FindObjectOfType<UIManager>();
         if (uiManager == null)
         {
@@ -17,30 +19,28 @@ public class HPManager : MonoBehaviour
         }
 
         currentHP = maxHP;
-        uiManager.UpdateHPUI(currentHP, maxHP, true); // 초기화 시 즉시 업데이트
+        uiManager.UpdateHPUI(currentHP, maxHP, true);
     }
 
-    public void TakeDamage(int _damage)
+    public void TakeDamage(int damage)
     {
-        currentHP -= _damage;
+        currentHP -= damage;
         if (currentHP < 0)
         {
             currentHP = 0;
         }
         uiManager.UpdateHPUI(currentHP, maxHP);
-
-        // 데미지를 입을 때 HP 슬라이더를 깜빡이게 함
         uiManager.BlinkHPSlider();
 
         if (currentHP == 0)
         {
-            FindObjectOfType<GameManager>().GameOver();
+            gameManager.GameOver();
         }
     }
 
-    public void Heal(int _heal)
+    public void Heal(int heal)
     {
-        currentHP += _heal;
+        currentHP += heal;
         if (currentHP > maxHP)
         {
             currentHP = maxHP;

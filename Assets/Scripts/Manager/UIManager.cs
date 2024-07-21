@@ -10,24 +10,24 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI hpText;
     [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private Slider hpSlider; // HP 슬라이더 추가
-    [SerializeField] private Image fillImage; // 슬라이더의 Fill 이미지
+    [SerializeField] private Slider hpSlider;
+    [SerializeField] private Image fillImage;
 
-    // 깜빡임 관련 설정을 인스펙터에서 받기
     [SerializeField] private Color blinkColor = Color.red;
     [SerializeField] private float blinkDuration = 1f;
     [SerializeField] private int blinkCount = 3;
+    private GameManager gameManager;
 
     private Coroutine blinkCoroutine;
 
-    public void Init()
+    public void Init(GameManager gm)
     {
-        // 초기화 로직
+        gameManager = gm;
         if (hpSlider != null)
         {
-            hpSlider.maxValue = 100; // 최대 HP 값 설정
-            hpSlider.value = 100;    // 초기 HP 값 설정
-            hpSlider.interactable = false; // 슬라이더 조작 불가 설정
+            hpSlider.maxValue = 100;
+            hpSlider.value = 100;
+            hpSlider.interactable = false;
         }
     }
 
@@ -77,7 +77,7 @@ public class UIManager : MonoBehaviour
             }
             else
             {
-                StartCoroutine(SmoothSliderChange(hpSlider, hpSlider.value, currentHP, 0.5f)); // 0.5초 동안 부드럽게 변경
+                StartCoroutine(SmoothSliderChange(hpSlider, hpSlider.value, currentHP, 0.5f));
             }
         }
     }
@@ -124,7 +124,6 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(halfDuration);
         }
 
-        // 깜빡임이 끝난 후 항상 원래 색상으로 돌아감
         fillImage.color = originalColor;
     }
 }

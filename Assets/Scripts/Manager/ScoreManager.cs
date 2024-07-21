@@ -12,16 +12,17 @@ public enum ScoreType
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private int maxFragmentLevel = 3; // 최대 파편화 단계
+    [SerializeField] private int maxFragmentLevel = 3;
     private int score;
     private Dictionary<ScoreType, int> scoreTable;
+    private GameManager gameManager;
 
-    public void Init()
+    public void Init(GameManager gm)
     {
+        gameManager = gm;
         score = 0;
         UpdateScoreUI();
 
-        // ScoreType별 점수 설정
         scoreTable = new Dictionary<ScoreType, int>
         {
             { ScoreType.TypeA, 10 },

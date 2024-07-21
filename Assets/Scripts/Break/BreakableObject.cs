@@ -55,6 +55,8 @@ public class BreakableObject : MonoBehaviour
         {
             touchManager.RegisterBreakableObject(this);
         }
+
+        
     }
 
     private void OnDestroy()
@@ -89,6 +91,9 @@ public class BreakableObject : MonoBehaviour
             {
                 SetFragmentProperties(fragment, currentVelocity);
                 InitFragment(fragment);
+                // SelfDestruct 기능 추가
+                var destroyFade = fragment.gameObject.AddComponent<DestroyFade>();
+                destroyFade.StartDestruction();
             }
         }
 

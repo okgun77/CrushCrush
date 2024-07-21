@@ -8,13 +8,15 @@ public class SlowMotionManager : MonoBehaviour
     [SerializeField] private float slowMotionScale = 0.2f;
     [SerializeField] private float normalTimeScale = 1.0f;
     [SerializeField] private float transitionSpeed = 2.0f;
+    private UIManager uiManager;
+    private GameManager gameManager;
 
     private bool isSlowMotionActive = false;
-    private Action<bool> onSlowMotionChanged;
 
-    public void Init(Action<bool> _slowMotionChangedCallback)
+    public void Init(GameManager gm)
     {
-        onSlowMotionChanged = _slowMotionChangedCallback;
+        gameManager = gm;
+        uiManager = FindObjectOfType<UIManager>();
     }
 
     private void Update()
@@ -30,9 +32,8 @@ public class SlowMotionManager : MonoBehaviour
 
         float targetTimeScale = isSlowMotionActive ? slowMotionScale : normalTimeScale;
         Time.timeScale = Mathf.Lerp(Time.timeScale, targetTimeScale, Time.deltaTime * transitionSpeed);
-
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
-        FindObjectOfType<GameManager>().UpdateTimeScale(Time.timeScale);
+        gameManager.UpdateTimeScale(Time.timeScale);
     }
 
     public void ToggleSlowMotion()
@@ -50,12 +51,12 @@ public class SlowMotionManager : MonoBehaviour
     private void ActivateSlowMotion()
     {
         isSlowMotionActive = true;
-        onSlowMotionChanged?.Invoke(true);
+        uiManager.ShowSlowMotionPanel();
     }
 
     private void DeactivateSlowMotion()
     {
         isSlowMotionActive = false;
-        onSlowMotionChanged?.Invoke(false);
+        uiManager.HideSlowMotionPanel();
     }
 }
