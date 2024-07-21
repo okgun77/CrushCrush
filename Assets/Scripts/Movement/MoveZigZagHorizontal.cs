@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class MoveZigZagHorizontal : MonoBehaviour, IMovementCondition
 {
-    [SerializeField] private float horizontalZigzagWidth; // 좌우 지그재그 이동의 폭
-    [SerializeField] private float frequency; // 지그재그 주파수 (왕복 시간)
-    [SerializeField] private float difficultyThreshold; // 추가될 난이도 임계값
+    [SerializeField] private float horizontalZigzagWidth = 0.5f; // 좌우 지그재그 이동의 폭
+    [SerializeField] private float frequency = 1f; // 지그재그 주파수 (왕복 시간)
+    [SerializeField] private float difficultyThreshold = 20f; // 추가될 난이도 임계값
 
     private Vector3 startPosition;
     private float time;
@@ -29,5 +29,12 @@ public class MoveZigZagHorizontal : MonoBehaviour, IMovementCondition
     public bool ShouldAddBehavior(float gameTime)
     {
         return gameTime > difficultyThreshold;
+    }
+
+    public void SetSettings(float _width, float _frequency, float _threshold)
+    {
+        horizontalZigzagWidth = _width;
+        frequency = _frequency;
+        difficultyThreshold = _threshold;
     }
 }

@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class MoveZigZagVertical : MonoBehaviour, IMovementCondition
 {
-    [SerializeField] private float verticalZigzagHeight; // 상하 지그재그 이동의 높이
-    [SerializeField] private float frequency; // 지그재그 주파수 (왕복 시간)
-    [SerializeField] private float difficultyThreshold; // 추가될 난이도 임계값
+    [SerializeField] private float verticalZigzagHeight = 0.5f; // 상하 지그재그 이동의 높이
+    [SerializeField] private float frequency = 1f; // 지그재그 주파수 (왕복 시간)
+    [SerializeField] private float difficultyThreshold = 10; // 추가될 난이도 임계값
 
     private Vector3 startPosition;
     private float time;
@@ -29,5 +29,12 @@ public class MoveZigZagVertical : MonoBehaviour, IMovementCondition
     public bool ShouldAddBehavior(float gameTime)
     {
         return gameTime > difficultyThreshold;
+    }
+
+    public void SetSettings(float _height, float _frequency, float _threshold)
+    {
+        verticalZigzagHeight = _height;
+        frequency = _frequency;
+        difficultyThreshold = _threshold;
     }
 }

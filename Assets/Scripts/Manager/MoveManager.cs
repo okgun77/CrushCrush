@@ -50,21 +50,12 @@ public class MoveManager : MonoBehaviour
     private void CopyComponentSettings(MonoBehaviour source, MonoBehaviour destination)
     {
         var type = source.GetType();
-        var fields = type.GetFields();
+        var fields = type.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         foreach (var field in fields)
         {
             if (field.IsPublic || field.IsDefined(typeof(SerializeField), true))
             {
                 field.SetValue(destination, field.GetValue(source));
-            }
-        }
-
-        var properties = type.GetProperties();
-        foreach (var property in properties)
-        {
-            if (property.CanWrite && property.CanRead && property.GetIndexParameters().Length == 0)
-            {
-                property.SetValue(destination, property.GetValue(source, null), null);
             }
         }
     }
