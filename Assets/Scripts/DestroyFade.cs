@@ -3,7 +3,7 @@ using System.Collections;
 
 public class DestroyFade : MonoBehaviour
 {
-    [SerializeField] private float lifetime = 1.0f; // 오브젝트가 유지되는 시간 (초)
+    [SerializeField] private float lifetime = 5.0f; // 오브젝트가 유지되는 시간 (초)
     [SerializeField] private float fadeDuration = 0.5f; // 서서히 사라지는 시간 (초)
     [SerializeField] private GameObject destructionEffect; // 파괴 시 발생하는 효과
 

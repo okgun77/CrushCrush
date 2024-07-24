@@ -3,16 +3,16 @@ using RayFire;
 
 public class BreakableObject : MonoBehaviour
 {
+    [SerializeField] private float additionalSpeedMultiplier = 2.0f;
+    [SerializeField] private ScoreType scoreType;
+    [SerializeField] private int fragmentLevel = 0; // 파편 레벨 (0은 원래 오브젝트)
+
     private RayfireRigid rayfireRigid;
     private RayfireBomb rayfireBomb;
     private RayfireSound rayfireSound;
     private MoveToTargetPoint moveScript;
     private ScoreManager scoreManager;
     private TouchManager touchManager;
-
-    [SerializeField] private float additionalSpeedMultiplier = 2.0f;
-    [SerializeField] private ScoreType scoreType;
-    [SerializeField] private int fragmentLevel = 0; // 파편 레벨 (0은 원래 오브젝트)
 
     private void Start()
     {
@@ -55,8 +55,6 @@ public class BreakableObject : MonoBehaviour
         {
             touchManager.RegisterBreakableObject(this);
         }
-
-        
     }
 
     private void OnDestroy()
@@ -144,6 +142,9 @@ public class BreakableObject : MonoBehaviour
                 {
                     col = fragment.gameObject.AddComponent<SphereCollider>();
                 }
+
+                // 콜라이더 크기를 파편 크기에 맞게 조정
+                AdjustColliderSize(col, fragment);
             }
             catch
             {
@@ -184,6 +185,22 @@ public class BreakableObject : MonoBehaviour
         // 예: 특정 메쉬 이름 또는 태그를 기준으로 결정
         // 여기에 해당 조건을 추가하세요.
         return true; // 기본적으로 BoxCollider를 사용하도록 설정
+    }
+
+    private void AdjustColliderSize(Collider collider, RayfireRigid fragment)
+    {
+        if (collider is BoxCollider boxCollider)
+        {
+            boxCollider.size = fragment.meshRenderer.bounds.size;
+            boxCollider.center = fragment.meshRenderer.bounds.center - fragment.transform.position;
+        }
+        else if (collider is SphereCollider sphereCollider)
+        {
+            // SphereCollider의 반지름을 파편의 경계 박스를 기준으로 설정 
+            Vector3 boundsSize = fragment.meshRenderer.bounds.size;
+            sphereCollider.radius = Mathf.Max(boundsSize.x, boundsSize.y, boundsSize.z) / 2.0f;
+            sphereCollider.center = fragment.meshRenderer.bounds.center - fragment.transform.position;
+        }
     }
 
     private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity)

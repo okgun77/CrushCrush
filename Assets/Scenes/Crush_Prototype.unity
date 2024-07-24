@@ -1173,7 +1173,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5577bb88232c3da4a8e8c4ddc2f58c1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereCastRadius: 0.2
+  mainCamera: {fileID: 330585545}
+  detectionRadius: 0.2
 --- !u!4 &607463029
 Transform:
   m_ObjectHideFlags: 0
@@ -3545,7 +3546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1410890764}
-  maxFragmentLevel: 9
+  maxFragmentLevel: 3
 --- !u!4 &1674844819
 Transform:
   m_ObjectHideFlags: 0
@@ -4082,7 +4083,7 @@ MonoBehaviour:
       type: 3}
   - prefab: {fileID: 3667165656394162692, guid: 89028ef45a4a4f84c8538b7cc9435a7f,
       type: 3}
-  - prefab: {fileID: 1000010894558518, guid: 2fc2beb5acfb43f44a46a1f9ee4b3924, type: 3}
+  - prefab: {fileID: 1342534575175866, guid: 75c33665db8b89341abf96081d7e6cd3, type: 3}
   spawnPoints:
   - {fileID: 496827441}
   - {fileID: 34778929}
@@ -4244,7 +4245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616aecdb52fcbcc45b0897fe46aafc44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 1.5
+  margin: 0.5
 --- !u!1 &2054626041
 GameObject:
   m_ObjectHideFlags: 0

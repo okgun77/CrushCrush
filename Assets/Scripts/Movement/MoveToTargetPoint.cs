@@ -3,6 +3,7 @@ using UnityEngine;
 public class MoveToTargetPoint : MonoBehaviour
 {
     [SerializeField] private float speed = 3f; // 이동 속도
+    [SerializeField] private float margin = 0.1f; // 화면 경계로부터의 마진 (뷰포트 좌표 기준, 0~1 사이)
 
     private Transform targetPoint; // 타겟 포인트
     private Vector3 currentVelocity; // 현재 속도
@@ -42,15 +43,21 @@ public class MoveToTargetPoint : MonoBehaviour
         Vector3 viewportPosition = Camera.main.WorldToViewportPoint(position);
         bool isClamped = false;
 
-        if (viewportPosition.x < 0.1f || viewportPosition.x > 0.9f)
+        // 마진 적용
+        float leftMargin = margin;
+        float rightMargin = 1 - margin;
+        float bottomMargin = margin;
+        float topMargin = 1 - margin;
+
+        if (viewportPosition.x < leftMargin || viewportPosition.x > rightMargin)
         {
-            viewportPosition.x = Mathf.Clamp(viewportPosition.x, 0.1f, 0.9f);
+            viewportPosition.x = Mathf.Clamp(viewportPosition.x, leftMargin, rightMargin);
             isClamped = true;
         }
 
-        if (viewportPosition.y < 0.1f || viewportPosition.y > 0.9f)
+        if (viewportPosition.y < bottomMargin || viewportPosition.y > topMargin)
         {
-            viewportPosition.y = Mathf.Clamp(viewportPosition.y, 0.1f, 0.9f);
+            viewportPosition.y = Mathf.Clamp(viewportPosition.y, bottomMargin, topMargin);
             isClamped = true;
         }
 

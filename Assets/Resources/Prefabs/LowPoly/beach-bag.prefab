@@ -174,7 +174,7 @@ MonoBehaviour:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
   meshDemolition:
-    am: 7
+    am: 5
     var: 0
     dpf: 0.5
     bias: 0
@@ -316,7 +316,7 @@ MonoBehaviour:
   showGizmo: 0
   rangeType: 0
   fadeType: 0
-  range: 0.3
+  range: 0.1
   deletion: 0
   strength: 0.1
   variation: 50
@@ -451,6 +451,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6257eeea04c3bb44b4c06f71d1fced9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  additionalSpeedMultiplier: 0.5
+  additionalSpeedMultiplier: 5
   scoreType: 1
   fragmentLevel: 0
