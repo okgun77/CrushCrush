@@ -42,13 +42,16 @@ public class DamageZone : MonoBehaviour
 
         foreach (GameObject obj in breakableObjects)
         {
+            BreakableObject breakableObject = obj.GetComponent<BreakableObject>();
+            if (breakableObject == null) continue;
+
             if (IsObjectCloseToDamageZone(obj))
             {
-                warningManager.ApplyWarningEffect(obj.GetComponent<BreakableObject>());
+                warningManager.ApplyWarningEffect(breakableObject);
             }
             else
             {
-                warningManager.RemoveWarningEffect(obj.GetComponent<BreakableObject>());
+                warningManager.RemoveWarningEffect(breakableObject);
             }
 
             if (IsObjectPassed(obj))

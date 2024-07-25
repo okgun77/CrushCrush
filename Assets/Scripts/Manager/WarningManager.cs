@@ -1,50 +1,47 @@
 using UnityEngine;
 using System.Collections.Generic;
+using HighlightPlus;
 
 public class WarningManager : MonoBehaviour
 {
-    [SerializeField] private GameObject warningEffectPrefab;
-
-    private Dictionary<BreakableObject, GameObject> activeWarnings = new Dictionary<BreakableObject, GameObject>();
+    private Dictionary<BreakableObject, HighlightEffect> activeWarnings = new Dictionary<BreakableObject, HighlightEffect>();
 
     public void ApplyWarningEffect(BreakableObject targetObject)
     {
-        if (warningEffectPrefab == null)
+        if (targetObject == null)
         {
-            Debug.LogError("Warning Effect Prefab is not set!");
+            Debug.LogError("Target Object is not set!");
+            return;
+        }
+
+        HighlightEffect highlightEffect = targetObject.GetComponent<HighlightEffect>();
+        if (highlightEffect == null)
+        {
+            Debug.LogError("HighlightEffect component is not attached to the target object!");
             return;
         }
 
         if (!activeWarnings.ContainsKey(targetObject))
         {
-            GameObject warningEffect = Instantiate(warningEffectPrefab, targetObject.transform.position, Quaternion.identity);
-            warningEffect.transform.SetParent(targetObject.transform, false);
-
-            // 경고 이펙트 크기 조정
-            AdjustWarningEffectSize(warningEffect, targetObject);
-
-            activeWarnings.Add(targetObject, warningEffect);
+            highlightEffect.enabled = true;
+            activeWarnings.Add(targetObject, highlightEffect);
             targetObject.SetWarningState(true);
         }
     }
 
     public void RemoveWarningEffect(BreakableObject targetObject)
     {
+        if (targetObject == null) return;
+
         if (activeWarnings.ContainsKey(targetObject))
         {
-            Destroy(activeWarnings[targetObject]);
+            HighlightEffect highlightEffect = activeWarnings[targetObject];
+            if (highlightEffect != null)
+            {
+                highlightEffect.enabled = false;
+            }
             activeWarnings.Remove(targetObject);
             targetObject.SetWarningState(false);
-        }
-    }
-
-    private void AdjustWarningEffectSize(GameObject warningEffect, BreakableObject targetObject)
-    {
-        Renderer targetRenderer = targetObject.GetComponent<Renderer>();
-        if (targetRenderer != null)
-        {
-            Vector3 objectSize = targetRenderer.bounds.size;
-            warningEffect.transform.localScale = objectSize * 1.2f; // 오브젝트 크기보다 약간 더 크게 설정
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,7 +32,7 @@ namespace HighlightPlus {
         public TriggerMode triggerMode = TriggerMode.ColliderEventsOnlyOnThisObject;
 #endif
         public Camera raycastCamera;
-        public RayCastSource raycastSource = RayCastSource.MousePosition;
+        public RayCastSource raycastSource = RayCastSource.CameraDirection;
         public LayerMask raycastLayerMask = -1;
         [Tooltip("Minimum distance for target.")]
         public float minDistance;
