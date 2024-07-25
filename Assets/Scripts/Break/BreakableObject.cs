@@ -13,6 +13,9 @@ public class BreakableObject : MonoBehaviour
     private MoveToTargetPoint moveScript;
     private ScoreManager scoreManager;
     private TouchManager touchManager;
+    private WarningManager warningManager;
+
+    private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
 
     private void Start()
     {
@@ -55,6 +58,14 @@ public class BreakableObject : MonoBehaviour
         {
             touchManager.RegisterBreakableObject(this);
         }
+
+        // WarningManager 컴포넌트 가져오기
+        warningManager = FindObjectOfType<WarningManager>();
+        if (warningManager == null)
+        {
+            Debug.LogError("WarningManager를 찾을 수 없습니다!");
+            return;
+        }
     }
 
     private void OnDestroy()
@@ -63,6 +74,12 @@ public class BreakableObject : MonoBehaviour
         if (touchManager != null)
         {
             touchManager.UnregisterBreakableObject(this);
+        }
+
+        // 오브젝트가 파괴될 때 경고 효과 해제
+        if (isWarningActive && warningManager != null)
+        {
+            warningManager.RemoveWarningEffect(this);
         }
     }
 
@@ -238,5 +255,11 @@ public class BreakableObject : MonoBehaviour
                 }
             }
         }
+    }
+
+    // WarningManager에 의해 경고 상태가 업데이트됨
+    public void SetWarningState(bool state)
+    {
+        isWarningActive = state;
     }
 }
