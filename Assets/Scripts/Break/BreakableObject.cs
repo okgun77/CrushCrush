@@ -127,41 +127,41 @@ public class BreakableObject : MonoBehaviour
         scoreManager.AddScore(calculatedScore);
     }
 
-    private void InitFragment(RayfireRigid fragment)
+    private void InitFragment(RayfireRigid _fragment)
     {
         if (fragmentLevel < scoreManager.GetMaxFragmentLevel())
         {
-            if (fragment.gameObject.GetComponent<BreakableObject>() == null)
+            if (_fragment.gameObject.GetComponent<BreakableObject>() == null)
             {
-                var fragmentScript = fragment.gameObject.AddComponent<BreakableObject>();
+                var fragmentScript = _fragment.gameObject.AddComponent<BreakableObject>();
                 fragmentScript.scoreType = this.scoreType;
                 fragmentScript.fragmentLevel = this.fragmentLevel + 1; // 파편 레벨 증가
             }
         }
 
-        Rigidbody rb = fragment.GetComponent<Rigidbody>();
+        Rigidbody rb = _fragment.GetComponent<Rigidbody>();
         if (rb == null)
         {
-            rb = fragment.gameObject.AddComponent<Rigidbody>();
+            rb = _fragment.gameObject.AddComponent<Rigidbody>();
         }
 
-        Collider col = fragment.GetComponent<Collider>();
+        Collider col = _fragment.GetComponent<Collider>();
         if (col == null)
         {
             try
             {
                 // BoxCollider 또는 SphereCollider 사용
-                if (ShouldUseBoxCollider(fragment))
+                if (ShouldUseBoxCollider(_fragment))
                 {
-                    col = fragment.gameObject.AddComponent<BoxCollider>();
+                    col = _fragment.gameObject.AddComponent<BoxCollider>();
                 }
                 else
                 {
-                    col = fragment.gameObject.AddComponent<SphereCollider>();
+                    col = _fragment.gameObject.AddComponent<SphereCollider>();
                 }
 
                 // 콜라이더 크기를 파편 크기에 맞게 조정
-                AdjustColliderSize(col, fragment);
+                AdjustColliderSize(col, _fragment);
             }
             catch
             {
@@ -169,27 +169,27 @@ public class BreakableObject : MonoBehaviour
             }
         }
 
-        RayfireRigid fragmentRigid = fragment.GetComponent<RayfireRigid>();
+        RayfireRigid fragmentRigid = _fragment.GetComponent<RayfireRigid>();
         if (fragmentRigid == null)
         {
-            fragmentRigid = fragment.gameObject.AddComponent<RayfireRigid>();
+            fragmentRigid = _fragment.gameObject.AddComponent<RayfireRigid>();
             fragmentRigid.demolitionType = DemolitionType.Runtime;
         }
 
-        RayfireBomb fragmentBomb = fragment.GetComponent<RayfireBomb>();
+        RayfireBomb fragmentBomb = _fragment.GetComponent<RayfireBomb>();
         if (fragmentBomb == null && rayfireBomb != null)
         {
-            fragmentBomb = fragment.gameObject.AddComponent<RayfireBomb>();
+            fragmentBomb = _fragment.gameObject.AddComponent<RayfireBomb>();
             fragmentBomb.range = rayfireBomb.range;
             fragmentBomb.strength = rayfireBomb.strength;
             fragmentBomb.variation = rayfireBomb.variation;
             fragmentBomb.chaos = rayfireBomb.chaos;
         }
 
-        RayfireSound fragmentSound = fragment.GetComponent<RayfireSound>();
+        RayfireSound fragmentSound = _fragment.GetComponent<RayfireSound>();
         if (fragmentSound == null && rayfireSound != null)
         {
-            fragmentSound = fragment.gameObject.AddComponent<RayfireSound>();
+            fragmentSound = _fragment.gameObject.AddComponent<RayfireSound>();
             fragmentSound.enabled = true;
             fragmentSound.demolition = rayfireSound.demolition;
             fragmentSound.collision = rayfireSound.collision;
@@ -204,19 +204,19 @@ public class BreakableObject : MonoBehaviour
         return true; // 기본적으로 BoxCollider를 사용하도록 설정
     }
 
-    private void AdjustColliderSize(Collider collider, RayfireRigid fragment)
+    private void AdjustColliderSize(Collider _collider, RayfireRigid _fragment)
     {
-        if (collider is BoxCollider boxCollider)
+        if (_collider is BoxCollider boxCollider)
         {
-            boxCollider.size = fragment.meshRenderer.bounds.size;
-            boxCollider.center = fragment.meshRenderer.bounds.center - fragment.transform.position;
+            boxCollider.size = _fragment.meshRenderer.bounds.size;
+            boxCollider.center = _fragment.meshRenderer.bounds.center - _fragment.transform.position;
         }
-        else if (collider is SphereCollider sphereCollider)
+        else if (_collider is SphereCollider sphereCollider)
         {
             // SphereCollider의 반지름을 파편의 경계 박스를 기준으로 설정 
-            Vector3 boundsSize = fragment.meshRenderer.bounds.size;
+            Vector3 boundsSize = _fragment.meshRenderer.bounds.size;
             sphereCollider.radius = Mathf.Max(boundsSize.x, boundsSize.y, boundsSize.z) / 2.0f;
-            sphereCollider.center = fragment.meshRenderer.bounds.center - fragment.transform.position;
+            sphereCollider.center = _fragment.meshRenderer.bounds.center - _fragment.transform.position;
         }
     }
 
@@ -258,8 +258,8 @@ public class BreakableObject : MonoBehaviour
     }
 
     // WarningManager에 의해 경고 상태가 업데이트됨
-    public void SetWarningState(bool state)
+    public void SetWarningState(bool _state)
     {
-        isWarningActive = state;
+        isWarningActive = _state;
     }
 }

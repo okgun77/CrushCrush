@@ -39,9 +39,9 @@ public class MoveZigZagVertical : MonoBehaviour, IMovementCondition
         difficultyThreshold = _threshold;
     }
 
-    private Vector3 ClampPositionToScreen(Vector3 position)
+    private Vector3 ClampPositionToScreen(Vector3 _position)
     {
-        Vector3 viewportPosition = Camera.main.WorldToViewportPoint(position);
+        Vector3 viewportPosition = Camera.main.WorldToViewportPoint(_position);
         bool isClamped = false;
 
         if (viewportPosition.x < 0.1f || viewportPosition.x > 0.9f)

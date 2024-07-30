@@ -513,7 +513,7 @@ MonoBehaviour:
   overlayTextureScale: 1
   overlayTextureScrolling: {x: 0, y: 0}
   overlayVisibility: 0
-  outline: 1
+  outline: 0
   outlineColor: {r: 1, g: 0, b: 0, a: 1}
   outlineColorStyle: 0
   outlineGradient:
@@ -560,7 +560,7 @@ MonoBehaviour:
   outlineIndependent: 0
   outlineContourStyle: 0
   outlineMaskMode: 0
-  glow: 5
+  glow: 0
   glowWidth: 0.4
   glowQuality: 3
   glowBlurMethod: 0

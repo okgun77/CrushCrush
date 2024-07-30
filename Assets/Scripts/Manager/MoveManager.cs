@@ -38,24 +38,24 @@ public class MoveManager : MonoBehaviour
         }
     }
 
-    private void AddAndConfigureComponent(GameObject obj, MonoBehaviour behavior)
+    private void AddAndConfigureComponent(GameObject _obj, MonoBehaviour _behavior)
     {
-        var component = obj.AddComponent(behavior.GetType()) as MonoBehaviour;
+        var component = _obj.AddComponent(_behavior.GetType()) as MonoBehaviour;
         if (component != null)
         {
-            CopyComponentSettings(behavior, component);
+            CopyComponentSettings(_behavior, component);
         }
     }
 
-    private void CopyComponentSettings(MonoBehaviour source, MonoBehaviour destination)
+    private void CopyComponentSettings(MonoBehaviour _source, MonoBehaviour _destination)
     {
-        var type = source.GetType();
+        var type = _source.GetType();
         var fields = type.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         foreach (var field in fields)
         {
             if (field.IsPublic || field.IsDefined(typeof(SerializeField), true))
             {
-                field.SetValue(destination, field.GetValue(source));
+                field.SetValue(_destination, field.GetValue(_source));
             }
         }
     }

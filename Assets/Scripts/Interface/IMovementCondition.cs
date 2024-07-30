@@ -1,4 +1,4 @@
 public interface IMovementCondition
 {
-    bool ShouldAddBehavior(float gameTime);
+    bool ShouldAddBehavior(float _gameTime);
 }

@@ -38,9 +38,9 @@ public class MoveToTargetPoint : MonoBehaviour
         speed = _speed;
     }
 
-    private Vector3 ClampPositionToScreen(Vector3 position, Vector3 direction)
+    private Vector3 ClampPositionToScreen(Vector3 _position, Vector3 _direction)
     {
-        Vector3 viewportPosition = Camera.main.WorldToViewportPoint(position);
+        Vector3 viewportPosition = Camera.main.WorldToViewportPoint(_position);
         bool isClamped = false;
 
         // 마진 적용
@@ -64,10 +64,10 @@ public class MoveToTargetPoint : MonoBehaviour
         if (isClamped)
         {
             // 반사 벡터 계산
-            Vector3 reflectedDirection = Vector3.Reflect(direction, Vector3.up);
+            Vector3 reflectedDirection = Vector3.Reflect(_direction, Vector3.up);
             // 자연스러운 곡선을 위한 Slerp 사용
-            direction = Vector3.Slerp(direction, reflectedDirection, Time.deltaTime * speed);
-            currentVelocity = direction * speed;
+            _direction = Vector3.Slerp(_direction, reflectedDirection, Time.deltaTime * speed);
+            currentVelocity = _direction * speed;
         }
 
         return Camera.main.ViewportToWorldPoint(viewportPosition);

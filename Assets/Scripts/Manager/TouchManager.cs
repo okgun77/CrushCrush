@@ -52,9 +52,9 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    private void DetectObject(Vector3 inputPosition)
+    private void DetectObject(Vector3 _inputPosition)
     {
-        Ray ray = mainCamera.ScreenPointToRay(inputPosition);
+        Ray ray = mainCamera.ScreenPointToRay(_inputPosition);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))

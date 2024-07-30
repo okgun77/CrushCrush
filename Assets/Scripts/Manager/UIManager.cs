@@ -20,9 +20,9 @@ public class UIManager : MonoBehaviour
 
     private Coroutine blinkCoroutine;
 
-    public void Init(GameManager gm)
+    public void Init(GameManager _gameManager)
     {
-        gameManager = gm;
+        gameManager = _gameManager;
         if (hpSlider != null)
         {
             hpSlider.maxValue = 100;

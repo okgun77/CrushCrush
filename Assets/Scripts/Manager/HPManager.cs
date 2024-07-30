@@ -8,9 +8,9 @@ public class HPManager : MonoBehaviour
     private UIManager uiManager;
     private GameManager gameManager;
 
-    public void Init(GameManager gm)
+    public void Init(GameManager _gameManager)
     {
-        gameManager = gm;
+        gameManager = _gameManager;
         uiManager = FindObjectOfType<UIManager>();
         if (uiManager == null)
         {
@@ -22,9 +22,9 @@ public class HPManager : MonoBehaviour
         uiManager.UpdateHPUI(currentHP, maxHP, true);
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int _damage)
     {
-        currentHP -= damage;
+        currentHP -= _damage;
         if (currentHP < 0)
         {
             currentHP = 0;
@@ -38,9 +38,9 @@ public class HPManager : MonoBehaviour
         }
     }
 
-    public void Heal(int heal)
+    public void Heal(int _heal)
     {
-        currentHP += heal;
+        currentHP += _heal;
         if (currentHP > maxHP)
         {
             currentHP = maxHP;
