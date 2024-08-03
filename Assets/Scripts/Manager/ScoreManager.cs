@@ -46,11 +46,15 @@ public class ScoreManager : MonoBehaviour
         return 0;
     }
 
-    public int CalculateScore(ScoreType _scoreType, int _fragmentLevel)
+    public int CalculateScore(ScoreType _scoreType, int _fragmentLevel, float _distanceToCamera)
     {
         int baseScore = GetScoreForScoreType(_scoreType);
-        float multiplier = Mathf.Pow(0.5f, _fragmentLevel);
-        return Mathf.CeilToInt(baseScore * multiplier);
+        float fragmentMultiplier = Mathf.Pow(0.5f, _fragmentLevel);
+
+        // 거리 기반 가중치 계산
+        float distanceMultiplier = CalculateDistanceMultiplier(_distanceToCamera);
+
+        return Mathf.CeilToInt(baseScore * fragmentMultiplier * distanceMultiplier);
     }
 
     public int GetMaxFragmentLevel()
@@ -64,5 +68,12 @@ public class ScoreManager : MonoBehaviour
         {
             scoreText.text = "" + score;
         }
+    }
+
+    // 거리 기반 가중치 계산 함수
+    private float CalculateDistanceMultiplier(float _distanceToCamera)
+    {
+        // 거리가 가까울수록 가중치가 높아짐
+        return Mathf.Clamp01(1 / _distanceToCamera);
     }
 }

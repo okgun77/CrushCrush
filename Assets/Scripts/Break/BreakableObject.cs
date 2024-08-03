@@ -123,7 +123,9 @@ public class BreakableObject : MonoBehaviour
 
     private void AddScore()
     {
-        int calculatedScore = scoreManager.CalculateScore(scoreType, fragmentLevel);
+        Camera mainCamera = Camera.main;
+        float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
+        int calculatedScore = scoreManager.CalculateScore(scoreType, fragmentLevel, distanceToCamera);
         scoreManager.AddScore(calculatedScore);
     }
 
