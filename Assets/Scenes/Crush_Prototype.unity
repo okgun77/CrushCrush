@@ -546,7 +546,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &229442043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -641,7 +641,8 @@ MonoBehaviour:
   hpSlider: {fileID: 716357759725229403}
   fillImage: {fileID: 716674332875423871}
   damagePanel: {fileID: 229442042}
-  blinkColor: {r: 1, g: 0, b: 0, a: 1}
+  damageBlinkColor: {r: 1, g: 0, b: 0, a: 1}
+  healBlinkColor: {r: 0, g: 1, b: 0, a: 1}
   blinkDuration: 0.5
   blinkCount: 3
 --- !u!4 &293372177
@@ -2042,6 +2043,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 100
+  consecutiveDestroyThreshold: 10
+  hpIncreaseAmount: 3
 --- !u!4 &854758261
 Transform:
   m_ObjectHideFlags: 0

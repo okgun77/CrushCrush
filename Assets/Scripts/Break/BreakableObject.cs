@@ -14,6 +14,7 @@ public class BreakableObject : MonoBehaviour
     private ScoreManager scoreManager;
     private TouchManager touchManager;
     private WarningManager warningManager;
+    private HPManager hpManager;
 
     private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
 
@@ -64,6 +65,14 @@ public class BreakableObject : MonoBehaviour
         if (warningManager == null)
         {
             Debug.LogError("WarningManager를 찾을 수 없습니다!");
+            return;
+        }
+
+        // HPManager 컴포넌트 가져오기
+        hpManager = FindObjectOfType<HPManager>();
+        if (hpManager == null)
+        {
+            Debug.LogError("HPManager를 찾을 수 없습니다!");
             return;
         }
     }
@@ -119,6 +128,12 @@ public class BreakableObject : MonoBehaviour
 
         // 점수 추가
         AddScore();
+
+        // 파편 레벨이 0일 때만 연속 파괴로 계산
+        if (fragmentLevel == 0)
+        {
+            hpManager.IncreaseConsecutiveDestroys();
+        }
     }
 
     private void AddScore()

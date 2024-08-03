@@ -46,23 +46,28 @@ public class GameManager : MonoBehaviour
         uiManager.ShowGameOverUI();
     }
 
-    public void TakeDamage(int _damage)
+    public void TakeDamage(int damage)
     {
-        hpManager.TakeDamage(_damage);
+        hpManager.TakeDamage(damage);
     }
 
-    public void AddScore(int _score)
+    public void AddScore(int score)
     {
-        scoreManager.AddScore(_score);
+        scoreManager.AddScore(score);
     }
 
-    public void UpdateTimeScale(float _timeScale)
+    public void UpdateTimeScale(float timeScale)
     {
-        uiManager.UpdateTimeScaleText(_timeScale);
+        uiManager.UpdateTimeScaleText(timeScale);
     }
 
     public MoveManager GetMoveManager()
     {
         return moveManager;
+    }
+
+    public void HealPlayer(int amount)
+    {
+        hpManager.Heal(amount);
     }
 }

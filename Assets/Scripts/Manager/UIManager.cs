@@ -14,7 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image fillImage;
     [SerializeField] private GameObject damagePanel;
 
-    [SerializeField] private Color blinkColor = Color.red;
+    [SerializeField] private Color damageBlinkColor = Color.red;
+    [SerializeField] private Color healBlinkColor = Color.green;
     [SerializeField] private float blinkDuration = 1f;
     [SerializeField] private int blinkCount = 3;
     private GameManager gameManager;
@@ -105,19 +106,21 @@ public class UIManager : MonoBehaviour
         _slider.value = _toValue;
     }
 
-    public void BlinkHPSlider()
+    public void BlinkHPSlider(Color _blinkColor)
     {
         blinkRequests++; // 새로운 깜빡임 요청 추가
 
         if (blinkCoroutine == null)
         {
-            blinkCoroutine = StartCoroutine(BlinkCoroutine(blinkColor, blinkDuration, blinkCount));
+            blinkCoroutine = StartCoroutine(BlinkCoroutine(_blinkColor, blinkDuration, blinkCount));
         }
+    }
 
-        // 데미지 패널 깜빡임 시작
+    public void BlinkDamagePanel()
+    {
         if (damagePanelCoroutine == null)
         {
-            damagePanelCoroutine = StartCoroutine(DamagePanelCoroutine(blinkColor, blinkDuration, blinkCount));
+            damagePanelCoroutine = StartCoroutine(DamagePanelCoroutine(damageBlinkColor, blinkDuration, blinkCount));
         }
     }
 
@@ -147,7 +150,7 @@ public class UIManager : MonoBehaviour
         Image panelImage = damagePanel.GetComponent<Image>();
         if (panelImage == null) yield break;
 
-        for (int i = 0; i < _blinkCount * blinkRequests; i++) // 누적된 요청 수만큼 깜빡임
+        for (int i = 0; i < _blinkCount; i++) // 지정된 횟수만큼 깜빡임
         {
             // panelImage.color = _blinkColor;
             yield return new WaitForSeconds(halfDuration);
@@ -157,5 +160,16 @@ public class UIManager : MonoBehaviour
 
         damagePanel.SetActive(false);
         damagePanelCoroutine = null; // 코루틴 초기화
+    }
+
+    public void OnDamageTaken()
+    {
+        BlinkHPSlider(damageBlinkColor);
+        BlinkDamagePanel();
+    }
+
+    public void OnHeal()
+    {
+        BlinkHPSlider(healBlinkColor);
     }
 }
