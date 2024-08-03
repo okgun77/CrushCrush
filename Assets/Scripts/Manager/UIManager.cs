@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Image fillImage;
+    [SerializeField] private GameObject damagePanel;
 
     [SerializeField] private Color blinkColor = Color.red;
     [SerializeField] private float blinkDuration = 1f;
@@ -19,6 +20,8 @@ public class UIManager : MonoBehaviour
     private GameManager gameManager;
 
     private Coroutine blinkCoroutine;
+    private Coroutine damagePanelCoroutine;
+    private int blinkRequests = 0; // 깜빡임 요청 수
 
     public void Init(GameManager _gameManager)
     {
@@ -104,11 +107,18 @@ public class UIManager : MonoBehaviour
 
     public void BlinkHPSlider()
     {
-        if (blinkCoroutine != null)
+        blinkRequests++; // 새로운 깜빡임 요청 추가
+
+        if (blinkCoroutine == null)
         {
-            StopCoroutine(blinkCoroutine);
+            blinkCoroutine = StartCoroutine(BlinkCoroutine(blinkColor, blinkDuration, blinkCount));
         }
-        blinkCoroutine = StartCoroutine(BlinkCoroutine(blinkColor, blinkDuration, blinkCount));
+
+        // 데미지 패널 깜빡임 시작
+        if (damagePanelCoroutine == null)
+        {
+            damagePanelCoroutine = StartCoroutine(DamagePanelCoroutine(blinkColor, blinkDuration, blinkCount));
+        }
     }
 
     private IEnumerator BlinkCoroutine(Color _blinkColor, float _duration, int _blinkCount)
@@ -116,7 +126,7 @@ public class UIManager : MonoBehaviour
         Color originalColor = fillImage.color;
         float halfDuration = _duration / (_blinkCount * 2);
 
-        for (int i = 0; i < _blinkCount; i++)
+        for (int i = 0; i < _blinkCount * blinkRequests; i++) // 누적된 요청 수만큼 깜빡임
         {
             fillImage.color = _blinkColor;
             yield return new WaitForSeconds(halfDuration);
@@ -124,6 +134,28 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(halfDuration);
         }
 
-        fillImage.color = originalColor;
+        blinkRequests = 0; // 요청 수 초기화
+        blinkCoroutine = null; // 코루틴 초기화
+    }
+
+    private IEnumerator DamagePanelCoroutine(Color _blinkColor, float _duration, int _blinkCount)
+    {
+        if (damagePanel == null) yield break;
+
+        float halfDuration = _duration / (_blinkCount * 2);
+        damagePanel.SetActive(true);
+        Image panelImage = damagePanel.GetComponent<Image>();
+        if (panelImage == null) yield break;
+
+        for (int i = 0; i < _blinkCount * blinkRequests; i++) // 누적된 요청 수만큼 깜빡임
+        {
+            // panelImage.color = _blinkColor;
+            yield return new WaitForSeconds(halfDuration);
+            // panelImage.color = new Color(0, 0, 0, 0);
+            yield return new WaitForSeconds(halfDuration);
+        }
+
+        damagePanel.SetActive(false);
+        damagePanelCoroutine = null; // 코루틴 초기화
     }
 }
