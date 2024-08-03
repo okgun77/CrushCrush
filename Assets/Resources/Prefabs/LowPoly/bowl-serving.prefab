@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -5214408839517985821}
   - component: {fileID: 1794407728750458680}
   - component: {fileID: 8706928857702145912}
-  - component: {fileID: -6111439427508291069}
+  - component: {fileID: 8977575730888673129}
   m_Layer: 6
   m_Name: bowl-serving
   m_TagString: BreakableObject
@@ -454,7 +454,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.19999999, y: 0.09, z: 0.19999999}
   m_Center: {x: 0, y: 0.045, z: 0}
---- !u!114 &-6111439427508291069
+--- !u!114 &8977575730888673129
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -557,8 +557,8 @@ MonoBehaviour:
   outlineIndependent: 0
   outlineContourStyle: 0
   outlineMaskMode: 0
-  glow: 0
-  glowWidth: 0.4
+  glow: 0.05
+  glowWidth: 0.2
   glowQuality: 3
   glowBlurMethod: 0
   glowDownsampling: 2
@@ -584,7 +584,7 @@ MonoBehaviour:
   - offset: 1
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
-  glowMaskMode: 0
+  glowMaskMode: 2
   innerGlow: 1.02
   innerGlowWidth: 1
   innerGlowColor: {r: 1, g: 1, b: 1, a: 1}

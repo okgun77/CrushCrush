@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5652362834972469977}
   - component: {fileID: -5922248887163209719}
   - component: {fileID: 1998184094890619608}
-  - component: {fileID: 8718651991456906776}
+  - component: {fileID: -2123722957748149073}
   m_Layer: 6
   m_Name: sand-bucket
   m_TagString: BreakableObject
@@ -455,7 +455,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2897336, y: 0.23247246, z: 0.26040828}
   m_Center: {x: -0.01867114, y: 0.11623623, z: 0}
---- !u!114 &8718651991456906776
+--- !u!114 &-2123722957748149073
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -558,8 +558,8 @@ MonoBehaviour:
   outlineIndependent: 0
   outlineContourStyle: 0
   outlineMaskMode: 0
-  glow: 0
-  glowWidth: 0.4
+  glow: 0.05
+  glowWidth: 0.2
   glowQuality: 3
   glowBlurMethod: 0
   glowDownsampling: 2
@@ -585,7 +585,7 @@ MonoBehaviour:
   - offset: 1
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
-  glowMaskMode: 0
+  glowMaskMode: 2
   innerGlow: 1.02
   innerGlowWidth: 1
   innerGlowColor: {r: 1, g: 1, b: 1, a: 1}

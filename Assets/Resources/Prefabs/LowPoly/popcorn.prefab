@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -3118049189492024752}
   - component: {fileID: -4117849124586072342}
   - component: {fileID: 5398232864503224367}
-  - component: {fileID: 3143883752347823440}
+  - component: {fileID: -7794606899612200476}
   m_Layer: 6
   m_Name: popcorn
   m_TagString: BreakableObject
@@ -456,7 +456,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.21629229, y: 0.35, z: 0.21629229}
   m_Center: {x: 0, y: 0.175, z: 0}
---- !u!114 &3143883752347823440
+--- !u!114 &-7794606899612200476
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -559,8 +559,8 @@ MonoBehaviour:
   outlineIndependent: 0
   outlineContourStyle: 0
   outlineMaskMode: 0
-  glow: 0
-  glowWidth: 0.4
+  glow: 0.05
+  glowWidth: 0.2
   glowQuality: 3
   glowBlurMethod: 0
   glowDownsampling: 2
@@ -586,7 +586,7 @@ MonoBehaviour:
   - offset: 1
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
-  glowMaskMode: 0
+  glowMaskMode: 2
   innerGlow: 1.02
   innerGlowWidth: 1
   innerGlowColor: {r: 1, g: 1, b: 1, a: 1}

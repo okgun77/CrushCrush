@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5369870802319884165}
   - component: {fileID: 8060404067322157545}
   - component: {fileID: 3774115051579664195}
-  - component: {fileID: -3460401394036984332}
+  - component: {fileID: -8600461695337466229}
   m_Layer: 6
   m_Name: sunscreen-big
   m_TagString: BreakableObject
@@ -456,7 +456,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.2707237
   m_Center: {x: 0.000015258789, y: 1.1049604, z: 0.0010156631}
---- !u!114 &-3460401394036984332
+--- !u!114 &-8600461695337466229
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -559,8 +559,8 @@ MonoBehaviour:
   outlineIndependent: 0
   outlineContourStyle: 0
   outlineMaskMode: 0
-  glow: 0
-  glowWidth: 0.4
+  glow: 0.05
+  glowWidth: 0.2
   glowQuality: 3
   glowBlurMethod: 0
   glowDownsampling: 2
@@ -586,7 +586,7 @@ MonoBehaviour:
   - offset: 1
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
-  glowMaskMode: 0
+  glowMaskMode: 2
   innerGlow: 1.02
   innerGlowWidth: 1
   innerGlowColor: {r: 1, g: 1, b: 1, a: 1}

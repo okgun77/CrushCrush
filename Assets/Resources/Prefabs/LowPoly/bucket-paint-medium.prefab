@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -1853308388413064005}
   - component: {fileID: -5299122628660544042}
   - component: {fileID: 6253790720465827512}
-  - component: {fileID: 8091361852367611574}
+  - component: {fileID: 1930098801738083068}
   m_Layer: 6
   m_Name: bucket-paint-medium
   m_TagString: BreakableObject
@@ -458,7 +458,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.23712529
   m_Center: {x: -0.00007812679, y: 0.125, z: -0.0005039945}
---- !u!114 &8091361852367611574
+--- !u!114 &1930098801738083068
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -561,8 +561,8 @@ MonoBehaviour:
   outlineIndependent: 0
   outlineContourStyle: 0
   outlineMaskMode: 0
-  glow: 0
-  glowWidth: 0.4
+  glow: 0.05
+  glowWidth: 0.2
   glowQuality: 3
   glowBlurMethod: 0
   glowDownsampling: 2
@@ -588,7 +588,7 @@ MonoBehaviour:
   - offset: 1
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
-  glowMaskMode: 0
+  glowMaskMode: 2
   innerGlow: 1.02
   innerGlowWidth: 1
   innerGlowColor: {r: 1, g: 1, b: 1, a: 1}

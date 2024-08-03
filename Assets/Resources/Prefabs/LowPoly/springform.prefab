@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -3163697043826577197}
   - component: {fileID: 3735011053616262038}
   - component: {fileID: 2963657808872272544}
-  - component: {fileID: -5433436823825253173}
+  - component: {fileID: 1410611730419170015}
   m_Layer: 6
   m_Name: springform
   m_TagString: BreakableObject
@@ -455,7 +455,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.20325351, y: 0.060000002, z: 0.20962882}
   m_Center: {x: -0.000004108995, y: 0.030000001, z: 0.0031777397}
---- !u!114 &-5433436823825253173
+--- !u!114 &1410611730419170015
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -558,8 +558,8 @@ MonoBehaviour:
   outlineIndependent: 0
   outlineContourStyle: 0
   outlineMaskMode: 0
-  glow: 0
-  glowWidth: 0.4
+  glow: 0.05
+  glowWidth: 0.2
   glowQuality: 3
   glowBlurMethod: 0
   glowDownsampling: 2
@@ -585,7 +585,7 @@ MonoBehaviour:
   - offset: 1
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
-  glowMaskMode: 0
+  glowMaskMode: 2
   innerGlow: 1.02
   innerGlowWidth: 1
   innerGlowColor: {r: 1, g: 1, b: 1, a: 1}

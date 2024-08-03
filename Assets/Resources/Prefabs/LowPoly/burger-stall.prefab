@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -1449721667983085614}
   - component: {fileID: 4482954166618844607}
   - component: {fileID: 8250955780127352522}
-  - component: {fileID: 4690255869702014692}
+  - component: {fileID: 6215571509663291614}
   m_Layer: 6
   m_Name: burger-stall
   m_TagString: BreakableObject
@@ -461,7 +461,7 @@ MonoBehaviour:
   additionalSpeedMultiplier: 5
   scoreType: 1
   fragmentLevel: 0
---- !u!114 &4690255869702014692
+--- !u!114 &6215571509663291614
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -564,8 +564,8 @@ MonoBehaviour:
   outlineIndependent: 0
   outlineContourStyle: 0
   outlineMaskMode: 0
-  glow: 0
-  glowWidth: 0.4
+  glow: 0.05
+  glowWidth: 0.2
   glowQuality: 3
   glowBlurMethod: 0
   glowDownsampling: 2
@@ -591,7 +591,7 @@ MonoBehaviour:
   - offset: 1
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
-  glowMaskMode: 0
+  glowMaskMode: 2
   innerGlow: 1.02
   innerGlowWidth: 1
   innerGlowColor: {r: 1, g: 1, b: 1, a: 1}

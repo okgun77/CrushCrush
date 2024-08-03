@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -4038618000782651633}
   - component: {fileID: -6255379584841901771}
   - component: {fileID: 1776052249641744864}
-  - component: {fileID: -7184752871409843454}
+  - component: {fileID: -207899024764834356}
   m_Layer: 6
   m_Name: lounger
   m_TagString: BreakableObject
@@ -456,7 +456,7 @@ MonoBehaviour:
   additionalSpeedMultiplier: 5
   scoreType: 1
   fragmentLevel: 0
---- !u!114 &-7184752871409843454
+--- !u!114 &-207899024764834356
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -559,8 +559,8 @@ MonoBehaviour:
   outlineIndependent: 0
   outlineContourStyle: 0
   outlineMaskMode: 0
-  glow: 0
-  glowWidth: 0.4
+  glow: 0.05
+  glowWidth: 0.2
   glowQuality: 3
   glowBlurMethod: 0
   glowDownsampling: 2
@@ -586,7 +586,7 @@ MonoBehaviour:
   - offset: 1
     alpha: 0.4
     color: {r: 0.64, g: 1, b: 0, a: 1}
-  glowMaskMode: 0
+  glowMaskMode: 2
   innerGlow: 1.02
   innerGlowWidth: 1
   innerGlowColor: {r: 1, g: 1, b: 1, a: 1}
