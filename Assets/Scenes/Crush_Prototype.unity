@@ -1251,7 +1251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 330585545}
-  detectionRadius: 0.2
+  detectionRadius: 2
 --- !u!4 &607463029
 Transform:
   m_ObjectHideFlags: 0
@@ -4370,8 +4370,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616aecdb52fcbcc45b0897fe46aafc44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.5
-  margin: 0.5
+  speed: 0.6
+  margin: 0.9
 --- !u!1 &2054626041
 GameObject:
   m_ObjectHideFlags: 0

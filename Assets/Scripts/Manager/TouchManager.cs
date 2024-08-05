@@ -4,7 +4,7 @@ using UnityEngine;
 public class TouchManager : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera; // 주 카메라
-    [SerializeField] private float detectionRadius = 0.2f; // 충돌 검사 반경 (월드 좌표 기준)
+    [SerializeField] private float detectionRadius = 0.2f; // 충돌 검사 반경 (스크린 좌표 기준)
     private List<BreakableObject> breakableObjects = new List<BreakableObject>();
     private GameManager gameManager;
 
@@ -52,12 +52,12 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    private void DetectObject(Vector3 _inputPosition)
+    private void DetectObject(Vector3 inputPosition)
     {
-        Ray ray = mainCamera.ScreenPointToRay(_inputPosition);
+        Ray ray = mainCamera.ScreenPointToRay(inputPosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out hit))
         {
             BreakableObject breakableObject = hit.collider.GetComponent<BreakableObject>();
             if (breakableObject != null)
@@ -67,15 +67,17 @@ public class TouchManager : MonoBehaviour
             }
             else
             {
-                // 구체 반경 내의 다른 객체 감지
-                Collider[] colliders = Physics.OverlapSphere(hit.point, detectionRadius);
-                foreach (Collider collider in colliders)
+                // 2D 화면에서 거리 기반 검사를 위해 주위에 있는 오브젝트 검사
+                Vector2 screenPoint = new Vector2(inputPosition.x, inputPosition.y);
+                foreach (BreakableObject obj in breakableObjects)
                 {
-                    BreakableObject nearbyObject = collider.GetComponent<BreakableObject>();
-                    if (nearbyObject != null)
+                    Vector2 objScreenPoint = mainCamera.WorldToScreenPoint(obj.transform.position);
+                    float distance = Vector2.Distance(screenPoint, objScreenPoint);
+
+                    if (distance <= detectionRadius)
                     {
-                        Debug.Log($"Nearby object {nearbyObject.name} touched within radius.");
-                        nearbyObject.OnTouch();
+                        Debug.Log($"Object {obj.name} touched within screen radius.");
+                        obj.OnTouch();
                         break;
                     }
                 }
@@ -83,19 +85,19 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    public void RegisterBreakableObject(BreakableObject _breakableObject)
+    public void RegisterBreakableObject(BreakableObject breakableObject)
     {
-        if (!breakableObjects.Contains(_breakableObject))
+        if (!breakableObjects.Contains(breakableObject))
         {
-            breakableObjects.Add(_breakableObject);
+            breakableObjects.Add(breakableObject);
         }
     }
 
-    public void UnregisterBreakableObject(BreakableObject _breakableObject)
+    public void UnregisterBreakableObject(BreakableObject breakableObject)
     {
-        if (breakableObjects.Contains(_breakableObject))
+        if (breakableObjects.Contains(breakableObject))
         {
-            breakableObjects.Remove(_breakableObject);
+            breakableObjects.Remove(breakableObject);
         }
     }
 }
