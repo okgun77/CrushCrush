@@ -1345,8 +1345,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13be98247159bc41bf9b8ddfd1ec0af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sfxClips: []
-  sfxSources: {fileID: 0}
+  sfxClips:
+  - name: SFX_Crush_01
+    clip: {fileID: 8300000, guid: 278576c5b6c0e9a43b2928da8c5cec14, type: 3}
+  sfxSource: {fileID: 0}
 --- !u!4 &578604570
 Transform:
   m_ObjectHideFlags: 0
@@ -2486,6 +2488,7 @@ MonoBehaviour:
   hpManager: {fileID: 854758260}
   touchManager: {fileID: 607463028}
   moveManager: {fileID: 1867383045}
+  audioManager: {fileID: 412866662}
 --- !u!4 &957836776
 Transform:
   m_ObjectHideFlags: 0

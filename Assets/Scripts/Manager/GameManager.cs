@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HPManager hpManager;
     [SerializeField] private TouchManager touchManager;
     [SerializeField] private MoveManager moveManager;
+    [SerializeField] private AudioManager audioManager;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
         hpManager.Init(this);
         touchManager.Init(this);
         moveManager.Init(this);
+        audioManager.Init(this);
     }
 
     public void RestartGame()

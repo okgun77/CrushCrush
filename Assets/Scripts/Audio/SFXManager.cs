@@ -1,28 +1,43 @@
-using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 
+[System.Serializable]
+public struct SFXClip
+{
+    public string name;      // 사용자가 설정할 SFX 이름
+    public AudioClip clip;   // 실제 오디오 클립
+}
+
 public class SFXManager : MonoBehaviour
 {
-    [SerializeField] private List<AudioClip> sfxClips;      // SFX 클립 리스트
-    [SerializeField] private AudioSource sfxSources;        // SFX를 재생할 AudioSource;
+    [SerializeField] private List<SFXClip> sfxClips; // SFX 클립 리스트
+    [SerializeField] private AudioSource sfxSource;  // SFX를 재생할 AudioSource
 
-    private void Awake()
+    private Dictionary<string, AudioClip> sfxDictionary;
+
+    public void Init(AudioManager _audioManager)
     {
-        if (sfxSources == null)
+        if (sfxSource == null)
         {
-            sfxSources = gameObject.AddComponent<AudioSource>();
-            sfxSources.loop = false;    // sfx 기본 반복 안됨(반복될 일이 있나??)
+            sfxSource = gameObject.AddComponent<AudioSource>();
+            sfxSource.loop = false; // SFX는 반복되지 않음(반복할 일이 있나??)
+        }
+
+        sfxDictionary = new Dictionary<string, AudioClip>();
+        foreach (SFXClip sfx in sfxClips)
+        {
+            if (!sfxDictionary.ContainsKey(sfx.name))
+            {
+                sfxDictionary.Add(sfx.name, sfx.clip);
+            }
         }
     }
 
     public void PlaySFX(string _sfxName)
     {
-        AudioClip clip = sfxClips.Find(s => s.name == _sfxName);
-        
-        if(clip != null)
+        if (sfxDictionary.TryGetValue(_sfxName, out AudioClip clip))
         {
-            sfxSources.PlayOneShot(clip);
+            sfxSource.PlayOneShot(clip);
         }
         else
         {
@@ -30,11 +45,9 @@ public class SFXManager : MonoBehaviour
         }
     }
 
-    public void PlaySFxAtPoint(string _sfxName, Vector3 _position)
+    public void PlaySFXAtPoint(string _sfxName, Vector3 _position)
     {
-        AudioClip clip = sfxClips.Find(s => s.name == _sfxName);
-
-        if (clip != null)
+        if (sfxDictionary.TryGetValue(_sfxName, out AudioClip clip))
         {
             AudioSource.PlayClipAtPoint(clip, _position);
         }
@@ -43,5 +56,4 @@ public class SFXManager : MonoBehaviour
             Debug.LogWarning($"SFX '{_sfxName}' not found!");
         }
     }
-
 }

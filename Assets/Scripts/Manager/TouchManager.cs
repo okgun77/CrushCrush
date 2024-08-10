@@ -56,6 +56,7 @@ public class TouchManager : MonoBehaviour
                     inputPosition = touch.position;
                     LogMessage($"Touch detected at position: {inputPosition}");
                     ShowTouchPoint(inputPosition);
+                    AudioManager.Instance.PlaySFX("SFX_Crush_01");
                 }
             }
         }
@@ -67,6 +68,7 @@ public class TouchManager : MonoBehaviour
                 inputPosition = Input.mousePosition;
                 LogMessage($"Mouse click detected at position: {inputPosition}");
                 ShowTouchPoint(inputPosition);
+                AudioManager.Instance.PlaySFX("SFX_Crush_01");
             }
         }
 

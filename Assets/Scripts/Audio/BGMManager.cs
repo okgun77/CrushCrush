@@ -7,7 +7,7 @@ public class BGMManager : MonoBehaviour
     [SerializeField] private List<AudioClip> bgmTracks;     // BGM Track List
     [SerializeField] private AudioSource bgmSource;         // BGM을 재생할 AudioSource
 
-    private void Awake()
+    public void Init(AudioManager _audioManager)
     {
         if (bgmSource == null)
         {
