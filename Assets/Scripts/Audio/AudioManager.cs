@@ -5,7 +5,8 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
-    private List<AudioSource> audioSources = new List<AudioSource>();
+    [SerializeField] private BGMManager bgmManager;
+    [SerializeField] private SFXManager sfxManager;
 
     private void Awake()
     {
@@ -20,19 +21,13 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void RegisterAudioSource(AudioSource audioSource)
+    public void PlayBGM(string _trackname)
     {
-        if (!audioSources.Contains(audioSource))
+        if (bgmManager != null)
         {
-            audioSources.Add(audioSource);
+            bgmManager.PlayTrack(_trackname);
         }
     }
 
-    public void SetPitch(float pitch)
-    {
-        foreach (var audioSource in audioSources)
-        {
-            audioSource.pitch = pitch;
-        }
-    }
+
 }

@@ -132,7 +132,7 @@ MonoBehaviour:
   objectType: 0
   demolitionType: 1
   physics:
-    mt: 3
+    mt: 9
     material: {fileID: 0}
     massBy: 0
     mass: 1
