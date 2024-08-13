@@ -152,9 +152,9 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < _blinkCount; i++) // 지정된 횟수만큼 깜빡임
         {
-            // panelImage.color = _blinkColor;
+            panelImage.color = _blinkColor;
             yield return new WaitForSeconds(halfDuration);
-            // panelImage.color = new Color(0, 0, 0, 0);
+            panelImage.color = new Color(0, 0, 0, 0);
             yield return new WaitForSeconds(halfDuration);
         }
 
