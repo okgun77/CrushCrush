@@ -4,12 +4,13 @@ using System.Collections.Generic;
 
 public class TouchManager : MonoBehaviour
 {
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private float detectionRadius = 0.2f; // 터치 감지 반경 (픽셀 단위)
-    [SerializeField] private int maxTouchCheckFrames = 3;
-    [SerializeField] private TextMeshProUGUI logText;
-    [SerializeField] private GameObject touchPointPrefab; // 터치 지점을 표시할 Quad 프리팹
-    [SerializeField] private Vector3 touchPointScale = new Vector3(0.1f, 0.1f, 0.1f); // 터치 포인트의 크기 설정
+    [SerializeField] private Camera mainCamera;                                         // 메인 카메라 참조
+    [SerializeField] private float detectionRadius = 0.2f;                              // 터치 감지 반경 (픽셀 단위)
+    [SerializeField] private int maxTouchCheckFrames = 3;                               // 터치 체크 최대 프레임
+    [SerializeField] private TextMeshProUGUI logText;                                   // 로그 표시
+    [SerializeField] private GameObject touchPointPrefab;                               // 터치 지점을 표시할 Quad 프리팹
+    [SerializeField] private Vector3 touchPointScale = new Vector3(0.1f, 0.1f, 0.1f);   // 터치 포인트의 크기 설정
+    
     private List<BreakableObject> breakableObjects = new List<BreakableObject>();
     private GameManager gameManager;
 
@@ -80,17 +81,17 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    private void DetectObject(Vector3 inputPosition)
+    private void DetectObject(Vector3 _inputPosition)
     {
-        Vector2 screenPoint = new Vector2(inputPosition.x, inputPosition.y);
+        Vector2 screenPoint = new Vector2(_inputPosition.x, _inputPosition.y);
 
         foreach (BreakableObject obj in breakableObjects)
         {
-            // 오브젝트의 콜라이더를 가져옵니다.
+            // 오브젝트의 콜라이더를 가져옴
             Collider collider = obj.GetComponent<Collider>();
             if (collider == null)
             {
-                continue; // 콜라이더가 없는 경우 건너뜁니다.
+                continue; // 콜라이더가 없는 경우 건너뜀.
             }
 
             // 콜라이더의 경계 상자를 스크린 좌표로 변환하여 검사
@@ -110,13 +111,13 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    private void ShowTouchPoint(Vector3 screenPosition)
+    private void ShowTouchPoint(Vector3 _screenPosition)
     {
         if (touchPointPrefab != null)
         {
             // 적절한 Z값 설정, 예를 들어 10f (카메라로부터 10 단위 떨어진 거리)
             float zDistanceFromCamera = 10f;
-            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, zDistanceFromCamera));
+            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(_screenPosition.x, _screenPosition.y, zDistanceFromCamera));
 
             // 터치 포인트 생성 (Quad 프리팹 사용)
             GameObject touchPoint = Instantiate(touchPointPrefab, worldPosition, Quaternion.identity);
@@ -136,28 +137,28 @@ public class TouchManager : MonoBehaviour
         currentTouchCheckFrame = 0;
     }
 
-    private void LogMessage(string message)
+    private void LogMessage(string _message)
     {
-        Debug.Log(message);
+        Debug.Log(_message);
         if (logText != null)
         {
-            logText.text = message;
+            logText.text = _message;
         }
     }
 
-    public void RegisterBreakableObject(BreakableObject breakableObject)
+    public void RegisterBreakableObject(BreakableObject _breakableObject)
     {
-        if (!breakableObjects.Contains(breakableObject))
+        if (!breakableObjects.Contains(_breakableObject))
         {
-            breakableObjects.Add(breakableObject);
+            breakableObjects.Add(_breakableObject);
         }
     }
 
-    public void UnregisterBreakableObject(BreakableObject breakableObject)
+    public void UnregisterBreakableObject(BreakableObject _breakableObject)
     {
-        if (breakableObjects.Contains(breakableObject))
+        if (breakableObjects.Contains(_breakableObject))
         {
-            breakableObjects.Remove(breakableObject);
+            breakableObjects.Remove(_breakableObject);
         }
     }
 }
