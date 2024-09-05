@@ -46,7 +46,7 @@ public class BreakableObject : MonoBehaviour
         moveScript = GetComponent<MoveToTargetPoint>();
 
         // ScoreManager 컴포넌트 가져오기
-        scoreManager = FindObjectOfType<ScoreManager>();
+        scoreManager = Object.FindFirstObjectByType<ScoreManager>();
         if (scoreManager == null)
         {
             Debug.LogError("ScoreManager를 찾을 수 없습니다!");
@@ -54,14 +54,14 @@ public class BreakableObject : MonoBehaviour
         }
 
         // TouchManager 컴포넌트 가져오기 및 등록
-        touchManager = FindObjectOfType<TouchManager>();
+        touchManager = FindFirstObjectByType<TouchManager>();
         if (touchManager != null)
         {
             touchManager.RegisterBreakableObject(this);
         }
 
         // WarningManager 컴포넌트 가져오기
-        warningManager = FindObjectOfType<WarningManager>();
+        warningManager = FindFirstObjectByType<WarningManager>();
         if (warningManager == null)
         {
             Debug.LogError("WarningManager를 찾을 수 없습니다!");
@@ -69,7 +69,7 @@ public class BreakableObject : MonoBehaviour
         }
 
         // HPManager 컴포넌트 가져오기
-        hpManager = FindObjectOfType<HPManager>();
+        hpManager = FindFirstObjectByType<HPManager>();
         if (hpManager == null)
         {
             Debug.LogError("HPManager를 찾을 수 없습니다!");
