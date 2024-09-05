@@ -4,12 +4,13 @@ using System.Collections.Generic;
 
 public class TouchManager : MonoBehaviour
 {
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private float detectionRadius = 0.2f; // 터치 감지 반경 (픽셀 단위)
-    [SerializeField] private int maxTouchCheckFrames = 3;
-    [SerializeField] private TextMeshProUGUI logText;
-    [SerializeField] private GameObject touchPointPrefab; // 터치 지점을 표시할 Quad 프리팹
-    [SerializeField] private Vector3 touchPointScale = new Vector3(0.1f, 0.1f, 0.1f); // 터치 포인트의 크기 설정
+    [SerializeField] private Camera mainCamera;                                         // 메인 카메라 참조
+    [SerializeField] private float detectionRadius = 0.2f;                              // 터치 감지 반경 (픽셀 단위)
+    [SerializeField] private int maxTouchCheckFrames = 3;                               // 터치 체크 최대 프레임
+    [SerializeField] private TextMeshProUGUI logText;                                   // 로그 표시
+    [SerializeField] private GameObject touchPointPrefab;                               // 터치 지점을 표시할 Quad 프리팹
+    [SerializeField] private Vector3 touchPointScale = new Vector3(0.1f, 0.1f, 0.1f);   // 터치 포인트의 크기 설정
+    
     private List<BreakableObject> breakableObjects = new List<BreakableObject>();
     private GameManager gameManager;
 
