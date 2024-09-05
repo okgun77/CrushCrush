@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         scoreManager.Init(this);
         slowMotionManager.Init(this);
         hpManager.Init(this);
-        touchManager.Init(this);
+        // touchManager.Init(this);
         moveManager.Init(this);
         audioManager.Init(this);
     }
