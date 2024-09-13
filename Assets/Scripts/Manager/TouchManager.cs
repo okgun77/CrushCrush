@@ -59,14 +59,18 @@ public class TouchManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit, rayDistance))
         {
             Debug.Log("부딪힌 물체 : " + hit.collider.gameObject.name);
+
             // 충돌한 오브젝트에 BreakableObject가 붙어있는지 확인
             BreakableObject breakableObject = hit.collider.gameObject.GetComponent<BreakableObject>();
+
             Debug.Log("breakableObject 가 있는지 체크" + (breakableObject != null));
+            
             if (breakableObject != null)
             {
                 // BreakableObject의 OnTouch() 함수 호출
                 breakableObject.OnTouch();
             }
+
             // 레이가 부딪힌 위치까지의 선을 그린다
             Debug.DrawLine(ray.origin, hit.point, Color.red, 1f); // 1초 동안 빨간색 선 표시
         }
