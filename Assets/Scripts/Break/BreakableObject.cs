@@ -15,6 +15,7 @@ public class BreakableObject : MonoBehaviour
     private TouchManager touchManager;
     private WarningManager warningManager;
     private HPManager hpManager;
+    private AudioManager audioManager;
 
     private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
 
@@ -75,6 +76,14 @@ public class BreakableObject : MonoBehaviour
             Debug.LogError("HPManager를 찾을 수 없습니다!");
             return;
         }
+
+        audioManager = FindFirstObjectByType<AudioManager>();
+        if (audioManager == null)
+        {
+            Debug.LogError("AudioManager를 찾을 수 없습니다!");
+            return;
+        }
+
     }
 
     private void OnDestroy()
@@ -111,6 +120,7 @@ public class BreakableObject : MonoBehaviour
 
             // 오브젝트 파괴 및 파편 처리
             rayfireRigid.Demolish();
+            audioManager.PlaySFX("SHATTER_Glass_Big_02_mono_short");
             foreach (RayfireRigid fragment in rayfireRigid.fragments)
             {
                 SetFragmentProperties(fragment, currentVelocity);

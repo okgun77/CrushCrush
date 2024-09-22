@@ -27,21 +27,8 @@ public class TouchManager : MonoBehaviour
 
     private void Update()
     {
-        //Raycast 등의 기능을 사용하신다면 아래 주석처리된 기능은 전부 사용하지 않으셔도 됩니다.
-        //if (isTouchDetected)
-        //{
-        //    currentTouchCheckFrame++;
-        //    //DetectObject(lastInputPosition);
 
-        //    if (currentTouchCheckFrame >= maxTouchCheckFrames)
-        //    {
-        //        ResetTouchDetection();
-        //    }
-        //}
-        //else
-        //{
         ScreenTouch();
-        //}
     }
     //터치 혹은 클릭한 위치에 바로 ray를 쏘아서 가장 먼저 닿은 오브젝트를 확인,
     //해당 오브젝트가 breakableObject 컴포넌트를 가지고있다면 OnTouch 실행

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,12 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private SpawnObject[] spawnObjects;
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private float spawnRange = 10f;
-    [SerializeField] private float spawnInterval = 2.0f;
+
+    // 스폰 간격 관련 변수들 추가
+    [SerializeField] private float initialSpawnInterval = 5.0f; // 초기 스폰 간격
+    [SerializeField] private float minimumSpawnInterval = 1.0f; // 최소 스폰 간격
+    [SerializeField] private float spawnIntervalDecreaseRate = 0.1f; // 스폰 간격 감소량
+
     private GameManager gameManager;
 
     private int lastSpawnPointIndex = -1;
@@ -23,7 +29,7 @@ public class SpawnManager : MonoBehaviour
     {
         gameManager = _gameManager;
         InitIndexes();
-        InvokeRepeating(nameof(SpawnObject), 0f, spawnInterval);
+        StartCoroutine(SpawnObjectCoroutine()); // 코루틴 시작
     }
 
     private void InitIndexes()
@@ -34,7 +40,26 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    private void SpawnObject()
+    private IEnumerator SpawnObjectCoroutine()
+    {
+        float currentSpawnInterval = initialSpawnInterval;
+
+        while (true)
+        {
+            SpawnObjectMethod();
+
+            yield return new WaitForSeconds(currentSpawnInterval);
+
+            // 스폰 간격 감소
+            if (currentSpawnInterval > minimumSpawnInterval)
+            {
+                currentSpawnInterval -= spawnIntervalDecreaseRate;
+                currentSpawnInterval = Mathf.Max(currentSpawnInterval, minimumSpawnInterval);
+            }
+        }
+    }
+
+    private void SpawnObjectMethod()
     {
         if (spawnPoints.Length == 0 || spawnObjects.Length == 0)
         {
@@ -52,7 +77,11 @@ public class SpawnManager : MonoBehaviour
         lastSpawnPointIndex = (lastSpawnPointIndex + 1) % spawnPoints.Length;
         Transform selectedSpawnPoint = spawnPoints[lastSpawnPointIndex];
 
-        Vector3 randomOffset = new Vector3(Random.Range(-spawnRange, spawnRange), Random.Range(-spawnRange, spawnRange), Random.Range(-spawnRange, spawnRange));
+        Vector3 randomOffset = new Vector3(
+            Random.Range(-spawnRange, spawnRange),
+            Random.Range(-spawnRange, spawnRange),
+            Random.Range(-spawnRange, spawnRange)
+        );
         Vector3 spawnPosition = selectedSpawnPoint.position + randomOffset;
 
         GameObject spawnedObject = Instantiate(objectToSpawn, spawnPosition, Quaternion.identity);
