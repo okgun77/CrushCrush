@@ -16,6 +16,8 @@ public class TouchManager : MonoBehaviour
     private List<BreakableObject> breakableObjects = new List<BreakableObject>();
     // private GameManager gameManager;
 
+    private AudioManager audioManager;
+
     private bool isTouchDetected = false;
     private Vector3 lastInputPosition;
     private int currentTouchCheckFrame = 0;
@@ -24,6 +26,18 @@ public class TouchManager : MonoBehaviour
     //{
     //    gameManager = _gameManager;
     //}
+
+    private void Start()
+    {
+        audioManager = FindFirstObjectByType<AudioManager>();
+        if (audioManager == null)
+        {
+            Debug.LogError("AudioManager를 찾을 수 없습니다!");
+            return;
+        }
+
+    }
+
 
     private void Update()
     {
@@ -37,10 +51,15 @@ public class TouchManager : MonoBehaviour
     //
     private void DoRay(Vector3 _position)
     {
+
+        audioManager.PlaySFX("Wpn_Laser_01");
+
         LogMessage($"pointer detected at position: {_position}");
         // 카메라의 위치에서 레이 발사
         Ray ray = Camera.main.ScreenPointToRay(_position);
         RaycastHit hit;
+
+
 
         // 레이가 지정한 거리에 있는 오브젝트와 충돌했을 때
         if (Physics.Raycast(ray, out hit, rayDistance))

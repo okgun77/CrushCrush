@@ -1,16 +1,17 @@
 using UnityEngine;
 
-public class MoveToTargetPoint : MonoBehaviour
+public class MoveToTargetPoint : MonoBehaviour, IMovable
 {
     [SerializeField] private float speed = 3f; // 이동 속도
     [SerializeField] private float margin = 0.1f; // 화면 경계로부터의 마진 (뷰포트 좌표 기준, 0~1 사이)
 
     private Transform targetPoint; // 타겟 포인트
     private Vector3 currentVelocity; // 현재 속도
+    private bool isPaused = false; // 일시정지 상태 플래그
 
     private void Update()
     {
-        if (targetPoint != null)
+        if (!isPaused && targetPoint != null)
         {
             // 타겟 포인트로 이동
             Vector3 direction = (targetPoint.position - transform.position).normalized;
@@ -36,6 +37,12 @@ public class MoveToTargetPoint : MonoBehaviour
     public void SetSpeed(float _speed)
     {
         speed = _speed;
+    }
+
+    // 일시정지 상태 적용
+    public void SetPaused(bool _isPaused)
+    {
+        isPaused = _isPaused;
     }
 
     private Vector3 ClampPositionToScreen(Vector3 _position, Vector3 _direction)
@@ -65,7 +72,6 @@ public class MoveToTargetPoint : MonoBehaviour
         {
             // 반사 벡터 계산
             Vector3 reflectedDirection = Vector3.Reflect(_direction, Vector3.up);
-            // 자연스러운 곡선을 위한 Slerp 사용
             _direction = Vector3.Slerp(_direction, reflectedDirection, Time.deltaTime * speed);
             currentVelocity = _direction * speed;
         }

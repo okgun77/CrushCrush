@@ -120,7 +120,10 @@ public class BreakableObject : MonoBehaviour
 
             // 오브젝트 파괴 및 파편 처리
             rayfireRigid.Demolish();
-            audioManager.PlaySFX("SHATTER_Glass_Big_02_mono_short");
+
+            // 파괴 오디오 플레이
+            audioManager.PlaySFX("BreakingBones02-Mono");
+            
             foreach (RayfireRigid fragment in rayfireRigid.fragments)
             {
                 SetFragmentProperties(fragment, currentVelocity);
