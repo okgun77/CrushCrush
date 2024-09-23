@@ -11,13 +11,14 @@ public class TouchManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI logText;                                   // 로그 표시
     [SerializeField] private GameObject touchPointPrefab;                               // 터치 지점을 표시할 Quad 프리팹
     [SerializeField] private Vector3 touchPointScale = new Vector3(0.1f, 0.1f, 0.1f);   // 터치 포인트의 크기 설정
-
     [SerializeField] private float rayDistance = 100f;  // 레이캐스트가 나아갈 거리
+
+    private AudioManager audioManager;
     private List<BreakableObject> breakableObjects = new List<BreakableObject>();
     // private GameManager gameManager;
 
-    private AudioManager audioManager;
 
+    private bool isPaused = false;      // 일시정지 상태
     private bool isTouchDetected = false;
     private Vector3 lastInputPosition;
     private int currentTouchCheckFrame = 0;
@@ -41,14 +42,22 @@ public class TouchManager : MonoBehaviour
 
     private void Update()
     {
-
-        ScreenTouch();
+        if (!isPaused)
+        {
+            ScreenTouch();
+        }
     }
     //터치 혹은 클릭한 위치에 바로 ray를 쏘아서 가장 먼저 닿은 오브젝트를 확인,
     //해당 오브젝트가 breakableObject 컴포넌트를 가지고있다면 OnTouch 실행
     //보통 Raycast를 사용하면 즉시 부수는 경우 이 방법을 자주 사용합니다.
     //터치한 지점에 무언가(미사일 같은) 투사체가 발사시켜야하는 경우는 사용x
     //
+
+    public void SetPaused(bool _isPaused)
+    {
+        isPaused = _isPaused;
+    }
+
     private void DoRay(Vector3 _position)
     {
 
@@ -87,6 +96,8 @@ public class TouchManager : MonoBehaviour
         }
         ShowTouchPoint(_position);
     }
+
+    
     private void ScreenTouch()
     {
         //bool inputDetected = false; //중복으로 사용 할 필요없는 bool 변수

@@ -10,11 +10,15 @@ public class PauseMenuManager : MonoBehaviour
     [SerializeField] private Button exitButton;
     [SerializeField] private GameObject pauseMenuPrefab;
 
+    private TouchManager touchManager;
+    
     private bool isPaused = false;
+    
 
     private void Start()
     {
         Init();
+        touchManager = FindObjectOfType<TouchManager>();
     }
 
     private void Update()
@@ -59,6 +63,12 @@ public class PauseMenuManager : MonoBehaviour
         {
             spawnManager.StopSpawning();
         }
+
+        // TouchManager 일시정지
+        if (touchManager != null)
+        {
+            touchManager.SetPaused(true);
+        }
     }
 
     private void PauseMenuDisable()
@@ -79,6 +89,12 @@ public class PauseMenuManager : MonoBehaviour
         if (spawnManager != null)
         {
             spawnManager.StartSpawning();
+        }
+
+        // TouchManager 일시정지
+        if (touchManager != null)
+        {
+            touchManager.SetPaused(false);
         }
     }
 
