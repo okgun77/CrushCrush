@@ -1,0 +1,127 @@
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+
+public class GameOverMenuManager : MonoBehaviour
+{
+    [SerializeField] private Button titleButton;
+    [SerializeField] private Button exitButton;
+    [SerializeField] private GameObject gameOverMenuPrefab;
+
+    private TouchManager touchManager;
+    
+    private bool isPaused = false;
+    
+
+    private void Start()
+    {
+        Init();
+        touchManager = FindObjectOfType<TouchManager>();
+    }
+
+    private void Init()
+    {
+        gameOverMenuPrefab.SetActive(false);
+        titleButton.onClick.AddListener(OnTitleButtonClicked);
+        exitButton.onClick.AddListener(OnExitButtonClicked);
+    }
+
+    private void PauseMenuEnable()
+    {
+        Time.timeScale = 0f;
+        gameOverMenuPrefab.SetActive(true);
+        isPaused = true;
+
+        // 모든 움직이는 오브젝트에 대해 일시정지 호출
+        var movableObjects = GetMovableObjects();
+        foreach (var movable in movableObjects)
+        {
+            movable.SetPaused(true);
+        }
+
+        // 스폰 매니저에서 스폰을 멈춤
+        var spawnManager = FindObjectOfType<SpawnManager>();
+        if (spawnManager != null)
+        {
+            spawnManager.StopSpawning();
+        }
+
+        // TouchManager 일시정지
+        if (touchManager != null)
+        {
+            touchManager.SetPaused(true);
+        }
+    }
+
+    private void PauseMenuDisable()
+    {
+        Time.timeScale = 1f;
+        gameOverMenuPrefab.SetActive(false);
+        isPaused = false;
+
+        // 모든 움직이는 오브젝트에 대해 일시정지 해제 호출
+        var movableObjects = GetMovableObjects();
+        foreach (var movable in movableObjects)
+        {
+            movable.SetPaused(false);
+        }
+
+        // 스폰 매니저에서 스폰을 재개
+        var spawnManager = FindObjectOfType<SpawnManager>();
+        if (spawnManager != null)
+        {
+            spawnManager.StartSpawning();
+        }
+
+        // TouchManager 일시정지
+        if (touchManager != null)
+        {
+            touchManager.SetPaused(false);
+        }
+    }
+
+
+    // IMovable 인터페이스를 구현한 MonoBehaviour 컴포넌트들을 찾음
+    private List<IMovable> GetMovableObjects()
+    {
+        List<IMovable> movables = new List<IMovable>();
+        MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>();
+
+        foreach (var behaviour in allBehaviours)
+        {
+            if (behaviour is IMovable movable)
+            {
+                movables.Add(movable);
+            }
+        }
+
+        return movables;
+    }
+
+    private void OnContinueButtonClicked()
+    {
+        PauseMenuDisable();
+    }
+
+    private void OnTitleButtonClicked()
+    {
+        PauseMenuDisable();
+        SceneManager.LoadScene("Title");
+    }
+
+    private void OnExitButtonClicked()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit(); // 어플리케이션 종료
+#endif
+    }
+
+    private void OnDestroy()
+    {
+        titleButton.onClick.RemoveListener(OnTitleButtonClicked);
+        exitButton.onClick.RemoveListener(OnExitButtonClicked);
+    }
+}

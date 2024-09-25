@@ -88,6 +88,10 @@ public class SpawnManager : MonoBehaviour
 
         GameObject spawnedObject = Instantiate(objectToSpawn, spawnPosition, Quaternion.identity);
 
+        // FadeInObject 추가, 서서히 나타나게 함
+        // FadeInObject fadeInObject = spawnedObject.AddComponent<FadeInObject>();
+        // fadeInObject.StartFadeIn();
+
         // MoveManager를 통해 이동 방식 적용
         var moveManager = gameManager.GetMoveManager();
         if (moveManager != null)

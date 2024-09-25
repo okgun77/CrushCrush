@@ -16,6 +16,7 @@ public class BreakableObject : MonoBehaviour
     private WarningManager warningManager;
     private HPManager hpManager;
     private AudioManager audioManager;
+    private FadeInObject fadeInObject;
 
     private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
 
