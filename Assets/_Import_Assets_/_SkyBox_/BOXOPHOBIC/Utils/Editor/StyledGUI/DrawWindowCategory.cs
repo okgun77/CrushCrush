@@ -10,8 +10,6 @@ namespace Boxophobic.StyledGUI
     {
         public static void DrawWindowCategory(string bannerText)
         {
-            GUI.color = new Color(1, 1, 1, 0.9f);
-
             var fullRect = GUILayoutUtility.GetRect(0, 0, 18, 0);
             var fillRect = new Rect(0, fullRect.y, fullRect.xMax + 10, 18);
             var lineRect = new Rect(0, fullRect.y, fullRect.xMax + 10, 1);
@@ -21,14 +19,10 @@ namespace Boxophobic.StyledGUI
             EditorGUI.DrawRect(lineRect, CONSTANT.LineColor);
 
             GUI.Label(titleRect, bannerText, CONSTANT.HeaderStyle);
-
-            GUI.color = Color.white;
         }
 
         public static bool DrawWindowCategory(string bannerText, bool enabled, float top, float down, bool colapsable)
         {
-            GUI.color = new Color(1, 1, 1, 0.9f);
-
             if (colapsable)
             {
                 if (enabled)
@@ -87,8 +81,6 @@ namespace Boxophobic.StyledGUI
             {
                 GUILayout.Space(down);
             }
-
-            GUI.color = Color.white;
 
             return enabled;
         }

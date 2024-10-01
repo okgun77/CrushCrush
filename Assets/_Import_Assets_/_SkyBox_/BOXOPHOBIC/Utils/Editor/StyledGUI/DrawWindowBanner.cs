@@ -13,8 +13,8 @@ namespace Boxophobic.StyledGUI
             GUILayout.Space(15);
 
             var fullRect = GUILayoutUtility.GetRect(0, 0, 36, 0);
-            var fillRect = new Rect(0, fullRect.y, fullRect.xMax + 10, 36);
-            var lineRect = new Rect(0, fullRect.y, fullRect.xMax + 10, 1);
+            var fillRect = new Rect(1, fullRect.position.y, fullRect.xMax - 2, 36);
+            var lineRect = new Rect(1, fullRect.position.y, fullRect.xMax - 2, 1);
 
             if (EditorGUIUtility.isProSkin)
             {
@@ -40,8 +40,7 @@ namespace Boxophobic.StyledGUI
             GUILayout.Space(15);
 
             var fullRect = GUILayoutUtility.GetRect(0, 0, 36, 0);
-            var fillRect = new Rect(0, fullRect.y, fullRect.xMax + 10, 36);
-            var lineRect = new Rect(0, fullRect.y, fullRect.xMax + 10, 1);
+            var fillRect = new Rect(2, fullRect.position.y, fullRect.xMax - 4, 36);
 
             Color color;
             Color guiColor;
@@ -58,7 +57,6 @@ namespace Boxophobic.StyledGUI
             }
 
             EditorGUI.DrawRect(fillRect, color);
-            EditorGUI.DrawRect(lineRect, CONSTANT.LineColor);
 
             GUI.Label(fullRect, "<size=16><color=#" + ColorUtility.ToHtmlStringRGB(guiColor) + ">" + title + "</color></size>", CONSTANT.TitleStyle);
 
@@ -82,9 +80,9 @@ namespace Boxophobic.StyledGUI
             GUILayout.Space(15);
 
             var fullRect = GUILayoutUtility.GetRect(0, 0, 36, 0);
-            var fillRect = new Rect(0, fullRect.y, fullRect.xMax + 10, 36);
-            var subRect = new Rect(0, fullRect.y, fullRect.xMax - 18, 36);
-            var lineRect = new Rect(0, fullRect.y, fullRect.xMax + 10, 1);
+            var fillRect = new Rect(1, fullRect.position.y, fullRect.xMax - 2, 36);
+            var subRect = new Rect(1, fullRect.position.y, fullRect.xMax - 18, 36);
+            var lineRect = new Rect(1, fullRect.position.y, fullRect.xMax - 2, 1);
 
             if (EditorGUIUtility.isProSkin)
             {
@@ -123,8 +121,8 @@ namespace Boxophobic.StyledGUI
             GUILayout.Space(15);
 
             var fullRect = GUILayoutUtility.GetRect(0, 0, 36, 0);
-            var subRect = new Rect(0, fullRect.y, fullRect.xMax - 18, 36);
-            var fillRect = new Rect(0, fullRect.y, fullRect.xMax + 10, 36);
+            var subRect = new Rect(1, fullRect.position.y, fullRect.xMax - 18, 36);
+            var fillRect = new Rect(2, fullRect.position.y, fullRect.xMax - 4, 36);
 
             Color color;
             Color guiColor;
