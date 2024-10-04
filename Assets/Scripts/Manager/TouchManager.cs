@@ -30,13 +30,17 @@ public class TouchManager : MonoBehaviour
 
     private void Start()
     {
-        audioManager = FindFirstObjectByType<AudioManager>();
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+
+        audioManager = FindAnyObjectByType<AudioManager>();
         if (audioManager == null)
         {
             Debug.LogError("AudioManager를 찾을 수 없습니다!");
             return;
         }
-
     }
 
 
@@ -47,11 +51,12 @@ public class TouchManager : MonoBehaviour
             ScreenTouch();
         }
     }
+
     //터치 혹은 클릭한 위치에 바로 ray를 쏘아서 가장 먼저 닿은 오브젝트를 확인,
     //해당 오브젝트가 breakableObject 컴포넌트를 가지고있다면 OnTouch 실행
     //보통 Raycast를 사용하면 즉시 부수는 경우 이 방법을 자주 사용합니다.
     //터치한 지점에 무언가(미사일 같은) 투사체가 발사시켜야하는 경우는 사용x
-    //
+    
 
     public void SetPaused(bool _isPaused)
     {
@@ -105,7 +110,8 @@ public class TouchManager : MonoBehaviour
 
         //if문을 작성하면 매 터치마다 if문에서 확인을 하기때문에 #if를 사용하는 것이 좋음
         //#if는 빌드할때 #if에 참이 되는 내용만 컴파일하게됨
-#if UNITY_EDITOR
+
+#if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetMouseButtonDown(0))
         {
             DoRay(Input.mousePosition);
@@ -121,78 +127,8 @@ public class TouchManager : MonoBehaviour
         }
 #endif
 
-        //기존 내용
-        //if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-        //{
-        //    if (Input.touchCount > 0)
-        //    {
-        //        Touch touch = Input.GetTouch(0);
-        //        if (touch.phase == TouchPhase.Began)
-        //        {
-        //            inputDetected = true;
-        //            inputPosition = touch.position;
-        //            LogMessage($"Touch detected at position: {inputPosition}");
-        //            ShowTouchPoint(inputPosition);
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        inputDetected = true;
-        //        inputPosition = Input.mousePosition;
-        //        LogMessage($"Mouse click detected at position: {inputPosition}");
-        //        ShowTouchPoint(inputPosition);
-        //    }
-        //}
-
-        //최적화를 위해DoEvent 함수로 옮김
-        //if (inputDetected)
-        //{
-        //    isTouchDetected = true;
-        //    lastInputPosition = inputPosition;
-        //    currentTouchCheckFrame = 0;
-        //}
     }
 
-
-
-    //원래 사용하시던 DetectObject() 함수의 경우 매 터치마다 foreach 문을 통해 breakableObjects List를 매번 검색합니다.
-    //[문제점]
-    //1. breakableObjects 의 갯수가 많아지거나 터치 횟수가 많아지면 퍼포먼스 저하의 우려가 있음
-    //2. 게임개발이 고도화 되면 최적화 잡기가 힘들어짐
-    //해결방안 : RayCast 방식으로 변경 -> DoRay() 함수 확인
-
-    //private void DetectObject(Vector3 _inputPosition)
-    //{
-    //    Vector2 screenPoint = new Vector2(_inputPosition.x, _inputPosition.y);
-
-    //    foreach (BreakableObject obj in breakableObjects)
-    //    {
-    //        // 오브젝트의 콜라이더를 가져옴
-    //        Collider collider = obj.GetComponent<Collider>();
-    //        if (collider == null)
-    //        {
-    //            continue; // 콜라이더가 없는 경우 건너뜀.
-    //        }
-
-    //        // 콜라이더의 경계 상자를 스크린 좌표로 변환하여 검사
-    //        Bounds bounds = collider.bounds;
-    //        Vector2 minScreenPoint = mainCamera.WorldToScreenPoint(bounds.min);
-    //        Vector2 maxScreenPoint = mainCamera.WorldToScreenPoint(bounds.max);
-
-    //        // 스크린 좌표에서 터치 위치가 콜라이더 경계 내에 있는지 검사
-    //        if (screenPoint.x >= minScreenPoint.x && screenPoint.x <= maxScreenPoint.x &&
-    //            screenPoint.y >= minScreenPoint.y && screenPoint.y <= maxScreenPoint.y)
-    //        {
-    //            LogMessage($"Object {obj.name} touched within collider bounds.");
-    //            obj.OnTouch();  // 오브젝트의 OnTouch 메서드를 호출
-    //            ResetTouchDetection();
-    //            break;
-    //        }
-    //    }
-    //}
 
     private void ShowTouchPoint(Vector3 _screenPosition)
     {

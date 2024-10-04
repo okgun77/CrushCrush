@@ -5,25 +5,27 @@ public class DamageZone : MonoBehaviour
 {
     [SerializeField] private int damageAmount = 10;
     [SerializeField] private float warningDistance = 5f; // 경고를 활성화할 거리
-    private HPManager hpManager;
+    
+    // private HPManager hpManager;
     private SpawnManager spawnManager;
     private WarningManager warningManager;
+    private PlayerHealth playerHealth;
 
     private void Start()
     {
-        hpManager = FindObjectOfType<HPManager>();
-        if (hpManager == null)
+        playerHealth = FindAnyObjectByType<PlayerHealth>();
+        if (playerHealth == null)
         {
-            Debug.LogError("HPManager를 찾을 수 없습니다!");
+            Debug.LogError("PlayerHealth를 찾을 수 없습니다!");
         }
 
-        spawnManager = FindObjectOfType<SpawnManager>();
+        spawnManager = FindAnyObjectByType<SpawnManager>();
         if (spawnManager == null)
         {
             Debug.LogError("SpawnManager를 찾을 수 없습니다!");
         }
 
-        warningManager = FindObjectOfType<WarningManager>();
+        warningManager = FindAnyObjectByType<WarningManager>();
         if (warningManager == null)
         {
             Debug.LogError("WarningManager를 찾을 수 없습니다!");
@@ -56,7 +58,7 @@ public class DamageZone : MonoBehaviour
 
             if (IsObjectPassed(obj))
             {
-                hpManager.TakeDamage(damageAmount);
+                playerHealth?.TakeDamage(damageAmount);
                 Destroy(obj);
             }
         }

@@ -1656,7 +1656,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &854758260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1931,6 +1931,68 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2069746091}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &921133549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 921133551}
+  - component: {fileID: 921133550}
+  - component: {fileID: 921133552}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &921133550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921133549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee1cbecae669834189f95f9c3aa1565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  mass: 1
+  isDestructible: 0
+--- !u!4 &921133551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921133549}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1083421867}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &921133552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921133549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da3c3e59dc88fab469aba8761ee00754, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackDamage: 60
 --- !u!1 &927412700
 GameObject:
   m_ObjectHideFlags: 0
@@ -2094,10 +2156,11 @@ MonoBehaviour:
   spawnManager: {fileID: 1906694091}
   scoreManager: {fileID: 1674844818}
   slowMotionManager: {fileID: 1086417761}
-  hpManager: {fileID: 854758260}
   touchManager: {fileID: 607463028}
   moveManager: {fileID: 1867383045}
   audioManager: {fileID: 412866662}
+  consecutiveDestroyThreshold: 5
+  hpIncreaseAmount: 10
 --- !u!4 &957836776
 Transform:
   m_ObjectHideFlags: 0
@@ -2240,12 +2303,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1083421865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 921133551}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1083421868
 MonoBehaviour:
@@ -11692,7 +11755,7 @@ SceneRoots:
   - {fileID: 2076824360}
   - {fileID: 1184883423}
   - {fileID: 1916270266}
-  - {fileID: 1083421867}
+  - {fileID: 921133551}
   - {fileID: 927412702}
   - {fileID: 1196817750}
   - {fileID: 2000441844}

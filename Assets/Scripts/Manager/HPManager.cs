@@ -13,7 +13,9 @@ public class HPManager : MonoBehaviour
 
     public void Init(GameManager _gameManager)
     {
-        uiManager = FindObjectOfType<UIManager>();
+
+        // uiManager = FindObjectOfType<UIManager>();
+        uiManager = FindAnyObjectByType<UIManager>();
         if (uiManager == null)
         {
             Debug.LogError("UIManager를 찾을 수 없습니다!");
@@ -37,7 +39,8 @@ public class HPManager : MonoBehaviour
 
         if (currentHP == 0)
         {
-            FindObjectOfType<GameManager>().GameOver();
+            // FindObjectOfType<GameManager>().GameOver();
+            FindAnyObjectByType<GameManager>().GameOver();
         }
     }
 

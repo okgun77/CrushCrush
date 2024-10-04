@@ -7,10 +7,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpawnManager spawnManager;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private SlowMotionManager slowMotionManager;
-    [SerializeField] private HPManager hpManager;
     [SerializeField] private TouchManager touchManager;
     [SerializeField] private MoveManager moveManager;
     [SerializeField] private AudioManager audioManager;
+
+    [SerializeField] private int consecutiveDestroyThreshold = 5;   // 연속 파괴 제한
+    [SerializeField] private int hpIncreaseAmount = 10;             // HP 증가량
+
+    // [SerializeField] private HPManager hpManager;
+
+    private PlayerHealth playerHealth;
+    private int consecutiveDestroys = 0;
+
 
     private void Awake()
     {
@@ -24,10 +32,17 @@ public class GameManager : MonoBehaviour
         spawnManager.Init(this);
         scoreManager.Init(this);
         slowMotionManager.Init(this);
-        hpManager.Init(this);
-        // touchManager.Init(this);
         moveManager.Init(this);
         audioManager.Init(this);
+        // hpManager.Init(this);
+        // touchManager.Init(this);
+
+        playerHealth = FindAnyObjectByType<PlayerHealth>();
+        if (playerHealth == null)
+        {
+            Debug.LogError("PlayerHealth를 찾을 수 없습니다.");
+        }
+
     }
 
     public void RestartGame()
@@ -48,10 +63,6 @@ public class GameManager : MonoBehaviour
         uiManager.ShowGameOverUI();
     }
 
-    public void TakeDamage(int _damage)
-    {
-        hpManager.TakeDamage(_damage);
-    }
 
     public void AddScore(int _score)
     {
@@ -70,6 +81,21 @@ public class GameManager : MonoBehaviour
 
     public void HealPlayer(int _amount)
     {
-        hpManager.Heal(_amount);
+        playerHealth?.Heal(_amount);
+    }
+
+    public void IncreaseConsecutiveDestroys()
+    {
+        consecutiveDestroys++;
+        if (consecutiveDestroys >= consecutiveDestroyThreshold)
+        {
+            HealPlayer(hpIncreaseAmount);
+            ResetConsecutiveDestroys();
+        }
+    }
+
+    public void ResetConsecutiveDestroys()
+    {
+        consecutiveDestroys = 0;
     }
 }

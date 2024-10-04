@@ -1,6 +1,7 @@
 using UnityEngine;
 using RayFire;
 
+[RequireComponent(typeof(EnemyHealth))]
 public class BreakableObject : MonoBehaviour
 {
     [SerializeField] private float additionalSpeedMultiplier = 2.0f;
@@ -14,9 +15,10 @@ public class BreakableObject : MonoBehaviour
     private ScoreManager scoreManager;
     private TouchManager touchManager;
     private WarningManager warningManager;
-    private HPManager hpManager;
     private AudioManager audioManager;
     private FadeInObject fadeInObject;
+    private EnemyHealth enemyHealth;
+    // private HPManager hpManager;
 
     private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
 
@@ -70,14 +72,6 @@ public class BreakableObject : MonoBehaviour
             return;
         }
 
-        // HPManager 컴포넌트 가져오기
-        hpManager = FindFirstObjectByType<HPManager>();
-        if (hpManager == null)
-        {
-            Debug.LogError("HPManager를 찾을 수 없습니다!");
-            return;
-        }
-
         audioManager = FindFirstObjectByType<AudioManager>();
         if (audioManager == null)
         {
@@ -85,6 +79,16 @@ public class BreakableObject : MonoBehaviour
             return;
         }
 
+        // HPManager 컴포넌트 가져오기
+        enemyHealth = FindFirstObjectByType<EnemyHealth>();
+        if (enemyHealth == null)
+        {
+            Debug.LogError("EnemyHealth를 찾을 수 없습니다!");
+            return;
+        }
+
+        // 이벤트 구독
+        enemyHealth.OnDeath += OnEnemyDeath;
     }
 
     private void OnDestroy()
@@ -100,9 +104,33 @@ public class BreakableObject : MonoBehaviour
         {
             warningManager.RemoveWarningEffect(this);
         }
+
+        // 이벤트 해제
+        if (enemyHealth != null)
+        {
+            enemyHealth.OnDeath -= OnEnemyDeath;
+        }
     }
 
     public void OnTouch()
+    {
+        // BreakObject();
+
+        // 플레이어의 공격력을 가져옵니다.
+        PlayerAttack playerAttack = FindObjectOfType<PlayerAttack>();
+        if (playerAttack != null)
+        {
+            enemyHealth.TakeDamage(playerAttack.AttackDamage);
+        }
+        else
+        {
+            Debug.LogWarning("PlayerAttack 컴포넌트를 찾을 수 없습니다.");
+            // 기본값으로 전체 체력을 데미지로 사용 (즉시 파괴)
+            enemyHealth.TakeDamage(enemyHealth.CurrentHealth);
+        }
+    }
+
+    private void OnEnemyDeath()
     {
         BreakObject();
     }
@@ -124,16 +152,29 @@ public class BreakableObject : MonoBehaviour
 
             // 파괴 오디오 플레이
             audioManager.PlaySFX("BreakingBones02-Mono");
-            
-            foreach (RayfireRigid fragment in rayfireRigid.fragments)
+
+            // 파편 처리
+            if (rayfireRigid.fragments != null && rayfireRigid.fragments.Count > 0)
             {
-                SetFragmentProperties(fragment, currentVelocity);
-                InitFragment(fragment);
-                // SelfDestruct 기능 추가
-                var destroyFade = fragment.gameObject.AddComponent<DestroyFade>();
-                destroyFade.StartDestruction();
+                foreach (RayfireRigid fragment in rayfireRigid.fragments)
+                {
+                    SetFragmentProperties(fragment, currentVelocity);
+                    InitFragment(fragment);
+                    // SelfDestruct 기능 추가
+                    var destroyFade = fragment.gameObject.AddComponent<DestroyFade>();
+                    destroyFade.StartDestruction();
+                }
             }
         }
+        else
+        {
+            // 파편인 경우, 단순히 파괴
+            rayfireRigid.Demolish();
+
+            // 파괴 오디오 재생
+            audioManager.PlaySFX("BreakingBones02-Mono");
+        }
+
 
         if (rayfireBomb != null)
         {
@@ -146,8 +187,18 @@ public class BreakableObject : MonoBehaviour
         // 파편 레벨이 0일 때만 연속 파괴로 계산
         if (fragmentLevel == 0)
         {
-            hpManager.IncreaseConsecutiveDestroys();
+            // hpManager.IncreaseConsecutiveDestroys();
+            
+            // 플레이어의 연속 파괴 횟수 증가
+            PlayerHealth playerHealth = FindAnyObjectByType<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.IncreaseConsecutiveDestroys();
+            }
         }
+
+        // 오브젝트 제거
+        Destroy(gameObject);
     }
 
     private void AddScore()
@@ -224,6 +275,22 @@ public class BreakableObject : MonoBehaviour
             fragmentSound.enabled = true;
             fragmentSound.demolition = rayfireSound.demolition;
             fragmentSound.collision = rayfireSound.collision;
+        }
+
+        // 파편에 EnemyHealth 컴포넌트 추가
+        if (_fragment.gameObject.GetComponent<EnemyHealth>() == null)
+        {
+            var fragmentHealth = _fragment.gameObject.AddComponent<EnemyHealth>();
+            fragmentHealth.MaxHealth = enemyHealth.MaxHealth; // 원본과 동일한 체력 설정
+            fragmentHealth.IsDestructible = enemyHealth.IsDestructible;
+            fragmentHealth.EnemyType = enemyHealth.EnemyType;
+            fragmentHealth.ScoreValue = enemyHealth.ScoreValue;
+        }
+
+        // 파편의 rayfireRigid의 fragments를 초기화하여 다른 파편을 참조하지 않도록 합니다.
+        if (fragmentRigid.fragments != null)
+        {
+            fragmentRigid.fragments.Clear();
         }
     }
 
