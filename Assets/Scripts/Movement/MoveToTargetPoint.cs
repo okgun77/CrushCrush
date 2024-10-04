@@ -18,7 +18,7 @@ public class MoveToTargetPoint : MonoBehaviour, IMovable
             currentVelocity = direction * speed;
 
             // 속도가 제대로 반영되고 있는지 확인하는 디버그 로그 추가
-            Debug.Log($"Current Speed: {speed}, Velocity: {currentVelocity}");
+            // Debug.Log($"Current Speed: {speed}, Velocity: {currentVelocity}");
 
             Vector3 newPosition = transform.position + currentVelocity * Time.deltaTime;
 

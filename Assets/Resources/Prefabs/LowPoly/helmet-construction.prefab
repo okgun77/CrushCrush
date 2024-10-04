@@ -451,8 +451,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6257eeea04c3bb44b4c06f71d1fced9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  additionalSpeedMultiplier: 5
+  objectType: {fileID: 11400000, guid: 70a3695c9d5173f46b106b7618e0e3f9, type: 2}
   scoreType: 1
+  additionalSpeedMultiplier: 5
   fragmentLevel: 0
 --- !u!114 &-3900183251616726616
 MonoBehaviour:
