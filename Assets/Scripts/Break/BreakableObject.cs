@@ -3,9 +3,8 @@ using RayFire;
 
 public class BreakableObject : MonoBehaviour
 {
-    [SerializeField] private ObjectTypeScriptable objectType;
-    [SerializeField] private ScoreType scoreType;
     [SerializeField] private float additionalSpeedMultiplier = 2.0f;
+    [SerializeField] private ScoreType scoreType;
     [SerializeField] private int fragmentLevel = 0; // 파편 레벨 (0은 원래 오브젝트)
 
     private RayfireRigid rayfireRigid;
@@ -20,7 +19,6 @@ public class BreakableObject : MonoBehaviour
     private FadeInObject fadeInObject;
 
     private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
-    private float currentHealth;
 
     private void Start()
     {
@@ -87,17 +85,6 @@ public class BreakableObject : MonoBehaviour
             return;
         }
 
-        // ObjectTypeScriptable 속성 초기화
-        if (objectType != null)
-        {
-            currentHealth = objectType.health;
-            Debug.Log($"초기 체력 설정됨: {currentHealth}");  // 디버깅용 로그
-        }
-        else
-        {
-            Debug.LogError("ObjectType이 설정되지 않았습니다! Inspector에서 ObjectType을 확인하세요.");
-            return;  // objectType이 설정되지 않았다면 더 이상 진행하지 않도록 함
-        }
     }
 
     private void OnDestroy()
@@ -117,19 +104,7 @@ public class BreakableObject : MonoBehaviour
 
     public void OnTouch()
     {
-        TakeDamage(10);
-    }
-
-    public void TakeDamage(float _damage)
-    {
-        if (objectType != null && objectType.isDestructible)
-        {
-            currentHealth -= _damage;
-            if (currentHealth <= 0)
-            {
-                BreakObject();
-            }
-        }
+        BreakObject();
     }
 
     private void BreakObject()
@@ -190,7 +165,6 @@ public class BreakableObject : MonoBehaviour
             if (_fragment.gameObject.GetComponent<BreakableObject>() == null)
             {
                 var fragmentScript = _fragment.gameObject.AddComponent<BreakableObject>();
-                fragmentScript.objectType = this.objectType;
                 fragmentScript.scoreType = this.scoreType;
                 fragmentScript.fragmentLevel = this.fragmentLevel + 1; // 파편 레벨 증가
             }
