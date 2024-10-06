@@ -4,13 +4,14 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private UIManager uiManager;
-    [SerializeField] private SpawnManager spawnManager;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private SlowMotionManager slowMotionManager;
     [SerializeField] private HPManager hpManager;
     [SerializeField] private TouchManager touchManager;
-    [SerializeField] private MoveManager moveManager;
     [SerializeField] private AudioManager audioManager;
+    [SerializeField] private MoveManager moveManager;
+
+    // [SerializeField] private SpawnManager spawnManager;
 
     private void Awake()
     {
@@ -21,13 +22,14 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         uiManager.Init(this);
-        spawnManager.Init(this);
+        
         scoreManager.Init(this);
         slowMotionManager.Init(this);
         hpManager.Init(this);
+        audioManager.Init(this);
         // touchManager.Init(this);
         moveManager.Init(this);
-        audioManager.Init(this);
+        // spawnManager.Init(this);
     }
 
     public void RestartGame()
@@ -63,13 +65,15 @@ public class GameManager : MonoBehaviour
         uiManager.UpdateTimeScaleText(_timeScale);
     }
 
-    public MoveManager GetMoveManager()
-    {
-        return moveManager;
-    }
+    
 
     public void HealPlayer(int _amount)
     {
         hpManager.Heal(_amount);
+    }
+
+    public MoveManager GetMoveManager()
+    {
+        return moveManager;
     }
 }

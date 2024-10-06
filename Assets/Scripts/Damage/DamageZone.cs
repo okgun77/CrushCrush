@@ -6,7 +6,7 @@ public class DamageZone : MonoBehaviour
     [SerializeField] private int damageAmount = 10;
     [SerializeField] private float warningDistance = 5f; // 경고를 활성화할 거리
     private HPManager hpManager;
-    private SpawnManager spawnManager;
+    // private SpawnManager spawnManager;
     private WarningManager warningManager;
 
     private void Start()
@@ -17,11 +17,11 @@ public class DamageZone : MonoBehaviour
             Debug.LogError("HPManager를 찾을 수 없습니다!");
         }
 
-        spawnManager = FindObjectOfType<SpawnManager>();
-        if (spawnManager == null)
-        {
-            Debug.LogError("SpawnManager를 찾을 수 없습니다!");
-        }
+        //spawnManager = FindObjectOfType<SpawnManager>();
+        //if (spawnManager == null)
+        //{
+        //    Debug.LogError("SpawnManager를 찾을 수 없습니다!");
+        //}
 
         warningManager = FindObjectOfType<WarningManager>();
         if (warningManager == null)
@@ -32,36 +32,36 @@ public class DamageZone : MonoBehaviour
 
     private void Update()
     {
-        CheckObjectsInZone();
+        // CheckObjectsInZone();
     }
 
-    private void CheckObjectsInZone()
-    {
-        // SpawnManager를 통해 스폰된 오브젝트 리스트를 가져옴
-        List<GameObject> breakableObjects = spawnManager.GetSpawnedObjects();
+    //private void CheckObjectsInZone()
+    //{
+    //    // SpawnManager를 통해 스폰된 오브젝트 리스트를 가져옴
+    //    List<GameObject> breakObjects = spawnManager.GetSpawnedObjects();
 
-        foreach (GameObject obj in breakableObjects)
-        {
-            // BreakObject로 수정
-            BreakObject breakObject = obj.GetComponent<BreakObject>();
-            if (breakObject == null) continue;
+    //    foreach (GameObject obj in breakObjects)
+    //    {
+    //        // BreakObject로 수정
+    //        BreakObject breakObject = obj.GetComponent<BreakObject>();
+    //        if (breakObject == null) continue;
 
-            if (IsObjectCloseToDamageZone(obj))
-            {
-                warningManager.ApplyWarningEffect(breakObject);
-            }
-            else
-            {
-                warningManager.RemoveWarningEffect(breakObject);
-            }
+    //        if (IsObjectCloseToDamageZone(obj))
+    //        {
+    //            warningManager.ApplyWarningEffect(breakObject);
+    //        }
+    //        else
+    //        {
+    //            warningManager.RemoveWarningEffect(breakObject);
+    //        }
 
-            if (IsObjectPassed(obj))
-            {
-                hpManager.TakeDamage(damageAmount);
-                Destroy(obj);
-            }
-        }
-    }
+    //        if (IsObjectPassed(obj))
+    //        {
+    //            hpManager.TakeDamage(damageAmount);
+    //            Destroy(obj);
+    //        }
+    //    }
+    //}
 
     private bool IsObjectCloseToDamageZone(GameObject _object)
     {
