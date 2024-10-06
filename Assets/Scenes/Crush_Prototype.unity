@@ -42,7 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -1147,6 +1148,7 @@ MonoBehaviour:
     type: 3}
   touchPointScale: {x: 0.07, y: 0.07, z: 0.07}
   rayDistance: 100
+  attackManager: {fileID: 641395602}
 --- !u!4 &607463029
 Transform:
   m_ObjectHideFlags: 0
@@ -1236,6 +1238,51 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 633202234}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &641395601
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 641395603}
+  - component: {fileID: 641395602}
+  m_Layer: 0
+  m_Name: AttackManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &641395602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641395601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b069fecb63f76a8428f2e6cbed7ea140, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackPower: 100
+--- !u!4 &641395603
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641395601}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -1656,7 +1703,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &854758260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2094,11 +2141,10 @@ MonoBehaviour:
   spawnManager: {fileID: 1906694091}
   scoreManager: {fileID: 1674844818}
   slowMotionManager: {fileID: 1086417761}
+  hpManager: {fileID: 854758260}
   touchManager: {fileID: 607463028}
   moveManager: {fileID: 1867383045}
   audioManager: {fileID: 412866662}
-  consecutiveDestroyThreshold: 5
-  hpIncreaseAmount: 10
 --- !u!4 &957836776
 Transform:
   m_ObjectHideFlags: 0
@@ -11688,6 +11734,7 @@ SceneRoots:
   - {fileID: 293372177}
   - {fileID: 854758261}
   - {fileID: 607463029}
+  - {fileID: 641395603}
   - {fileID: 1623973487}
   - {fileID: 1083421867}
   - {fileID: 835447779}

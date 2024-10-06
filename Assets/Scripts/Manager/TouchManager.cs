@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
-using System;
 
 public class TouchManager : MonoBehaviour
 {
@@ -12,11 +11,11 @@ public class TouchManager : MonoBehaviour
     [SerializeField] private GameObject touchPointPrefab;                               // 터치 지점을 표시할 Quad 프리팹
     [SerializeField] private Vector3 touchPointScale = new Vector3(0.1f, 0.1f, 0.1f);   // 터치 포인트의 크기 설정
     [SerializeField] private float rayDistance = 100f;  // 레이캐스트가 나아갈 거리
+    [SerializeField] private AttackManager attackManager;                               // AttackManager 참조
 
     private AudioManager audioManager;
-    private List<BreakableObject> breakableObjects = new List<BreakableObject>();
+    private List<BreakObject> breakableObjects = new List<BreakObject>();   // List of BreakObject instead of BreakableObject
     // private GameManager gameManager;
-
 
     private bool isPaused = false;      // 일시정지 상태
     private bool isTouchDetected = false;
@@ -28,7 +27,7 @@ public class TouchManager : MonoBehaviour
     //    gameManager = _gameManager;
     //}
 
-    private void Start()
+    private void Awake()
     {
         audioManager = FindFirstObjectByType<AudioManager>();
         if (audioManager == null)
@@ -37,8 +36,13 @@ public class TouchManager : MonoBehaviour
             return;
         }
 
-    }
+        attackManager = FindFirstObjectByType<AttackManager>();
+        if (attackManager == null)
+        {
+            Debug.LogError("AttackManager를 찾을 수 없습니다");
+        }
 
+    }
 
     private void Update()
     {
@@ -47,12 +51,10 @@ public class TouchManager : MonoBehaviour
             ScreenTouch();
         }
     }
-    //터치 혹은 클릭한 위치에 바로 ray를 쏘아서 가장 먼저 닿은 오브젝트를 확인,
-    //해당 오브젝트가 breakableObject 컴포넌트를 가지고있다면 OnTouch 실행
-    //보통 Raycast를 사용하면 즉시 부수는 경우 이 방법을 자주 사용합니다.
-    //터치한 지점에 무언가(미사일 같은) 투사체가 발사시켜야하는 경우는 사용x
-    //
 
+    // 터치 혹은 클릭한 위치에 바로 ray를 쏘아서 가장 먼저 닿은 오브젝트를 확인,
+    // 해당 오브젝트가 ObjectProperties 컴포넌트를 가지고 있다면 IsBreakable 여부를 확인.
+    // 파괴 가능하면 BreakObject 컴포넌트를 추가하여 OnTouch 실행
     public void SetPaused(bool _isPaused)
     {
         isPaused = _isPaused;
@@ -60,7 +62,6 @@ public class TouchManager : MonoBehaviour
 
     private void DoRay(Vector3 _position)
     {
-
         audioManager.PlaySFX("Wpn_Laser_01");
 
         LogMessage($"pointer detected at position: {_position}");
@@ -68,22 +69,40 @@ public class TouchManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(_position);
         RaycastHit hit;
 
-
-
         // 레이가 지정한 거리에 있는 오브젝트와 충돌했을 때
         if (Physics.Raycast(ray, out hit, rayDistance))
         {
             Debug.Log("부딪힌 물체 : " + hit.collider.gameObject.name);
 
-            // 충돌한 오브젝트에 BreakableObject가 붙어있는지 확인
-            BreakableObject breakableObject = hit.collider.gameObject.GetComponent<BreakableObject>();
+            // 충돌한 오브젝트에 ObjectProperties가 있는지 확인
+            ObjectProperties objectProperties = hit.collider.gameObject.GetComponent<ObjectProperties>();
 
-            Debug.Log("breakableObject 가 있는지 체크" + (breakableObject != null));
-            
-            if (breakableObject != null)
+            // ObjectProperties가 있고, IsBreakable이 true이면 BreakObject를 추가
+            if (objectProperties != null && objectProperties.IsBreakable())
             {
-                // BreakableObject의 OnTouch() 함수 호출
-                breakableObject.OnTouch();
+                Debug.Log("Object is breakable!");
+
+                // BreakObject 컴포넌트를 동적으로 추가 (이미 추가되어 있지 않으면)
+                BreakObject breakObject = hit.collider.gameObject.GetComponent<BreakObject>();
+                if (breakObject == null)
+                {
+                    breakObject = hit.collider.gameObject.AddComponent<BreakObject>();
+                    breakObject.Initialize(objectProperties.GetScoreType(), objectProperties.GetFragmentLevel(), 2.0f); // 초기화
+                }
+
+                // DamageHandler가 없으면 추가
+                DamageHandler damageHandler = hit.collider.gameObject.GetComponent<DamageHandler>();
+                if (damageHandler == null)
+                {
+                    damageHandler = hit.collider.gameObject.AddComponent<DamageHandler>();
+                }
+
+                // AttackManager를 사용하여 공격 실행
+                attackManager.PerformAttack(hit.collider.gameObject);  // 타겟에 공격 수행
+            }
+            else
+            {
+                Debug.Log("Object is not breakable or doesn't have ObjectProperties.");
             }
 
             // 레이가 부딪힌 위치까지의 선을 그린다
@@ -94,17 +113,17 @@ public class TouchManager : MonoBehaviour
             // 레이가 부딪힌 것이 없을 경우 최대 거리까지 선을 그린다
             Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.red, 1f); // 1초 동안 빨간색 선 표시
         }
+
         ShowTouchPoint(_position);
     }
 
-    
+
+
     private void ScreenTouch()
     {
-        //bool inputDetected = false; //중복으로 사용 할 필요없는 bool 변수
-        //Vector3 inputPosition = Vector3.zero; //중복으로 사용할 필요없는 Vec3 변수
-
-        //if문을 작성하면 매 터치마다 if문에서 확인을 하기때문에 #if를 사용하는 것이 좋음
-        //#if는 빌드할때 #if에 참이 되는 내용만 컴파일하게됨
+        // 터치 혹은 클릭한 위치에서 DoRay 함수 실행
+        //if문을 작성하면 매 터치마다 if문에서 확인을 하기 때문에 #if를 사용하는 것이 좋음
+        //#if는 빌드할 때 #if에 참이 되는 내용만 컴파일하게됨
 #if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0))
         {
@@ -120,79 +139,7 @@ public class TouchManager : MonoBehaviour
             }
         }
 #endif
-
-        //기존 내용
-        //if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-        //{
-        //    if (Input.touchCount > 0)
-        //    {
-        //        Touch touch = Input.GetTouch(0);
-        //        if (touch.phase == TouchPhase.Began)
-        //        {
-        //            inputDetected = true;
-        //            inputPosition = touch.position;
-        //            LogMessage($"Touch detected at position: {inputPosition}");
-        //            ShowTouchPoint(inputPosition);
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        inputDetected = true;
-        //        inputPosition = Input.mousePosition;
-        //        LogMessage($"Mouse click detected at position: {inputPosition}");
-        //        ShowTouchPoint(inputPosition);
-        //    }
-        //}
-
-        //최적화를 위해DoEvent 함수로 옮김
-        //if (inputDetected)
-        //{
-        //    isTouchDetected = true;
-        //    lastInputPosition = inputPosition;
-        //    currentTouchCheckFrame = 0;
-        //}
     }
-
-
-
-    //원래 사용하시던 DetectObject() 함수의 경우 매 터치마다 foreach 문을 통해 breakableObjects List를 매번 검색합니다.
-    //[문제점]
-    //1. breakableObjects 의 갯수가 많아지거나 터치 횟수가 많아지면 퍼포먼스 저하의 우려가 있음
-    //2. 게임개발이 고도화 되면 최적화 잡기가 힘들어짐
-    //해결방안 : RayCast 방식으로 변경 -> DoRay() 함수 확인
-
-    //private void DetectObject(Vector3 _inputPosition)
-    //{
-    //    Vector2 screenPoint = new Vector2(_inputPosition.x, _inputPosition.y);
-
-    //    foreach (BreakableObject obj in breakableObjects)
-    //    {
-    //        // 오브젝트의 콜라이더를 가져옴
-    //        Collider collider = obj.GetComponent<Collider>();
-    //        if (collider == null)
-    //        {
-    //            continue; // 콜라이더가 없는 경우 건너뜀.
-    //        }
-
-    //        // 콜라이더의 경계 상자를 스크린 좌표로 변환하여 검사
-    //        Bounds bounds = collider.bounds;
-    //        Vector2 minScreenPoint = mainCamera.WorldToScreenPoint(bounds.min);
-    //        Vector2 maxScreenPoint = mainCamera.WorldToScreenPoint(bounds.max);
-
-    //        // 스크린 좌표에서 터치 위치가 콜라이더 경계 내에 있는지 검사
-    //        if (screenPoint.x >= minScreenPoint.x && screenPoint.x <= maxScreenPoint.x &&
-    //            screenPoint.y >= minScreenPoint.y && screenPoint.y <= maxScreenPoint.y)
-    //        {
-    //            LogMessage($"Object {obj.name} touched within collider bounds.");
-    //            obj.OnTouch();  // 오브젝트의 OnTouch 메서드를 호출
-    //            ResetTouchDetection();
-    //            break;
-    //        }
-    //    }
-    //}
 
     private void ShowTouchPoint(Vector3 _screenPosition)
     {
@@ -229,19 +176,20 @@ public class TouchManager : MonoBehaviour
         }
     }
 
-    public void RegisterBreakableObject(BreakableObject _breakableObject)
+    // Register and unregister BreakObject instead of BreakableObject
+    public void RegisterBreakObject(BreakObject _breakeObject)
     {
-        if (!breakableObjects.Contains(_breakableObject))
+        if (!breakableObjects.Contains(_breakeObject))
         {
-            breakableObjects.Add(_breakableObject);
+            breakableObjects.Add(_breakeObject);
         }
     }
 
-    public void UnregisterBreakableObject(BreakableObject _breakableObject)
+    public void UnregisterBreakObject(BreakObject _breakeObject)
     {
-        if (breakableObjects.Contains(_breakableObject))
+        if (breakableObjects.Contains(_breakeObject))
         {
-            breakableObjects.Remove(_breakableObject);
+            breakableObjects.Remove(_breakeObject);
         }
     }
 }

@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: -4060843064066370988}
   - component: {fileID: -7050339252797889272}
   - component: {fileID: 6255421699119425849}
-  - component: {fileID: 6030929231447865570}
   - component: {fileID: 1798850012164840931}
+  - component: {fileID: -2325597273442521750}
   m_Layer: 6
   m_Name: cement-bag
   m_TagString: BreakableObject
@@ -440,21 +440,6 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
---- !u!114 &6030929231447865570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 19709336277231693}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6257eeea04c3bb44b4c06f71d1fced9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  additionalSpeedMultiplier: 5
-  scoreType: 1
-  fragmentLevel: 0
 --- !u!114 &1798850012164840931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -639,3 +624,20 @@ MonoBehaviour:
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 1, b: 1, a: 1}
   hitFxRadius: 0.5
+--- !u!114 &-2325597273442521750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19709336277231693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eebccaa5dc92a54aa3f6a9ef3167b8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectTypes: 0
+  health: 100
+  fragmentLevel: 3
+  isBreakable: 1
+  scoreType: 0

@@ -1,12 +1,8 @@
 using UnityEngine;
 using RayFire;
 
-public class BreakableObject : MonoBehaviour
+public class BreakObject : MonoBehaviour
 {
-    [SerializeField] private float additionalSpeedMultiplier = 2.0f;
-    [SerializeField] private ScoreType scoreType;
-    [SerializeField] private int fragmentLevel = 0; // 파편 레벨 (0은 원래 오브젝트)
-
     private RayfireRigid rayfireRigid;
     private RayfireBomb rayfireBomb;
     private RayfireSound rayfireSound;
@@ -16,11 +12,11 @@ public class BreakableObject : MonoBehaviour
     private WarningManager warningManager;
     private HPManager hpManager;
     private AudioManager audioManager;
-    private FadeInObject fadeInObject;
+    private ObjectProperties objectProperties;  // ObjectProperties 참조
 
     private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
 
-    private void Start()
+    private void Awake()
     {
         // RayfireRigid 컴포넌트 가져오기
         rayfireRigid = GetComponent<RayfireRigid>();
@@ -48,7 +44,7 @@ public class BreakableObject : MonoBehaviour
         moveScript = GetComponent<MoveToTargetPoint>();
 
         // ScoreManager 컴포넌트 가져오기
-        scoreManager = Object.FindFirstObjectByType<ScoreManager>();
+        scoreManager = FindAnyObjectByType<ScoreManager>();
         if (scoreManager == null)
         {
             Debug.LogError("ScoreManager를 찾을 수 없습니다!");
@@ -56,14 +52,14 @@ public class BreakableObject : MonoBehaviour
         }
 
         // TouchManager 컴포넌트 가져오기 및 등록
-        touchManager = FindFirstObjectByType<TouchManager>();
+        touchManager = FindAnyObjectByType<TouchManager>();
         if (touchManager != null)
         {
-            touchManager.RegisterBreakableObject(this);
+            touchManager.RegisterBreakObject(this);
         }
 
         // WarningManager 컴포넌트 가져오기
-        warningManager = FindFirstObjectByType<WarningManager>();
+        warningManager = FindAnyObjectByType<WarningManager>();
         if (warningManager == null)
         {
             Debug.LogError("WarningManager를 찾을 수 없습니다!");
@@ -71,20 +67,28 @@ public class BreakableObject : MonoBehaviour
         }
 
         // HPManager 컴포넌트 가져오기
-        hpManager = FindFirstObjectByType<HPManager>();
+        hpManager = FindAnyObjectByType<HPManager>();
         if (hpManager == null)
         {
             Debug.LogError("HPManager를 찾을 수 없습니다!");
             return;
         }
 
-        audioManager = FindFirstObjectByType<AudioManager>();
+        // AudioManager 컴포넌트 가져오기
+        audioManager = FindAnyObjectByType<AudioManager>();
         if (audioManager == null)
         {
             Debug.LogError("AudioManager를 찾을 수 없습니다!");
             return;
         }
 
+        // ObjectProperties 가져오기
+        objectProperties = GetComponent<ObjectProperties>();
+        if (objectProperties == null)
+        {
+            Debug.LogError("ObjectProperties 컴포넌트가 없습니다!");
+            return;
+        }
     }
 
     private void OnDestroy()
@@ -92,7 +96,7 @@ public class BreakableObject : MonoBehaviour
         // TouchManager에서 등록 해제
         if (touchManager != null)
         {
-            touchManager.UnregisterBreakableObject(this);
+            touchManager.UnregisterBreakObject(this);
         }
 
         // 오브젝트가 파괴될 때 경고 효과 해제
@@ -104,19 +108,37 @@ public class BreakableObject : MonoBehaviour
 
     public void OnTouch()
     {
-        BreakObject();
+        Break();
     }
 
-    private void BreakObject()
+    // 파괴 처리를 수행하는 함수
+    public void HandleObjectDestruction()
+    {
+        if (objectProperties.GetHealth() <= 0)
+        {
+            Break();
+        }
+    }
+
+    private void Break()
     {
         if (rayfireRigid != null)
         {
-            // 현재 속도 가져오기
+            // 현재 속도와 회전 속도 가져오기
             Vector3 currentVelocity = Vector3.zero;
+            Vector3 currentAngularVelocity = Vector3.zero;
+
             if (moveScript != null)
             {
                 currentVelocity = moveScript.GetCurrentVelocity();
                 Destroy(moveScript); // 이동 스크립트 제거
+            }
+
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                currentVelocity = rb.linearVelocity;  // 현재 속도 가져오기
+                currentAngularVelocity = rb.angularVelocity;  // 현재 회전 속도 가져오기
             }
 
             // 오브젝트 파괴 및 파편 처리
@@ -124,12 +146,12 @@ public class BreakableObject : MonoBehaviour
 
             // 파괴 오디오 플레이
             audioManager.PlaySFX("BreakingBones02-Mono");
-            
+
+            // 모든 파편에 속도와 회전 속도를 전달하고 초기화
             foreach (RayfireRigid fragment in rayfireRigid.fragments)
             {
-                SetFragmentProperties(fragment, currentVelocity);
-                InitFragment(fragment);
-                // SelfDestruct 기능 추가
+                SetFragmentProperties(fragment, currentVelocity, currentAngularVelocity);  // 속도와 회전 속도 전달
+                InitFragment(fragment);  // 파편 초기화
                 var destroyFade = fragment.gameObject.AddComponent<DestroyFade>();
                 destroyFade.StartDestruction();
             }
@@ -144,32 +166,56 @@ public class BreakableObject : MonoBehaviour
         AddScore();
 
         // 파편 레벨이 0일 때만 연속 파괴로 계산
-        if (fragmentLevel == 0)
+        if (objectProperties.GetFragmentLevel() == 0)  // ObjectProperties에서 fragmentLevel을 가져옴
         {
             hpManager.IncreaseConsecutiveDestroys();
         }
     }
 
+
+
     private void AddScore()
     {
+        if (scoreManager == null)
+        {
+            Debug.LogError("ScoreManager를 찾을 수 없습니다! AddScore 작업을 중단합니다.");
+            // return; // scoreManager가 null일 경우 작업을 중단
+        }
+
         Camera mainCamera = Camera.main;
         float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
-        int calculatedScore = scoreManager.CalculateScore(scoreType, fragmentLevel, distanceToCamera);
+        int calculatedScore = scoreManager.CalculateScore(objectProperties.GetScoreType(), objectProperties.GetFragmentLevel(), distanceToCamera); // fragmentLevel과 scoreType을 ObjectProperties에서 가져옴
         scoreManager.AddScore(calculatedScore);
     }
 
     private void InitFragment(RayfireRigid _fragment)
     {
-        if (fragmentLevel < scoreManager.GetMaxFragmentLevel())
+        // 파편에 ObjectProperties가 없으면 추가
+        ObjectProperties fragmentProperties = _fragment.gameObject.GetComponent<ObjectProperties>();
+        if (fragmentProperties == null)
         {
-            if (_fragment.gameObject.GetComponent<BreakableObject>() == null)
-            {
-                var fragmentScript = _fragment.gameObject.AddComponent<BreakableObject>();
-                fragmentScript.scoreType = this.scoreType;
-                fragmentScript.fragmentLevel = this.fragmentLevel + 1; // 파편 레벨 증가
-            }
+            fragmentProperties = _fragment.gameObject.AddComponent<ObjectProperties>();
         }
 
+        // 파편 오브젝트의 레벨과 속성을 상속
+        fragmentProperties.SetFragmentLevel(objectProperties.GetFragmentLevel() + 1);  // 파편 레벨 증가
+        fragmentProperties.SetScoreType(objectProperties.GetScoreType());  // 점수 타입 상속
+        fragmentProperties.SetBreakable(true);  // 파편도 파괴 가능하도록 설정
+
+        // 파편에 BreakObject가 없으면 추가
+        if (_fragment.gameObject.GetComponent<BreakObject>() == null)
+        {
+            var fragmentScript = _fragment.gameObject.AddComponent<BreakObject>();
+
+            // fragmentScript 초기화 (초기화 함수 호출)
+            fragmentScript.Initialize(
+                objectProperties.GetScoreType(),
+                objectProperties.GetFragmentLevel() + 1, // 파편 레벨 증가
+                2.0f // 추가 속도 배율 (예시 값)
+            );
+        }
+
+        // Rigidbody와 Collider 설정
         Rigidbody rb = _fragment.GetComponent<Rigidbody>();
         if (rb == null)
         {
@@ -200,6 +246,7 @@ public class BreakableObject : MonoBehaviour
             }
         }
 
+        // RayfireRigid 설정
         RayfireRigid fragmentRigid = _fragment.GetComponent<RayfireRigid>();
         if (fragmentRigid == null)
         {
@@ -207,6 +254,7 @@ public class BreakableObject : MonoBehaviour
             fragmentRigid.demolitionType = DemolitionType.Runtime;
         }
 
+        // RayfireBomb 설정
         RayfireBomb fragmentBomb = _fragment.GetComponent<RayfireBomb>();
         if (fragmentBomb == null && rayfireBomb != null)
         {
@@ -217,6 +265,7 @@ public class BreakableObject : MonoBehaviour
             fragmentBomb.chaos = rayfireBomb.chaos;
         }
 
+        // RayfireSound 설정
         RayfireSound fragmentSound = _fragment.GetComponent<RayfireSound>();
         if (fragmentSound == null && rayfireSound != null)
         {
@@ -227,11 +276,13 @@ public class BreakableObject : MonoBehaviour
         }
     }
 
+
+
+
     private bool ShouldUseBoxCollider(RayfireRigid _fragment)
     {
         // BoxCollider를 사용할 조건을 정의합니다.
         // 예: 특정 메쉬 이름 또는 태그를 기준으로 결정
-        // 여기에 해당 조건을 추가하세요.
         return true; // 기본적으로 BoxCollider를 사용하도록 설정
     }
 
@@ -251,12 +302,20 @@ public class BreakableObject : MonoBehaviour
         }
     }
 
-    private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity)
+    private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity, Vector3 _initialAngularVelocity)
     {
         Rigidbody rb = _fragment.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.linearVelocity = _initialVelocity * additionalSpeedMultiplier;
+            // 파편에 기존의 물리적 속도 전달
+            rb.linearVelocity = _initialVelocity * 2.0f;  // 추가 속도 배율 적용
+            rb.angularVelocity = _initialAngularVelocity; // 회전 속도도 유지
+
+            // 물리 속도가 없을 경우 임의로 추가적인 힘을 가할 수도 있습니다.
+            if (rb.linearVelocity.magnitude < 0.1f)
+            {
+                rb.AddForce(Random.onUnitSphere * 2.0f, ForceMode.Impulse);  // 랜덤한 방향으로 힘을 가함
+            }
         }
 
         // 파편의 알파 값 적용
@@ -288,9 +347,20 @@ public class BreakableObject : MonoBehaviour
         }
     }
 
+
     // WarningManager에 의해 경고 상태가 업데이트됨
     public void SetWarningState(bool _state)
     {
         isWarningActive = _state;
     }
+
+    // 추가: 초기화 메서드 (파편을 동적으로 초기화할 때 사용)
+    public void Initialize(ScoreType _scoreType, int _fragmentLevel, float _speedMultiplier)
+    {
+        // 필요한 데이터를 초기화합니다.
+        objectProperties.SetScoreType(_scoreType);
+        objectProperties.SetFragmentLevel(_fragmentLevel);
+        // 속도 배율 등 추가 속성을 초기화할 수 있습니다.
+    }
+
 }

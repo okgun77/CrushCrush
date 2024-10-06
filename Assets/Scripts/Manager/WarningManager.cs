@@ -4,9 +4,9 @@ using HighlightPlus;
 
 public class WarningManager : MonoBehaviour
 {
-    private Dictionary<BreakableObject, HighlightEffect> activeWarnings = new Dictionary<BreakableObject, HighlightEffect>();
+    private Dictionary<BreakObject, HighlightEffect> activeWarnings = new Dictionary<BreakObject, HighlightEffect>();
 
-    public void ApplyWarningEffect(BreakableObject _targetObject)
+    public void ApplyWarningEffect(BreakObject _targetObject)
     {
         if (_targetObject == null)
         {
@@ -29,7 +29,7 @@ public class WarningManager : MonoBehaviour
         }
     }
 
-    public void RemoveWarningEffect(BreakableObject _targetObject)
+    public void RemoveWarningEffect(BreakObject _targetObject)
     {
         if (_targetObject == null) return;
 

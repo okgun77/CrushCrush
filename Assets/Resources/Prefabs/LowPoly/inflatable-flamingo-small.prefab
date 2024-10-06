@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: -9010812948506568430}
   - component: {fileID: -6336990641211650973}
   - component: {fileID: 6469006711375123534}
-  - component: {fileID: 9118753825079496672}
   - component: {fileID: 2530763020650657337}
   - component: {fileID: 6702911059342432383}
   - component: {fileID: -8647460110511893751}
+  - component: {fileID: 1780698723839425396}
   m_Layer: 6
   m_Name: inflatable-flamingo-small
   m_TagString: BreakableObject
@@ -421,21 +421,6 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
---- !u!114 &9118753825079496672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5454694744021496138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6257eeea04c3bb44b4c06f71d1fced9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  additionalSpeedMultiplier: 5
-  scoreType: 1
-  fragmentLevel: 0
 --- !u!65 &2530763020650657337
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -662,3 +647,20 @@ MonoBehaviour:
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 1, b: 1, a: 1}
   hitFxRadius: 0.5
+--- !u!114 &1780698723839425396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5454694744021496138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eebccaa5dc92a54aa3f6a9ef3167b8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectTypes: 0
+  health: 100
+  fragmentLevel: 3
+  isBreakable: 1
+  scoreType: 0

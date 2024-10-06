@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 1551596586631318542}
   - component: {fileID: -3780472305648431779}
   - component: {fileID: -5332561521152424804}
-  - component: {fileID: -1930790992232795115}
   - component: {fileID: 3564916452725374915}
+  - component: {fileID: 546891559348904050}
   m_Layer: 6
   m_Name: ball-beach
   m_TagString: BreakableObject
@@ -442,21 +442,6 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
---- !u!114 &-1930790992232795115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000010619989362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6257eeea04c3bb44b4c06f71d1fced9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  additionalSpeedMultiplier: 5
-  scoreType: 1
-  fragmentLevel: 0
 --- !u!114 &3564916452725374915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -641,3 +626,20 @@ MonoBehaviour:
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 1, b: 1, a: 1}
   hitFxRadius: 0.5
+--- !u!114 &546891559348904050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010619989362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eebccaa5dc92a54aa3f6a9ef3167b8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectTypes: 0
+  health: 100
+  fragmentLevel: 3
+  isBreakable: 1
+  scoreType: 0

@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 9069491900434270715}
   - component: {fileID: -1449721667983085614}
   - component: {fileID: 4482954166618844607}
-  - component: {fileID: 8250955780127352522}
   - component: {fileID: 6215571509663291614}
+  - component: {fileID: -6319219473677152375}
   m_Layer: 6
   m_Name: burger-stall
   m_TagString: BreakableObject
@@ -446,21 +446,6 @@ MonoBehaviour:
   lastCollision: 0
   minimumSize: 0.3
   cameraDistance: 40
---- !u!114 &8250955780127352522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8515545433315260158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6257eeea04c3bb44b4c06f71d1fced9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  additionalSpeedMultiplier: 5
-  scoreType: 1
-  fragmentLevel: 0
 --- !u!114 &6215571509663291614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,3 +630,20 @@ MonoBehaviour:
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 1, b: 1, a: 1}
   hitFxRadius: 0.5
+--- !u!114 &-6319219473677152375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8515545433315260158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eebccaa5dc92a54aa3f6a9ef3167b8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectTypes: 0
+  health: 100
+  fragmentLevel: 3
+  isBreakable: 1
+  scoreType: 0
