@@ -38,9 +38,9 @@ public class DamageZone : MonoBehaviour
     private void CheckObjectsInZone()
     {
         // SpawnManager를 통해 스폰된 오브젝트 리스트를 가져옴
-        List<GameObject> breakableObjects = spawnManager.GetSpawnedObjects();
+        List<GameObject> breakObjects = spawnManager.GetSpawnedObjects();
 
-        foreach (GameObject obj in breakableObjects)
+        foreach (GameObject obj in breakObjects)
         {
             // BreakObject로 수정
             BreakObject breakObject = obj.GetComponent<BreakObject>();

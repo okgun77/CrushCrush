@@ -3,7 +3,7 @@ using System.Collections;
 
 public class DestroyFade : MonoBehaviour
 {
-    [SerializeField] private float lifetime = 1.5f; // 오브젝트가 유지되는 시간 (초)
+    [SerializeField] private float lifetime = 3.5f; // 오브젝트가 유지되는 시간 (초)
     [SerializeField] private float fadeDuration = 0.5f; // 서서히 사라지는 시간 (초)
     [SerializeField] private GameObject destructionEffect; // 파괴 시 발생하는 효과
 
@@ -17,6 +17,7 @@ public class DestroyFade : MonoBehaviour
         renderers = GetComponentsInChildren<Renderer>();
         originalColors = new Color[renderers.Length];
 
+        // 원래의 색상을 저장합니다.
         for (int i = 0; i < renderers.Length; i++)
         {
             if (renderers[i].material.HasProperty("_Color"))
@@ -24,6 +25,9 @@ public class DestroyFade : MonoBehaviour
                 originalColors[i] = renderers[i].material.color;
             }
         }
+
+        // 지정된 시간 후 파괴 시작
+        StartDestruction();
     }
 
     public void StartDestruction()
@@ -36,7 +40,7 @@ public class DestroyFade : MonoBehaviour
 
             // fadeStartTime 이후에 서서히 사라지게 하고, lifetime 이후에 파괴합니다.
             Invoke(nameof(StartFading), fadeStartTime);
-            Destroy(gameObject, lifetime);
+            Destroy(gameObject, lifetime); // 파괴 전 lifetime만큼 대기
         }
     }
 
@@ -54,6 +58,7 @@ public class DestroyFade : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
 
+            // 각 렌더러의 알파 값을 점진적으로 줄입니다.
             for (int i = 0; i < renderers.Length; i++)
             {
                 if (renderers[i].material.HasProperty("_Color"))
@@ -72,5 +77,8 @@ public class DestroyFade : MonoBehaviour
         {
             Instantiate(destructionEffect, transform.position, transform.rotation);
         }
+
+        // 파괴가 끝났으니 오브젝트 삭제
+        Destroy(gameObject);
     }
 }

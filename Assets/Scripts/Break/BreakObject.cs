@@ -1,5 +1,6 @@
 using UnityEngine;
 using RayFire;
+using System.Collections;
 
 public class BreakObject : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class BreakObject : MonoBehaviour
     private HPManager hpManager;
     private AudioManager audioManager;
     private ObjectProperties objectProperties;  // ObjectProperties 참조
+    private Transform targetPoint;
 
     private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
 
@@ -34,11 +36,11 @@ public class BreakObject : MonoBehaviour
         }
 
         // RayfireSound 컴포넌트 가져오기
-        rayfireSound = GetComponent<RayfireSound>();
-        if (rayfireSound == null)
-        {
-            Debug.LogWarning("RayfireSound 컴포넌트가 없습니다!");
-        }
+        //rayfireSound = GetComponent<RayfireSound>();
+        //if (rayfireSound == null)
+        //{
+        //    Debug.LogWarning("RayfireSound 컴포넌트가 없습니다!");
+        //}
 
         // MoveToTargetPoint 컴포넌트 가져오기
         moveScript = GetComponent<MoveToTargetPoint>();
@@ -89,6 +91,15 @@ public class BreakObject : MonoBehaviour
             Debug.LogError("ObjectProperties 컴포넌트가 없습니다!");
             return;
         }
+
+        // 플레이어(또는 TargetPoint) 위치를 가져오기
+        targetPoint = GameObject.Find("TargetPoint").transform; // TargetPoint로 설정된 빈 오브젝트를 찾아서 참조
+        if (targetPoint == null)
+        {
+            Debug.LogError("TargetPoint가 없습니다.");
+            return;
+        }
+
     }
 
     private void OnDestroy()
@@ -137,7 +148,7 @@ public class BreakObject : MonoBehaviour
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb != null)
             {
-                currentVelocity = rb.linearVelocity;  // 현재 속도 가져오기
+                currentVelocity = rb.velocity;  // 현재 속도 가져오기
                 currentAngularVelocity = rb.angularVelocity;  // 현재 회전 속도 가져오기
             }
 
@@ -147,13 +158,17 @@ public class BreakObject : MonoBehaviour
             // 파괴 오디오 플레이
             audioManager.PlaySFX("BreakingBones02-Mono");
 
-            // 모든 파편에 속도와 회전 속도를 전달하고 초기화
+            // Demolish() 호출 후 파편이 생성되므로 이 시점에서 파편을 초기화합니다.
             foreach (RayfireRigid fragment in rayfireRigid.fragments)
             {
-                SetFragmentProperties(fragment, currentVelocity, currentAngularVelocity);  // 속도와 회전 속도 전달
-                InitFragment(fragment);  // 파편 초기화
-                var destroyFade = fragment.gameObject.AddComponent<DestroyFade>();
-                destroyFade.StartDestruction();
+                if (fragment != null && fragment.gameObject.activeInHierarchy) // 비활성화되지 않은 파편만 처리
+                {
+                    // 파편에 필요한 컴포넌트 추가 및 초기화
+                    InitFragment(fragment);
+
+                    // 파편이 플레이어 쪽으로 날아가도록 설정
+                    fragment.gameObject.AddComponent<FragmentMovement>().MoveToTarget(targetPoint);
+                }
             }
         }
 
@@ -166,11 +181,13 @@ public class BreakObject : MonoBehaviour
         AddScore();
 
         // 파편 레벨이 0일 때만 연속 파괴로 계산
-        if (objectProperties.GetFragmentLevel() == 0)  // ObjectProperties에서 fragmentLevel을 가져옴
+        if (objectProperties.GetFragmentLevel() == 0)
         {
             hpManager.IncreaseConsecutiveDestroys();
         }
     }
+
+
 
 
 
@@ -214,6 +231,9 @@ public class BreakObject : MonoBehaviour
                 2.0f // 추가 속도 배율 (예시 값)
             );
         }
+
+        // 파편의 물리적 속도와 알파 값을 설정 (SetFragmentProperties 호출)
+        SetFragmentProperties(_fragment, Vector3.zero, Vector3.zero);
 
         // Rigidbody와 Collider 설정
         Rigidbody rb = _fragment.GetComponent<Rigidbody>();
@@ -274,6 +294,10 @@ public class BreakObject : MonoBehaviour
             fragmentSound.demolition = rayfireSound.demolition;
             fragmentSound.collision = rayfireSound.collision;
         }
+
+        // 파편이 사라지는 DestroyFade 컴포넌트 추가
+        var destroyFade = _fragment.gameObject.AddComponent<DestroyFade>();
+        destroyFade.StartDestruction(); // 서서히 사라지기 시작
     }
 
 
@@ -308,8 +332,8 @@ public class BreakObject : MonoBehaviour
         if (rb != null)
         {
             // 파편에 기존의 물리적 속도 전달
-            rb.linearVelocity = _initialVelocity * 2.0f;  // 추가 속도 배율 적용
-            rb.angularVelocity = _initialAngularVelocity; // 회전 속도도 유지
+            // rb.linearVelocity = _initialVelocity * 2.0f;  // 추가 속도 배율 적용
+            // rb.angularVelocity = _initialAngularVelocity; // 회전 속도도 유지
 
             // 물리 속도가 없을 경우 임의로 추가적인 힘을 가할 수도 있습니다.
             if (rb.linearVelocity.magnitude < 0.1f)
@@ -345,6 +369,33 @@ public class BreakObject : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    // 파편이 플레이어 쪽으로 움직이는 코루틴
+    private IEnumerator MoveFragmentToTarget(GameObject _fragment)
+    {
+        Rigidbody rb = _fragment.GetComponent<Rigidbody>();
+
+        while (rb != null && Vector3.Distance(_fragment.transform.position, targetPoint.position) > 0.1f)
+        {
+            Vector3 direction = (targetPoint.position - _fragment.transform.position).normalized;
+            rb.velocity = direction * 8.0f;  // 속도 설정
+            yield return null;  // 한 프레임 대기
+        }
+
+        // 도착 후 파편을 사라지게 처리
+        // Destroy(_fragment);
+
+        // 타겟에 도달한 후 서서히 사라지는 효과 적용
+        DestroyFade destroyFade = _fragment.GetComponent<DestroyFade>();
+        if (destroyFade == null)
+        {
+            destroyFade = _fragment.AddComponent<DestroyFade>();  // 없으면 추가
+        }
+
+        // 서서히 사라지는 효과 시작
+        destroyFade.StartDestruction();
     }
 
 
