@@ -148,7 +148,7 @@ public class BreakObject : MonoBehaviour
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb != null)
             {
-                currentVelocity = rb.velocity;  // 현재 속도 가져오기
+                currentVelocity = rb.linearVelocity;  // 현재 속도 가져오기
                 currentAngularVelocity = rb.angularVelocity;  // 현재 회전 속도 가져오기
             }
 
@@ -380,7 +380,7 @@ public class BreakObject : MonoBehaviour
         while (rb != null && Vector3.Distance(_fragment.transform.position, targetPoint.position) > 0.1f)
         {
             Vector3 direction = (targetPoint.position - _fragment.transform.position).normalized;
-            rb.velocity = direction * 8.0f;  // 속도 설정
+            rb.linearVelocity = direction * 8.0f;  // 속도 설정
             yield return null;  // 한 프레임 대기
         }
 

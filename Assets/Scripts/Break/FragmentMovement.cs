@@ -8,16 +8,16 @@ public class FragmentMovement : MonoBehaviour
     private bool isMovingToTarget = false;
 
     // 초기 퍼짐을 위한 힘의 세기
-    public float initialSpreadForce = 3.0f;
+    public float initialSpreadForce = 2.0f;
 
     // 타겟을 향해 움직이기 전 대기 시간
     public float delayBeforeMove = 1.0f;
 
     // 타겟으로 이동할 때 최대 속도
-    public float maxMoveSpeed = 5.0f;
+    public float maxMoveSpeed = 8.0f;
 
     // 타겟으로 이동할 때 가속도
-    public float acceleration = 3.0f;
+    public float acceleration = 4.0f;
 
     // 타겟에 가까워질 때 감속 반경
     public float slowDownRadius = 3.0f;
@@ -64,7 +64,7 @@ public class FragmentMovement : MonoBehaviour
             float distanceToTarget = Vector3.Distance(transform.position, targetPoint.position);
 
             // 현재 파편의 이동 방향
-            Vector3 currentDirection = rb.velocity.normalized;
+            Vector3 currentDirection = rb.linearVelocity.normalized;
 
             // 타겟 방향 계산
             Vector3 targetDirection = (targetPoint.position - transform.position).normalized;
@@ -85,7 +85,7 @@ public class FragmentMovement : MonoBehaviour
             }
 
             // 부드러운 방향 전환에 따라 속도를 설정
-            rb.velocity = newDirection * currentSpeed;
+            rb.linearVelocity = newDirection * currentSpeed;
         }
     }
 }
