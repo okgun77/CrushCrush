@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "CrushCrush.sln"
+    "dotnet.defaultSolution": "CrushCrush.sln",
+    "dotnet.preferCSharpExtension": true
 }
