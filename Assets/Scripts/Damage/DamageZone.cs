@@ -11,32 +11,38 @@ public class DamageZone : MonoBehaviour
 
     private void Start()
     {
-        hpManager = FindObjectOfType<HPManager>();
+        hpManager = FindAnyObjectByType<HPManager>();
         if (hpManager == null)
         {
             Debug.LogError("HPManager를 찾을 수 없습니다!");
         }
 
-        spawnManager = FindObjectOfType<SpawnManager>();
+        spawnManager = FindAnyObjectByType<SpawnManager>();
         if (spawnManager == null)
         {
-            Debug.LogError("SpawnManager를 찾을 수 없습니다!");
+            Debug.LogWarning("SpawnManager를 찾을 수 없습니다. 독립적으로 동작합니다.");
         }
 
-        warningManager = FindObjectOfType<WarningManager>();
+        warningManager = FindAnyObjectByType<WarningManager>();
         if (warningManager == null)
         {
-            Debug.LogError("WarningManager를 찾을 수 없습니다!");
+            Debug.LogWarning("WarningManager를 찾을 수 없습니다. 경고 기능을 비활성화합니다.");
         }
     }
 
     private void Update()
     {
-        CheckObjectsInZone();
+        if (spawnManager != null)
+        {
+            CheckObjectsInZone();
+        }
     }
 
     private void CheckObjectsInZone()
     {
+        // SpawnManager가 없을 경우 함수 실행 중단
+        if (spawnManager == null) return;
+
         // SpawnManager를 통해 스폰된 오브젝트 리스트를 가져옴
         List<GameObject> breakObjects = spawnManager.GetSpawnedObjects();
 
@@ -46,13 +52,17 @@ public class DamageZone : MonoBehaviour
             BreakObject breakObject = obj.GetComponent<BreakObject>();
             if (breakObject == null) continue;
 
-            if (IsObjectCloseToDamageZone(obj))
+            // WarningManager가 있으면 경고 효과 적용
+            if (warningManager != null)
             {
-                warningManager.ApplyWarningEffect(breakObject);
-            }
-            else
-            {
-                warningManager.RemoveWarningEffect(breakObject);
+                if (IsObjectCloseToDamageZone(obj))
+                {
+                    warningManager.ApplyWarningEffect(breakObject);
+                }
+                else
+                {
+                    warningManager.RemoveWarningEffect(breakObject);
+                }
             }
 
             if (IsObjectPassed(obj))

@@ -18,7 +18,7 @@ public class PauseMenuManager : MonoBehaviour
     private void Start()
     {
         Init();
-        touchManager = FindObjectOfType<TouchManager>();
+        touchManager = FindAnyObjectByType<TouchManager>();
     }
 
     private void Update()
@@ -58,7 +58,7 @@ public class PauseMenuManager : MonoBehaviour
         }
 
         // 스폰 매니저에서 스폰을 멈춤
-        var spawnManager = FindObjectOfType<SpawnManager>();
+        var spawnManager = FindAnyObjectByType<SpawnManager>();
         if (spawnManager != null)
         {
             spawnManager.StopSpawning();
@@ -85,7 +85,7 @@ public class PauseMenuManager : MonoBehaviour
         }
 
         // 스폰 매니저에서 스폰을 재개
-        var spawnManager = FindObjectOfType<SpawnManager>();
+        var spawnManager = FindAnyObjectByType<SpawnManager>();
         if (spawnManager != null)
         {
             spawnManager.StartSpawning();

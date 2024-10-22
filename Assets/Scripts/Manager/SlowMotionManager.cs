@@ -16,7 +16,7 @@ public class SlowMotionManager : MonoBehaviour
     public void Init(GameManager gm)
     {
         gameManager = gm;
-        uiManager = FindObjectOfType<UIManager>();
+        uiManager = FindAnyObjectByType<UIManager>();
     }
 
     private void Update()

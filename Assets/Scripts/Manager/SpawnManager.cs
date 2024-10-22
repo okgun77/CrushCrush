@@ -14,22 +14,21 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private float spawnRange = 10f;
 
-    // 스폰 간격 관련 변수들 추가
     [SerializeField] private float initialSpawnInterval = 5.0f; // 초기 스폰 간격
     [SerializeField] private float minimumSpawnInterval = 1.0f; // 최소 스폰 간격
     [SerializeField] private float spawnIntervalDecreaseRate = 0.1f; // 스폰 간격 감소량
 
-    private GameManager gameManager;
-    private Coroutine spawnCoroutine; // 스폰 코루틴을 관리할 변수
-    private bool isPaused = false; // 일시정지 상태를 추적하기 위한 변수
+    private GameManager gameManager; // GameManager 참조는 선택적
+    private Coroutine spawnCoroutine;
+    private bool isPaused = false;
 
     private int lastSpawnPointIndex = -1;
     private List<int> availableIndexes = new List<int>();
     private List<GameObject> spawnedObjects = new List<GameObject>();
 
-    public void Init(GameManager _gameManager)
+    private void Start()
     {
-        gameManager = _gameManager;
+        gameManager = FindAnyObjectByType<GameManager>();  // GameManager가 존재할 경우만 찾음
         InitIndexes();
         StartSpawning(); // 스폰 시작
     }
@@ -49,10 +48,8 @@ public class SpawnManager : MonoBehaviour
         while (!isPaused)
         {
             SpawnObjectMethod();
-
             yield return new WaitForSeconds(currentSpawnInterval);
 
-            // 스폰 간격 감소
             if (currentSpawnInterval > minimumSpawnInterval)
             {
                 currentSpawnInterval -= spawnIntervalDecreaseRate;
@@ -88,19 +85,14 @@ public class SpawnManager : MonoBehaviour
 
         GameObject spawnedObject = Instantiate(objectToSpawn, spawnPosition, Quaternion.identity);
 
-        // FadeInObject 추가, 서서히 나타나게 함
-        // FadeInObject fadeInObject = spawnedObject.AddComponent<FadeInObject>();
-        // fadeInObject.StartFadeIn();
-
-        // MoveManager를 통해 이동 방식 적용
-        var moveManager = gameManager.GetMoveManager();
-        if (moveManager != null)
+        // MoveManager를 통한 이동 관리 (선택적으로 사용)
+        if (gameManager != null)
         {
-            moveManager.ApplyMovements(spawnedObject);
-        }
-        else
-        {
-            Debug.LogError("MoveManager가 GameManager에 연결되어 있지 않습니다.");
+            var moveManager = gameManager.GetMoveManager();
+            if (moveManager != null)
+            {
+                moveManager.ApplyMovements(spawnedObject);
+            }
         }
 
         spawnedObjects.Add(spawnedObject);
@@ -126,7 +118,6 @@ public class SpawnManager : MonoBehaviour
         return spawnObjects[objectIndex].prefab;
     }
 
-    // 스폰을 시작하는 메서드
     public void StartSpawning()
     {
         isPaused = false;
@@ -136,7 +127,6 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    // 스폰을 멈추는 메서드
     public void StopSpawning()
     {
         isPaused = true;
