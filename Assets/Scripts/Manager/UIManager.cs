@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Image fillImage;
     [SerializeField] private GameObject damagePanel;
+    [SerializeField] private RectTransform fragmentTargetIcon; // UI 아이콘 참조 추가
 
     [SerializeField] private Color damageBlinkColor = Color.red;
     [SerializeField] private Color healBlinkColor = Color.green;
@@ -171,5 +172,11 @@ public class UIManager : MonoBehaviour
     public void OnHeal()
     {
         BlinkHPSlider(healBlinkColor);
+    }
+
+    // UI 아이콘의 RectTransform을 반환하는 메서드
+    public RectTransform GetFragmentTargetIcon()
+    {
+        return fragmentTargetIcon;
     }
 }

@@ -15,6 +15,7 @@ public class BreakObject : MonoBehaviour
     private AudioManager audioManager;
     private ObjectProperties objectProperties;  // ObjectProperties 참조
     private Transform targetPoint;
+    private UIManager uiManager;
 
     private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
 
@@ -100,6 +101,13 @@ public class BreakObject : MonoBehaviour
             return;
         }
 
+        // UIManager 참조 가져오기
+        uiManager = FindAnyObjectByType<UIManager>();
+        if (uiManager == null)
+        {
+            Debug.LogError("UIManager를 찾을 수 없습니다!");
+            return;
+        }
     }
 
     private void OnDestroy()
@@ -166,8 +174,9 @@ public class BreakObject : MonoBehaviour
                     // 파편에 필요한 컴포넌트 추가 및 초기화
                     InitFragment(fragment);
 
-                    // 파편이 플레이어 쪽으로 날아가도록 설정
-                    fragment.gameObject.AddComponent<FragmentMovement>().MoveToTarget(targetPoint);
+                    // UI 타겟으로 이동하도록 설정
+                    var fragmentMovement = fragment.gameObject.AddComponent<FragmentMovement>();
+                    fragmentMovement.SetUITarget(uiManager.GetFragmentTargetIcon());
                 }
             }
         }
