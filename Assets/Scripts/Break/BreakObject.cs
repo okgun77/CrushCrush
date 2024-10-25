@@ -118,7 +118,7 @@ public class BreakObject : MonoBehaviour
             touchManager.UnregisterBreakObject(this);
         }
 
-        // 오브젝트가 파괴될 때 경고 효과 해제
+        // 오브젝트가 파괴될 때 경고 효과 해
         if (isWarningActive && warningManager != null)
         {
             warningManager.RemoveWarningEffect(this);
@@ -232,16 +232,14 @@ public class BreakObject : MonoBehaviour
         if (_fragment.gameObject.GetComponent<BreakObject>() == null)
         {
             var fragmentScript = _fragment.gameObject.AddComponent<BreakObject>();
-
-            // fragmentScript 초기화 (초기화 함수 호출)
             fragmentScript.Initialize(
                 objectProperties.GetScoreType(),
-                objectProperties.GetFragmentLevel() + 1, // 파편 레벨 증가
-                2.0f // 추가 속도 배율 (예시 값)
+                objectProperties.GetFragmentLevel() + 1,
+                2.0f
             );
         }
 
-        // 파편의 물리적 속도와 알파 값을 설정 (SetFragmentProperties 호출)
+        // 파편의 물리적 속도와 알파 값을 설정
         SetFragmentProperties(_fragment, Vector3.zero, Vector3.zero);
 
         // Rigidbody와 Collider 설정
@@ -337,21 +335,6 @@ public class BreakObject : MonoBehaviour
 
     private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity, Vector3 _initialAngularVelocity)
     {
-        Rigidbody rb = _fragment.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            // 파편에 기존의 물리적 속도 전달
-            // rb.linearVelocity = _initialVelocity * 2.0f;  // 추가 속도 배율 적용
-            // rb.angularVelocity = _initialAngularVelocity; // 회전 속도도 유지
-
-            // 물리 속도가 없을 경우 임의로 추가적인 힘을 가할 수도 있습니다.
-            if (rb.linearVelocity.magnitude < 0.1f)
-            {
-                rb.AddForce(Random.onUnitSphere * 2.0f, ForceMode.Impulse);  // 랜덤한 방향으로 힘을 가함
-            }
-        }
-
-        // 파편의 알파 값 적용
         Renderer renderer = _fragment.GetComponent<Renderer>();
         if (renderer != null)
         {
@@ -359,11 +342,9 @@ public class BreakObject : MonoBehaviour
             {
                 if (mat.HasProperty("_Color"))
                 {
-                    mat.SetFloat("_Surface", 1); // Transparent
-                    mat.SetFloat("_Blend", 1); // Alpha Blend
-                    Color color = mat.color;
-                    color.a = 0.3f; // 알파 값 조정
-                    mat.color = color;
+                    // 투명도 설정만 초기화
+                    mat.SetFloat("_Surface", 1);
+                    mat.SetFloat("_Blend", 1);
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
                     mat.SetInt("_ZWrite", 0);
@@ -371,10 +352,6 @@ public class BreakObject : MonoBehaviour
                     mat.EnableKeyword("_ALPHABLEND_ON");
                     mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
                     mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-                }
-                else if (mat.HasProperty("_Alpha"))
-                {
-                    mat.SetFloat("_Alpha", 0.3f); // 알파 값 조정
                 }
             }
         }
