@@ -118,7 +118,7 @@ public class BreakObject : MonoBehaviour
             touchManager.UnregisterBreakObject(this);
         }
 
-        // 오브젝트가 파괴될 때 경고 효과 해제
+        // 오브젝트가 파괴될 때 경고 효과 해
         if (isWarningActive && warningManager != null)
         {
             warningManager.RemoveWarningEffect(this);
@@ -232,16 +232,14 @@ public class BreakObject : MonoBehaviour
         if (_fragment.gameObject.GetComponent<BreakObject>() == null)
         {
             var fragmentScript = _fragment.gameObject.AddComponent<BreakObject>();
-
-            // fragmentScript 초기화 (초기화 함수 호출)
             fragmentScript.Initialize(
                 objectProperties.GetScoreType(),
-                objectProperties.GetFragmentLevel() + 1, // 파편 레벨 증가
-                2.0f // 추가 속도 배율 (예시 값)
+                objectProperties.GetFragmentLevel() + 1,
+                2.0f
             );
         }
 
-        // 파편의 물리적 속도와 알파 값을 설정 (SetFragmentProperties 호출)
+        // 파편의 물리적 속도와 알파 값을 설정
         SetFragmentProperties(_fragment, Vector3.zero, Vector3.zero);
 
         // Rigidbody와 Collider 설정
@@ -303,10 +301,6 @@ public class BreakObject : MonoBehaviour
             fragmentSound.demolition = rayfireSound.demolition;
             fragmentSound.collision = rayfireSound.collision;
         }
-
-        // 파편이 사라지는 DestroyFade 컴포넌트 추가
-        var destroyFade = _fragment.gameObject.AddComponent<DestroyFade>();
-        destroyFade.StartDestruction(); // 서서히 사라지기 시작
     }
 
 
@@ -337,21 +331,6 @@ public class BreakObject : MonoBehaviour
 
     private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity, Vector3 _initialAngularVelocity)
     {
-        Rigidbody rb = _fragment.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            // 파편에 기존의 물리적 속도 전달
-            // rb.linearVelocity = _initialVelocity * 2.0f;  // 추가 속도 배율 적용
-            // rb.angularVelocity = _initialAngularVelocity; // 회전 속도도 유지
-
-            // 물리 속도가 없을 경우 임의로 추가적인 힘을 가할 수도 있습니다.
-            if (rb.linearVelocity.magnitude < 0.1f)
-            {
-                rb.AddForce(Random.onUnitSphere * 2.0f, ForceMode.Impulse);  // 랜덤한 방향으로 힘을 가함
-            }
-        }
-
-        // 파편의 알파 값 적용
         Renderer renderer = _fragment.GetComponent<Renderer>();
         if (renderer != null)
         {
@@ -359,11 +338,9 @@ public class BreakObject : MonoBehaviour
             {
                 if (mat.HasProperty("_Color"))
                 {
-                    mat.SetFloat("_Surface", 1); // Transparent
-                    mat.SetFloat("_Blend", 1); // Alpha Blend
-                    Color color = mat.color;
-                    color.a = 0.3f; // 알파 값 조정
-                    mat.color = color;
+                    // 투명도 설정만 초기화
+                    mat.SetFloat("_Surface", 1);
+                    mat.SetFloat("_Blend", 1);
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
                     mat.SetInt("_ZWrite", 0);
@@ -372,39 +349,8 @@ public class BreakObject : MonoBehaviour
                     mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
                     mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                 }
-                else if (mat.HasProperty("_Alpha"))
-                {
-                    mat.SetFloat("_Alpha", 0.3f); // 알파 값 조정
-                }
             }
         }
-    }
-
-
-    // 파편이 플레이어 쪽으로 움직이는 코루틴
-    private IEnumerator MoveFragmentToTarget(GameObject _fragment)
-    {
-        Rigidbody rb = _fragment.GetComponent<Rigidbody>();
-
-        while (rb != null && Vector3.Distance(_fragment.transform.position, targetPoint.position) > 0.1f)
-        {
-            Vector3 direction = (targetPoint.position - _fragment.transform.position).normalized;
-            rb.linearVelocity = direction * 8.0f;  // 속도 설정
-            yield return null;  // 한 프레임 대기
-        }
-
-        // 도착 후 파편을 사라지게 처리
-        // Destroy(_fragment);
-
-        // 타겟에 도달한 후 서서히 사라지는 효과 적용
-        DestroyFade destroyFade = _fragment.GetComponent<DestroyFade>();
-        if (destroyFade == null)
-        {
-            destroyFade = _fragment.AddComponent<DestroyFade>();  // 없으면 추가
-        }
-
-        // 서서히 사라지는 효과 시작
-        destroyFade.StartDestruction();
     }
 
 
