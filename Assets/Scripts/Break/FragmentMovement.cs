@@ -22,8 +22,8 @@ public class FragmentMovement : MonoBehaviour
     // 페이드 아웃 시작까지의 최소 거리
     public float minFadeDistance = 20f;
     // 스크린 좌표상에서의 페이드 거리 설정
-    public float fadeStartScreenDistance = 50f;  // 페이드 시작 거리 (픽셀)
-    public float fadeEndScreenDistance = 30f;    // 완전히 사라지는 거리 (픽셀)
+    public float fadeStartScreenDistance = 30f;  // 페이드 시작 거리 (픽셀)
+    public float fadeEndScreenDistance = 15f;    // 완전히 사라지는 거리 (픽셀)
 
     private Rigidbody rb;
     private Vector3 targetScreenPosition;
@@ -37,10 +37,20 @@ public class FragmentMovement : MonoBehaviour
     private Vector3 initialScreenPosition;
     private float totalScreenDistance;
     private bool hasInitializedDistance = false;
+    private float initialZ;
+    private float targetZ;
+    private Vector3 cameraPosition;
+    private Camera mainCamera;
+    private float nearPlaneOffset = 2f; // 카메라 near plane으로부터의 오프셋
+    private Vector3 targetWorldPosition;
+    private float zoomFactor = 0.8f; // 카메라 방향으로 얼마나 빠르게 다가올지 결정
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        mainCamera = Camera.main;
+        cameraPosition = mainCamera.transform.position;
+
         if (rb != null)
         {
             // 초기 퍼짐 효과
@@ -52,12 +62,8 @@ public class FragmentMovement : MonoBehaviour
             if (renderer != null)
             {
                 materials = renderer.materials;
-                // 초기 투명도 설정
                 SetMaterialsAlpha(1.0f);
             }
-            
-            // 초기 스크린 위치 저장
-            initialScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
             
             StartCoroutine(StartMovingToTarget());
         }
@@ -99,24 +105,26 @@ public class FragmentMovement : MonoBehaviour
 
         if (!isMovingToTarget) return;
 
-        // 현재 오브젝트의 스크린 좌표 계산
-        Vector3 fragmentScreenPos = Camera.main.WorldToScreenPoint(transform.position);
+        Vector3 fragmentScreenPos = mainCamera.WorldToScreenPoint(transform.position);
         
-        if (fragmentScreenPos.z > 0) // 카메라 앞에 있을 때만 처리
+        if (fragmentScreenPos.z > 0)
         {
-            // 스크린 상에서의 거리 계산
+            // 파편의 크기를 고려한 거리 계산
+            Renderer renderer = GetComponent<Renderer>();
+            Vector3 size = renderer != null ? renderer.bounds.size : Vector3.one;
+            
+            // 스크린상의 파편 크기 계산
+            Vector3 screenSize = mainCamera.WorldToScreenPoint(transform.position + size/2) - 
+                               mainCamera.WorldToScreenPoint(transform.position - size/2);
+            float screenRadius = Mathf.Max(Mathf.Abs(screenSize.x), Mathf.Abs(screenSize.y)) * 0.5f;
+
+            // 스크린상의 2D 거리 계산 (파편 크기 고려)
             float distanceInScreen = Vector2.Distance(
                 new Vector2(fragmentScreenPos.x, fragmentScreenPos.y),
                 new Vector2(targetScreenPosition.x, targetScreenPosition.y)
-            );
+            ) - screenRadius; // 파편 크기만큼 거리 감소
 
-            // 월드 좌표로 변환하여 이동 방향 계산
-            Vector3 targetWorldPos = Camera.main.ScreenToWorldPoint(
-                new Vector3(targetScreenPosition.x, targetScreenPosition.y, fragmentScreenPos.z)
-            );
-            Vector3 directionToTarget = (targetWorldPos - transform.position).normalized;
-
-            // 거리에 따른 페이드 아웃
+            // 페이드 아웃 처리 (수정된 부분)
             if (distanceInScreen < fadeStartScreenDistance)
             {
                 float alpha = Mathf.InverseLerp(fadeEndScreenDistance, fadeStartScreenDistance, distanceInScreen);
@@ -129,18 +137,48 @@ public class FragmentMovement : MonoBehaviour
                 }
             }
 
-            // 속도 조절
+            float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
+            
+            // 목표 위치 계산 (수정된 부분)
+            Vector3 screenTarget = new Vector3(targetScreenPosition.x, targetScreenPosition.y, 10f); // 고정된 z값
+            Vector3 worldTargetPosition = mainCamera.ScreenToWorldPoint(screenTarget);
+            
+            // 카메라 방향으로의 보정된 목표 위치 계산
+            Vector3 cameraDirection = (mainCamera.transform.position - transform.position).normalized;
+            float targetDistance = Mathf.Min(distanceToCamera, 10f); // 카메라로부터의 목표 거리
+            Vector3 targetPos = mainCamera.transform.position - cameraDirection * targetDistance;
+            
+            // 최종 목표 위치는 UI 타겟 위치와 카메라 방향 보정을 혼합
+            Vector3 finalTargetPos = Vector3.Lerp(
+                worldTargetPosition,
+                targetPos,
+                Mathf.InverseLerp(50f, 0f, distanceToCamera) // 거리에 따른 보정 강도 조절
+            );
+
+            Vector3 directionToTarget = (finalTargetPos - transform.position).normalized;
+
+            // 속도 조절 (수정된 부분)
             float speedMultiplier = 1f;
             if (distanceInScreen < hardStopRadius)
             {
-                speedMultiplier = Mathf.Lerp(minSpeed, 0.3f, distanceInScreen / hardStopRadius);
+                // 더 급격한 감속
+                speedMultiplier = Mathf.Lerp(0.1f, 0.3f, distanceInScreen / hardStopRadius);
             }
             else if (distanceInScreen < slowDownRadius)
             {
                 speedMultiplier = Mathf.Lerp(0.3f, 1f, (distanceInScreen - hardStopRadius) / (slowDownRadius - hardStopRadius));
             }
 
-            // 속도 적용
+            // 거리에 따른 추가 속도 보정
+            float distanceMultiplier = Mathf.Lerp(1.5f, 1f, distanceToCamera / 50f);
+            speedMultiplier *= distanceMultiplier;
+
+            // 목표 지점 근처에서 추가 감속
+            if (distanceInScreen < fadeStartScreenDistance)
+            {
+                speedMultiplier *= Mathf.Lerp(0.1f, 1f, distanceInScreen / fadeStartScreenDistance);
+            }
+
             Vector3 targetVelocity = directionToTarget * maxMoveSpeed * speedMultiplier;
             rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * 5f);
         }

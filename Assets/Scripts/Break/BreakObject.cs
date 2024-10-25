@@ -301,10 +301,6 @@ public class BreakObject : MonoBehaviour
             fragmentSound.demolition = rayfireSound.demolition;
             fragmentSound.collision = rayfireSound.collision;
         }
-
-        // 파편이 사라지는 DestroyFade 컴포넌트 추가
-        var destroyFade = _fragment.gameObject.AddComponent<DestroyFade>();
-        destroyFade.StartDestruction(); // 서서히 사라지기 시작
     }
 
 
@@ -355,33 +351,6 @@ public class BreakObject : MonoBehaviour
                 }
             }
         }
-    }
-
-
-    // 파편이 플레이어 쪽으로 움직이는 코루틴
-    private IEnumerator MoveFragmentToTarget(GameObject _fragment)
-    {
-        Rigidbody rb = _fragment.GetComponent<Rigidbody>();
-
-        while (rb != null && Vector3.Distance(_fragment.transform.position, targetPoint.position) > 0.1f)
-        {
-            Vector3 direction = (targetPoint.position - _fragment.transform.position).normalized;
-            rb.linearVelocity = direction * 8.0f;  // 속도 설정
-            yield return null;  // 한 프레임 대기
-        }
-
-        // 도착 후 파편을 사라지게 처리
-        // Destroy(_fragment);
-
-        // 타겟에 도달한 후 서서히 사라지는 효과 적용
-        DestroyFade destroyFade = _fragment.GetComponent<DestroyFade>();
-        if (destroyFade == null)
-        {
-            destroyFade = _fragment.AddComponent<DestroyFade>();  // 없으면 추가
-        }
-
-        // 서서히 사라지는 효과 시작
-        destroyFade.StartDestruction();
     }
 
 
