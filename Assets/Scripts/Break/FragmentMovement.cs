@@ -8,10 +8,7 @@ public class FragmentMovement : MonoBehaviour
     public float maxMoveSpeed = 8.0f;            // 타겟으로 이동할 때 최대 속도
     public float slowDownRadius = 50f;           // 감속 시작 거리
     public float transitionDuration = 0.5f;      // 감속/가속 시간
-    public float fadeStartDistance = 50f;        // 페이드 아웃 시작 거리
     public float hardStopRadius = 20f;           // 급격한 감속을 시작할 거리
-    public float minSpeed = 0.1f;                // 최소 속도 (완전히 멈추지 않도록)
-    public float minFadeDistance = 20f;          // 페이드 아웃 시작까지의 최소 거리
     public float fadeStartScreenDistance = 60f;   // 페이드 시작 거리 (픽셀)
     public float fadeEndScreenDistance = 30f;     // 완전히 사라지는 거리 (픽셀)
 
@@ -23,24 +20,16 @@ public class FragmentMovement : MonoBehaviour
     private float transitionTimer = 0f;          // 전환 타이머
     private Vector3 initialVelocity;             // 초기 속도
     private Material[] materials;                // 파편의 머티리얼 배열
-    private bool isFading = false;               // 페이드 아웃 중인지 여부
-    private Vector3 initialScreenPosition;        // 초기 스크린 좌표
-    private float totalScreenDistance;           // 전체 스크린 이동 거리
-    private bool hasInitializedDistance = false; // 거리가 초기화되었는지 여부
-    private float initialZ;                      // 초기 Z 좌표
-    private float targetZ;                       // 목표 Z 좌표
-    private Vector3 cameraPosition;              // 카메라 위치
     private Camera mainCamera;                   // 메인 카메라 참조
-    private float nearPlaneOffset = 2f;          // 카메라 near plane으로부터의 오프셋
-    private Vector3 targetWorldPosition;         // 월드 좌표계에서의 타겟 위치
-    private float zoomFactor = 0.8f;             // 카메라 방향으로 얼마나 빠르게 다가올지 결정
 
+    /// <summary>
+    /// 초기화: 리지드바디 설정, 초기 퍼짐 효과 적용, 머티리얼 설정
+    /// </summary>
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
-        cameraPosition = mainCamera.transform.position;
-
+        
         if (rb != null)
         {
             // 초기 퍼짐 효과
@@ -59,6 +48,9 @@ public class FragmentMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 지정된 대기 시간 후 타겟을 향한 이동 시작
+    /// </summary>
     private IEnumerator StartMovingToTarget()
     {
         yield return new WaitForSeconds(delayBeforeMove);
@@ -71,6 +63,9 @@ public class FragmentMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 물리 기반 이동 업데이트
+    /// </summary>
     private void FixedUpdate()
     {
         if (!CanUpdate()) return;
@@ -84,11 +79,18 @@ public class FragmentMovement : MonoBehaviour
         HandleFragmentMovement();
     }
 
+    /// <summary>
+    /// 업데이트 가능 상태 확인
+    /// </summary>
+    /// <returns>리지드바디와 타겟이 유효한 경우 true</returns>
     private bool CanUpdate()
     {
         return rb != null && hasTarget;
     }
 
+    /// <summary>
+    /// 파편 이동 로직 처리: 화면상 위치 계산, 페이드 아웃, 이동 처리
+    /// </summary>
     private void HandleFragmentMovement()
     {
         Vector3 fragmentScreenPos = mainCamera.WorldToScreenPoint(transform.position);
@@ -104,6 +106,9 @@ public class FragmentMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 초기 속도에서 정지 상태로의 전환 처리
+    /// </summary>
     private void HandleTransition()
     {
         transitionTimer += Time.fixedDeltaTime;
@@ -121,6 +126,11 @@ public class FragmentMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 화면상에서의 파편과 타겟 간 거리 계산
+    /// </summary>
+    /// <param name="_fragmentScreenPos">화면상의 파편 위치</param>
+    /// <returns>화면상의 실제 거리 (오브젝트 크기 고려)</returns>
     private float CalculateScreenDistance(Vector3 _fragmentScreenPos)
     {
         Renderer renderer = GetComponent<Renderer>();
@@ -136,6 +146,11 @@ public class FragmentMovement : MonoBehaviour
         ) - screenRadius;
     }
 
+    /// <summary>
+    /// 거리에 따른 페이드 아웃 처리
+    /// </summary>
+    /// <param name="_distanceInScreen">화면상의 거리</param>
+    /// <returns>오브젝트가 파괴되었으면 true</returns>
     private bool HandleFadeOut(float _distanceInScreen)
     {
         if (_distanceInScreen < fadeStartScreenDistance)
@@ -152,6 +167,11 @@ public class FragmentMovement : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 카메라와의 거리를 고려한 최종 타겟 위치 계산
+    /// </summary>
+    /// <param name="_distanceToCamera">카메라까지의 거리</param>
+    /// <returns>월드 좌표계의 타겟 위치</returns>
     private Vector3 CalculateTargetPosition(float _distanceToCamera)
     {
         Vector3 screenTarget = new Vector3(targetScreenPosition.x, targetScreenPosition.y, 10f);
@@ -168,6 +188,12 @@ public class FragmentMovement : MonoBehaviour
         );
     }
 
+    /// <summary>
+    /// 거리에 따른 속도 계수 계산
+    /// </summary>
+    /// <param name="_distanceInScreen">화면상의 거리</param>
+    /// <param name="_distanceToCamera">카메라까지의 거리</param>
+    /// <returns>최종 속도 계수 (0.0 ~ 1.5)</returns>
     private float CalculateSpeedMultiplier(float _distanceInScreen, float _distanceToCamera)
     {
         float speedMultiplier = 1f;
@@ -192,6 +218,11 @@ public class FragmentMovement : MonoBehaviour
         return speedMultiplier;
     }
 
+    /// <summary>
+    /// 파편의 실제 이동 처리
+    /// </summary>
+    /// <param name="_fragmentScreenPos">화면상의 파편 위치</param>
+    /// <param name="_distanceInScreen">화면상의 거리</param>
     private void HandleMovement(Vector3 _fragmentScreenPos, float _distanceInScreen)
     {
         float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
@@ -204,6 +235,10 @@ public class FragmentMovement : MonoBehaviour
         rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * 5f);
     }
 
+    /// <summary>
+    /// 머티리얼의 알파값 설정
+    /// </summary>
+    /// <param name="_alpha">설정할 알파값 (0.0 ~ 1.0)</param>
     private void SetMaterialsAlpha(float _alpha)
     {
         if (materials == null) return;
@@ -223,6 +258,10 @@ public class FragmentMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// UI 타겟 설정 및 화면 좌표 계산
+    /// </summary>
+    /// <param name="_uiTarget">타겟 UI 요소의 RectTransform</param>
     public void SetUITarget(RectTransform _uiTarget)
     {
         if (_uiTarget != null)
