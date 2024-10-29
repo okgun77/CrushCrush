@@ -216,6 +216,13 @@ public class BreakObject : MonoBehaviour
 
     private void InitFragment(RayfireRigid _fragment)
     {
+        // 모든 Collider 컴포넌트 제거
+        Collider[] colliders = _fragment.gameObject.GetComponents<Collider>();
+        foreach (Collider collider in colliders)
+        {
+            Destroy(collider);
+        }
+
         // 파편에 ObjectProperties가 없으면 추가
         ObjectProperties fragmentProperties = _fragment.gameObject.GetComponent<ObjectProperties>();
         if (fragmentProperties == null)
@@ -224,9 +231,9 @@ public class BreakObject : MonoBehaviour
         }
 
         // 파편 오브젝트의 레벨과 속성을 상속
-        fragmentProperties.SetFragmentLevel(objectProperties.GetFragmentLevel() + 1);  // 파편 레벨 증가
-        fragmentProperties.SetScoreType(objectProperties.GetScoreType());  // 점수 타입 상속
-        fragmentProperties.SetBreakable(true);  // 파편도 파괴 가능하도록 설정
+        fragmentProperties.SetFragmentLevel(objectProperties.GetFragmentLevel() + 1);
+        fragmentProperties.SetScoreType(objectProperties.GetScoreType());
+        fragmentProperties.SetBreakable(true);
 
         // 파편에 BreakObject가 없으면 추가
         if (_fragment.gameObject.GetComponent<BreakObject>() == null)
@@ -242,35 +249,11 @@ public class BreakObject : MonoBehaviour
         // 파편의 물리적 속도와 알파 값을 설정
         SetFragmentProperties(_fragment, Vector3.zero, Vector3.zero);
 
-        // Rigidbody와 Collider 설정
+        // Rigidbody 설정
         Rigidbody rb = _fragment.GetComponent<Rigidbody>();
         if (rb == null)
         {
             rb = _fragment.gameObject.AddComponent<Rigidbody>();
-        }
-
-        Collider col = _fragment.GetComponent<Collider>();
-        if (col == null)
-        {
-            try
-            {
-                // BoxCollider 또는 SphereCollider 사용
-                if (ShouldUseBoxCollider(_fragment))
-                {
-                    col = _fragment.gameObject.AddComponent<BoxCollider>();
-                }
-                else
-                {
-                    col = _fragment.gameObject.AddComponent<SphereCollider>();
-                }
-
-                // 콜라이더 크기를 파편 크기에 맞게 조정
-                AdjustColliderSize(col, _fragment);
-            }
-            catch
-            {
-                Debug.LogWarning("Failed to create BoxCollider or SphereCollider.");
-            }
         }
 
         // RayfireRigid 설정

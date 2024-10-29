@@ -21,6 +21,8 @@ public class FragmentMovement : MonoBehaviour
     private Vector3 initialVelocity;             // 초기 속도
     private Material[] materials;                // 파편의 머티리얼 배열
     private Camera mainCamera;                   // 메인 카메라 참조
+    private const float MAX_TRANSITION_WAIT_TIME = 0.1f;  // 최대 추가 대기 시간
+    private float extraWaitTimer = 0f;                    // 추가 대기 시간 타이머
 
     /// <summary>
     /// 초기화: 리지드바디 설정, 초기 퍼짐 효과 적용, 머티리얼 설정
@@ -121,8 +123,25 @@ public class FragmentMovement : MonoBehaviour
         }
         else
         {
-            isTransitioning = false;
-            isMovingToTarget = true;
+            // 속도가 충분히 감속되었거나 최대 대기 시간을 초과한 경우
+            if (rb.linearVelocity.magnitude < 0.1f || extraWaitTimer >= MAX_TRANSITION_WAIT_TIME)
+            {
+                // 안전하게 속도를 0으로 설정
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                
+                isTransitioning = false;
+                isMovingToTarget = true;
+                extraWaitTimer = 0f;  // 타이머 리셋
+            }
+            else
+            {
+                // 추가 대기 시간 증가
+                extraWaitTimer += Time.fixedDeltaTime;
+                // 계속해서 감속 시도
+                rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * 10f);
+                rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, Time.fixedDeltaTime * 10f);
+            }
         }
     }
 
