@@ -15,6 +15,30 @@ MonoBehaviour:
   sceneDatasByGuid:
     keys:
     - 8be56792e6e105147964807d97333c0a
+    - 2a45461c8fa97dc43b3fea1bf8a64fdd
+    - 1f4cef9801cedf842beb42c7e742c1c4
+    - 262e43902cd72084bb7a6ee5a4a87288
+    - e3307a03b41e2fb4e8c3a2aff3fea467
+    - 5c8f13e531a17ad4d84e98ae7f5e00c3
+    - b059d080d42e1e44aba408a15d2d102f
+    - ec3c5dc8d499ff747ab3b0ea3c622b44
+    - 29950e718c5d86a43bff5eb206e542b2
+    - 796834407e0382f4d84623a7611ee8fa
+    - 67d652b67cdb7c04b9545f7a9a86a15f
+    - 4cffa49f3c8c0d04188bc515a388b8d5
+    - 5409b5357d38520459694350471055c9
+    - 96457a18931a39944a1d9b89c439b2be
+    - 8952c582e08b5454aa5b1eb93831345b
+    - fdc6a730d8dac8c46a47f9230e7e9bb0
+    - 25bc764dfcc8438489e2e1c8fa13383c
+    - 915648f7ea0071544bb22051be336d14
+    - de877ad2fae2cc847a98b7d3d14f5318
+    - 3a368741590aac244ae91ec12ae6a93b
+    - c0debe72a45edc14084079def6664d6d
+    - 44d516f38ee6e5d45bf45f620efe267f
+    - f8b00454f71c1a64f8fa86a466c7a54b
+    - ec1ed81641d49fa429bb57302e4c92e1
+    - 
     values:
     - goDatasByGlobalId:
         keys:
@@ -29,7 +53,7 @@ MonoBehaviour:
         - iColor: 2
           icon: 
       goDatasByInstanceId:
-        keys: 02f800003ef900003ef80000
+        keys: e6d4000022d6000022d50000
         values:
         - iColor: 0
           icon: 
@@ -37,3 +61,162 @@ MonoBehaviour:
           icon: 
         - iColor: 2
           icon: 
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys:
+        - GlobalObjectId_V1-2-ec1ed81641d49fa429bb57302e4c92e1-1773276896-0
+        - GlobalObjectId_V1-2-ec1ed81641d49fa429bb57302e4c92e1-385846536-0
+        - GlobalObjectId_V1-2-ec1ed81641d49fa429bb57302e4c92e1-746779989-0
+        values:
+        - iColor: 2
+          icon: 
+        - iColor: 2
+          icon: 
+        - iColor: 8
+          icon: 
+      goDatasByInstanceId:
+        keys: 1ebf010090bb0100b890fbff
+        values:
+        - iColor: 2
+          icon: 
+        - iColor: 2
+          icon: 
+        - iColor: 8
+          icon: 
+    - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
