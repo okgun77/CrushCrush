@@ -3,7 +3,12 @@ using System.Collections;
 
 public class FragmentMovement : MonoBehaviour
 {
-    public float initialSpreadForce = 2.0f;      // 초기 퍼짐을 위한 힘의 세기
+    [Header("Initial Movement Settings")]
+    public float initialSpreadForce = 2.0f;      // 초기 퍼짐 힘
+    public float cameraMoveMultiplier = 0.4f;    // 카메라 방향 이동 배율
+    public float minCameraApproach = 2f;         // 최소 카메라 접근 거리
+    public float maxCameraApproach = 15f;        // 최대 카메라 접근 거리
+    
     public float delayBeforeMove = 0.8f;         // 타겟을 향해 움직이기 전 대기 시간
     public float maxMoveSpeed = 8.0f;            // 타겟으로 이동할 때 최대 속도
     public float slowDownRadius = 50f;           // 감속 시작 거리
@@ -34,9 +39,16 @@ public class FragmentMovement : MonoBehaviour
         
         if (rb != null)
         {
-            // 초기 퍼짐 효과
-            Vector3 randomDirection = Random.onUnitSphere;
+            // 카메라와의 거리에 따른 접근 거리 계산
+            float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
+            float approachDistance = CalculateApproachDistance(distanceToCamera);
+            
+            // 초기 퍼짐 방향 계산 (카메라 방향 고려)
+            Vector3 randomDirection = CalculateSpreadDirection(approachDistance);
+            
+            // 힘 적용
             rb.AddForce(randomDirection * initialSpreadForce, ForceMode.Impulse);
+            rb.AddTorque(Random.onUnitSphere * initialSpreadForce * 0.2f, ForceMode.Impulse);
             
             // 머티리얼 캐싱
             Renderer renderer = GetComponent<Renderer>();
@@ -296,5 +308,26 @@ public class FragmentMovement : MonoBehaviour
             }
             hasTarget = true;
         }
+    }
+
+    private float CalculateApproachDistance(float _distanceToCamera)
+    {
+        float nearPlane = mainCamera.nearClipPlane;
+        float normalizedDistance = Mathf.Clamp01((_distanceToCamera - nearPlane * 2) / (50f - nearPlane * 2));
+        
+        // 거리가 멀수록 더 많이 접근
+        return Mathf.Lerp(minCameraApproach, maxCameraApproach, normalizedDistance);
+    }
+
+    private Vector3 CalculateSpreadDirection(float _approachDistance)
+    {
+        Vector3 toCameraDir = (mainCamera.transform.position - transform.position).normalized;
+        Vector3 randomDir = Random.onUnitSphere;
+        
+        // 랜덤 방향과 카메라 방향을 혼합
+        Vector3 spreadDir = Vector3.Lerp(randomDir, toCameraDir, cameraMoveMultiplier).normalized;
+        
+        // 접근 거리를 반영한 최종 방향
+        return spreadDir * (1f + _approachDistance / maxCameraApproach);
     }
 }
