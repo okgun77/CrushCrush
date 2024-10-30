@@ -9,10 +9,18 @@ public class PlayerMovement : MonoBehaviour
     
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float turnSpeed = 30f;  // 자동 회전 속도
-    [SerializeField] private float maxTurnAngle = 45f;  // 최대 회전 각도
-    [SerializeField] private float smoothRotationTime = 0.5f;  // 회전 부드러움 정도
+    [SerializeField] private float turnSpeed = 30f;
+    [SerializeField] private float maxTurnAngle = 45f;
+    [SerializeField] private float smoothRotationTime = 0.5f;
     
+    [Header("Vertical Movement")]
+    [SerializeField] private float baseHeight = 4f;         // 기본 비행 높이
+    [SerializeField] private float heightVariation = 2f;    // 랜덤 높이 변화량
+    [SerializeField] private float waveAmplitude = 0.5f;    // 물결 움직임의 크기
+    [SerializeField] private float waveSpeed = 1f;          // 물결 움직임의 속도
+    [SerializeField] private float minHeight = 2f;          // 최소 비행 높이
+    [SerializeField] private float maxHeight = 6f;          // 최대 비행 높이
+
     private float orbitRadius;
     private Vector3[] vertices;
     private Vector3[] normals;
@@ -20,25 +28,31 @@ public class PlayerMovement : MonoBehaviour
     private float currentTurnAngle;
     private float turnTimer;
     private float targetTurnAngle;
+    private float verticalOffset;
+    private float baseOrbitRadius;  // 기본 궤도 반경 저장
+    
+    private float targetHeight;
+    private float heightChangeTimer;
+    private const float HEIGHT_CHANGE_INTERVAL = 4f;  // 높이 변경 간격
 
     private void Start()
     {
         if (!ValidateReferences()) return;
         
         InitializeMeshData();
-        orbitRadius = Vector3.Distance(transform.position, planetCenter.position);
+        baseOrbitRadius = Vector3.Distance(transform.position, planetCenter.position);
+        orbitRadius = baseOrbitRadius;
         
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
         }
 
-        // 초기 이동 방향 설정
         Vector3 upDirection = (transform.position - planetCenter.position).normalized;
         currentMoveDirection = Vector3.ProjectOnPlane(transform.forward, upDirection).normalized;
         
-        // 초기 회전 목표 설정
         SetNewTurnTarget();
+        SetNewVerticalTarget();  // 새로운 수직 움직임 목표 설정
     }
 
     private bool ValidateReferences()
@@ -77,44 +91,45 @@ public class PlayerMovement : MonoBehaviour
         turnTimer = 0f;
     }
 
+    private void SetNewVerticalTarget()
+    {
+        targetHeight = Random.Range(minHeight, maxHeight);
+        heightChangeTimer = 0f;
+    }
+
     private void MoveAroundPlanet()
     {
         if (mainCamera == null) return;
 
-        // 현재 위치에서 행성 중심까지의 방향 (up 방향)
+        UpdateVerticalMovement();  // 수직 움직임 업데이트
+        
         Vector3 upDirection = (transform.position - planetCenter.position).normalized;
         
-        // 시간에 따른 자동 회전
+        // 회전 로직
         turnTimer += Time.deltaTime;
-        if (turnTimer > 3f)  // 3초마다 새로운 회전 목표 설정
+        if (turnTimer > 3f)
         {
             SetNewTurnTarget();
         }
 
-        // 현재 회전 각도를 목표 각도로 부드럽게 보간
         currentTurnAngle = Mathf.Lerp(currentTurnAngle, targetTurnAngle, turnSpeed * Time.deltaTime);
-
-        // 현재 이동 방향을 부드럽게 회전
+        
         currentMoveDirection = Quaternion.AngleAxis(
             currentTurnAngle * Time.deltaTime, 
             upDirection
         ) * currentMoveDirection;
 
-        // 이동 방향이 수평면에 있도록 보정
         currentMoveDirection = Vector3.ProjectOnPlane(currentMoveDirection, upDirection).normalized;
 
-        // 이동 방향으로 위치 이동
+        // 이동 및 높이 적용
         Vector3 movement = currentMoveDirection * moveSpeed * Time.deltaTime;
         Vector3 newPosition = transform.position + movement;
-
-        // 새로운 위치에서 행성 중심까지의 방향
         Vector3 newUpDirection = (newPosition - planetCenter.position).normalized;
         
-        // 새로운 위치를 행성 표면에 맞추기
+        // 현재 orbitRadius를 사용하여 최종 위치 계산
         Vector3 finalPosition = planetCenter.position + (newUpDirection * orbitRadius);
         transform.position = finalPosition;
 
-        // 부드러운 회전 적용 (새로운 up 방향 기준)
         if (currentMoveDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(currentMoveDirection, newUpDirection);
@@ -123,6 +138,59 @@ public class PlayerMovement : MonoBehaviour
                 targetRotation,
                 Time.deltaTime / smoothRotationTime
             );
+        }
+    }
+
+    private void UpdateVerticalMovement()
+    {
+        // 높이 변경 타이머 업데이트
+        heightChangeTimer += Time.deltaTime;
+        if (heightChangeTimer >= HEIGHT_CHANGE_INTERVAL)
+        {
+            // 현재 높이를 고려하여 다음 목표 높이 설정
+            float currentRelativeHeight = orbitRadius - baseOrbitRadius;
+            
+            // 현재 높이가 최소/최대 높이에 가까울 때는 반대 방향으로 목표 설정
+            if (currentRelativeHeight < minHeight + heightVariation)
+            {
+                targetHeight = baseHeight + Random.Range(0, heightVariation);  // 위로 이동
+            }
+            else if (currentRelativeHeight > maxHeight - heightVariation)
+            {
+                targetHeight = baseHeight + Random.Range(-heightVariation, 0);  // 아래로 이동
+            }
+            else
+            {
+                targetHeight = baseHeight + Random.Range(-heightVariation, heightVariation);
+            }
+            
+            heightChangeTimer = 0f;
+        }
+
+        // 현재 높이를 목표 높이로 부드럽게 보간
+        float currentHeight = orbitRadius - baseOrbitRadius;
+        float newHeight = Mathf.Lerp(currentHeight, targetHeight, waveSpeed * Time.deltaTime);
+        
+        // 물결 움직임의 크기를 높이에 따라 동적으로 조절
+        float heightRatio = Mathf.InverseLerp(minHeight, maxHeight, currentHeight);
+        float dynamicAmplitude = waveAmplitude * (1f - Mathf.Abs(heightRatio - 0.5f) * 2f);
+        
+        // 부드러운 물결 움직임 추가
+        float waveOffset = Mathf.Sin(Time.time * waveSpeed) * dynamicAmplitude;
+        
+        // 최종 궤도 반경 설정
+        orbitRadius = baseOrbitRadius + newHeight + waveOffset;
+        
+        // 부드러운 제한을 위한 추가 보간
+        if (orbitRadius < baseOrbitRadius + minHeight)
+        {
+            float blend = Mathf.SmoothStep(0, 1, (orbitRadius - (baseOrbitRadius + minHeight - 1f)));
+            orbitRadius = Mathf.Lerp(orbitRadius, baseOrbitRadius + minHeight, blend);
+        }
+        else if (orbitRadius > baseOrbitRadius + maxHeight)
+        {
+            float blend = Mathf.SmoothStep(0, 1, ((baseOrbitRadius + maxHeight + 1f) - orbitRadius));
+            orbitRadius = Mathf.Lerp(orbitRadius, baseOrbitRadius + maxHeight, blend);
         }
     }
 }

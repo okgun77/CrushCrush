@@ -20,6 +20,10 @@ public class JunkSpawner : MonoBehaviour
     [SerializeField] private float spawnInterval = 0.5f; // 스폰 시도 간격
     [SerializeField] private int maxJunkCount = 30;      // 최대 쓰레기 개수
     [SerializeField] private float minJunkDistance = 5f; // 쓰레기 간 최소 거리
+    [SerializeField] private float screenEdgeMargin = 0.1f;  // 화면 가장자리 여유 공간 (0.1 = 10%)
+    
+    [Header("Effects")]
+    [SerializeField] private JunkFadeEffect fadeEffectSettings;  // EffectManager의 JunkFadeEffect 참조
     
     private float planetRadius;                          // 행성의 실제 반지름
     private List<GameObject> activeJunk = new List<GameObject>();  // 현재 활성화된 쓰레기 목록
@@ -138,7 +142,7 @@ public class JunkSpawner : MonoBehaviour
             
             if (distanceToPlayer >= visibleRadius && 
                 distanceToPlayer <= spawnRadius && 
-                !IsPositionVisible(spawnPosition) &&  // 시야 체크 추가
+                !IsPositionVisible(spawnPosition) &&  // 시야 체크 가
                 !IsTooCloseToOtherJunk(spawnPosition))
             {
                 SpawnJunkAt(spawnPosition);
@@ -156,14 +160,14 @@ public class JunkSpawner : MonoBehaviour
 
     private Vector3 GetSpawnPositionOutsidePlayerView()
     {
-        float randomAngle = Random.Range(-180f, 180f);
+        float randomAngle = Random.Range(-150f, 150f);
         Vector3 randomDirection = Quaternion.Euler(0, randomAngle, 0) * player.forward;
         
-        // 스폰 거리를 좀 더 여유있게 설정
-        float spawnDistance = Random.Range(visibleRadius + 5f, spawnRadius - 5f);
+        float minDistance = visibleRadius + 5f;
+        float maxDistance = spawnRadius - 5f;
+        float spawnDistance = Random.Range(minDistance, maxDistance);
         Vector3 basePosition = player.position + (randomDirection * spawnDistance);
         
-        // 행성 표면 기준으로 높이 조정
         Vector3 toPlanetCenter = (planetCenter.position - basePosition).normalized;
         Vector3 surfacePosition = planetCenter.position + (toPlanetCenter * -planetRadius);
         float heightAboveSurface = Random.Range(minSpawnHeight, maxSpawnHeight);
@@ -175,10 +179,23 @@ public class JunkSpawner : MonoBehaviour
     {
         if (mainCamera == null) return false;
         
+        Vector3 directionToPosition = (_position - mainCamera.transform.position).normalized;
+        float angleToPosition = Vector3.Angle(mainCamera.transform.forward, directionToPosition);
+        float halfFOV = mainCamera.fieldOfView * 0.5f;
+        
+        if (angleToPosition > halfFOV)
+        {
+            return false;  // 시야각 밖에 있음
+        }
+        
         Vector3 screenPoint = mainCamera.WorldToViewportPoint(_position);
-        return screenPoint.z > 0 && 
-               screenPoint.x >= 0 && screenPoint.x <= 1 && 
-               screenPoint.y >= 0 && screenPoint.y <= 1;
+        bool isInView = screenPoint.z > 0 && 
+                       screenPoint.x >= (0f + screenEdgeMargin) && 
+                       screenPoint.x <= (1f - screenEdgeMargin) && 
+                       screenPoint.y >= (0f + screenEdgeMargin) && 
+                       screenPoint.y <= (1f - screenEdgeMargin);
+        
+        return isInView;
     }
 
     private void SpawnJunkAt(Vector3 _position)
@@ -188,6 +205,9 @@ public class JunkSpawner : MonoBehaviour
         
         Vector3 upDirection = (junk.transform.position - planetCenter.position).normalized;
         junk.transform.rotation = Quaternion.LookRotation(Random.onUnitSphere, upDirection);
+        
+        // 페이드 효과 설정값과 함께 추가
+        JunkFadeEffect.CreateEffect(junk, fadeEffectSettings);
         
         activeJunk.Add(junk);
     }
@@ -212,13 +232,25 @@ public class JunkSpawner : MonoBehaviour
         {
             if (activeJunk[i] == null) continue;
             
-            float distanceToPlayer = Vector3.Distance(
-                activeJunk[i].transform.position,
-                player.position
-            );
+            Vector3 junkPosition = activeJunk[i].transform.position;
+            float distanceToPlayer = Vector3.Distance(junkPosition, player.position);
             
-            if (distanceToPlayer > despawnRadius)
+            // 거리가 너무 멀거나
+            bool isTooFar = distanceToPlayer > despawnRadius;
+            
+            // 플레이어의 뒤쪽에 있고 일정 거리 이상인 경우 제거
+            Vector3 directionToJunk = (junkPosition - player.position).normalized;
+            float dotProduct = Vector3.Dot(player.forward, directionToJunk);
+            bool isBehindPlayer = dotProduct < -0.5f && distanceToPlayer > visibleRadius;
+            
+            if (isTooFar || isBehindPlayer)
             {
+                if (Debug.isDebugBuild)
+                {
+                    string reason = isTooFar ? "too far" : "behind player";
+                    Debug.Log($"Destroying junk: {reason}");
+                }
+                
                 Destroy(activeJunk[i]);
                 activeJunk.RemoveAt(i);
             }
