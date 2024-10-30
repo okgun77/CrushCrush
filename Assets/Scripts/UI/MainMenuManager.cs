@@ -27,7 +27,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnStartButtonClicked()
     {
-        SceneManager.LoadScene("Crush_Prototype");
+        SceneManager.LoadScene("Stage01_Aurora");
     }
 
     private void OnOptionButtonClicked()

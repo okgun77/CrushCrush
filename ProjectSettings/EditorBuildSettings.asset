@@ -5,15 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/TItle.unity
     guid: bc3f86dfdad14dc459c65e1909430a4a
-  - enabled: 0
-    path: Assets/Scenes/Old/Crush_Prototype.unity
-    guid: a7e8a2c4fbf3f6841a124388610b78c0
   - enabled: 1
-    path: Assets/Scenes/Old/SpaceSweeper_Stage_Test.unity
-    guid: 8be56792e6e105147964807d97333c0a
+    path: Assets/Scenes/Stage01_Aurora.unity
+    guid: ec1ed81641d49fa429bb57302e4c92e1
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 7942d623833b4904ca12f4e25c3fe6e5,
       type: 2}

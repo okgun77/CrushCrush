@@ -6,32 +6,33 @@ using System.Linq;
 public class JunkSpawner : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Transform planetCenter;
-    [SerializeField] private Transform player;
-    [SerializeField] private GameObject[] junkPrefabs;
-    [SerializeField] private Transform junkContainer;
+    [SerializeField] private Transform planetCenter;      // 행성의 중심점
+    [SerializeField] private Transform player;           // 플레이어 Transform
+    [SerializeField] private GameObject[] junkPrefabs;   // 생성할 쓰레기 프리팹 배열
+    [SerializeField] private Transform junkContainer;    // 생성된 쓰레기들을 담을 부모 객체
     
     [Header("Spawn Settings")]
-    [SerializeField] private float minSpawnHeight = 2f;
-    [SerializeField] private float maxSpawnHeight = 5f;
-    [SerializeField] private float visibleRadius = 30f;
-    [SerializeField] private float spawnRadius = 45f;
-    [SerializeField] private float despawnRadius = 60f;
-    [SerializeField] private float spawnInterval = 0.5f;
-    [SerializeField] private int maxJunkCount = 30;
-    [SerializeField] private float minJunkDistance = 5f;
+    [SerializeField] private float minSpawnHeight = 2f;  // 행성 표면으로부터 최소 스폰 높이
+    [SerializeField] private float maxSpawnHeight = 5f;  // 행성 표면으로부터 최대 스폰 높이
+    [SerializeField] private float visibleRadius = 30f;  // 플레이어 주변 최소 스폰 거리
+    [SerializeField] private float spawnRadius = 45f;    // 플레이어 주변 최대 스폰 거리
+    [SerializeField] private float despawnRadius = 60f;  // 플레이어로부터 제거될 거리
+    [SerializeField] private float spawnInterval = 0.5f; // 스폰 시도 간격
+    [SerializeField] private int maxJunkCount = 30;      // 최대 쓰레기 개수
+    [SerializeField] private float minJunkDistance = 5f; // 쓰레기 간 최소 거리
     
-    private Vector3[] vertices;
-    private float planetRadius;
-    private List<GameObject> activeJunk = new List<GameObject>();
-    private float spawnTimer;
-    private SgtPlanet planetComponent;
+    private float planetRadius;                          // 행성의 실제 반지름
+    private List<GameObject> activeJunk = new List<GameObject>();  // 현재 활성화된 쓰레기 목록
+    private float spawnTimer;                           // 스폰 타이머
+    private SgtPlanet planetComponent;                  // 행성 컴포넌트
+    private Camera mainCamera;  // 카메라 캐시용 변수 추가
 
     private void Start()
     {
         if (!ValidateReferences()) return;
         
         InitializePlanetData();
+        mainCamera = Camera.main;  // 카메라 참조 캐시
         
         // 디버그 로그
         Debug.Log($"Planet Center: {planetCenter.position}");
@@ -135,27 +136,19 @@ public class JunkSpawner : MonoBehaviour
             Vector3 spawnPosition = GetSpawnPositionOutsidePlayerView();
             float distanceToPlayer = Vector3.Distance(spawnPosition, player.position);
             
-            // 거리 조건 확인
-            if (distanceToPlayer >= visibleRadius && distanceToPlayer <= spawnRadius)
+            if (distanceToPlayer >= visibleRadius && 
+                distanceToPlayer <= spawnRadius && 
+                !IsPositionVisible(spawnPosition) &&  // 시야 체크 추가
+                !IsTooCloseToOtherJunk(spawnPosition))
             {
-                if (!IsTooCloseToOtherJunk(spawnPosition))
-                {
-                    SpawnJunkAt(spawnPosition);
-                    spawned = true;
+                SpawnJunkAt(spawnPosition);
+                spawned = true;
+                if (Debug.isDebugBuild)
                     Debug.Log($"Successfully spawned junk at attempt {attempts}");
-                }
-                else
-                {
-                    Debug.Log("Position too close to other junk");
-                }
-            }
-            else
-            {
-                Debug.Log($"Invalid distance: {distanceToPlayer} (should be between {visibleRadius} and {spawnRadius})");
             }
         }
         
-        if (!spawned)
+        if (!spawned && Debug.isDebugBuild)
         {
             Debug.LogWarning($"Failed to spawn junk after {MAX_ATTEMPTS} attempts");
         }
@@ -163,64 +156,35 @@ public class JunkSpawner : MonoBehaviour
 
     private Vector3 GetSpawnPositionOutsidePlayerView()
     {
-        // 플레이어 기준으로 랜덤한 방향 생성
         float randomAngle = Random.Range(-180f, 180f);
         Vector3 randomDirection = Quaternion.Euler(0, randomAngle, 0) * player.forward;
         
-        // visibleRadius와 spawnRadius 사용
-        float spawnDistance = Random.Range(visibleRadius, spawnRadius);
+        // 스폰 거리를 좀 더 여유있게 설정
+        float spawnDistance = Random.Range(visibleRadius + 5f, spawnRadius - 5f);
         Vector3 basePosition = player.position + (randomDirection * spawnDistance);
         
-        // 행성 중심 방향으로의 벡터
+        // 행성 표면 기준으로 높이 조정
         Vector3 toPlanetCenter = (planetCenter.position - basePosition).normalized;
-        
-        // 행성 표면 위치 계산
         Vector3 surfacePosition = planetCenter.position + (toPlanetCenter * -planetRadius);
-        
-        // 표면으로부터 약간 위로 올린 최종 스폰 위치
         float heightAboveSurface = Random.Range(minSpawnHeight, maxSpawnHeight);
-        Vector3 spawnPosition = surfacePosition + (toPlanetCenter * -heightAboveSurface);
         
-        Debug.Log($"Player Position: {player.position}");
-        Debug.Log($"Random Direction: {randomDirection}");
-        Debug.Log($"Base Position: {basePosition}");
-        Debug.Log($"Surface Position: {surfacePosition}");
-        Debug.Log($"Final Spawn Position: {spawnPosition}");
-        Debug.Log($"Distance from player: {Vector3.Distance(spawnPosition, player.position)}");
-        
-        return spawnPosition;
+        return surfacePosition + (toPlanetCenter * -heightAboveSurface);
     }
 
-    private bool IsValidSpawnPosition(Vector3 position)
+    private bool IsPositionVisible(Vector3 _position)
     {
-        float distanceFromPlayer = Vector3.Distance(position, player.position);
+        if (mainCamera == null) return false;
         
-        // visibleRadius와 spawnRadius 사용
-        if (distanceFromPlayer < visibleRadius || distanceFromPlayer > spawnRadius)
-        {
-            Debug.Log($"Distance check failed: {distanceFromPlayer} (should be between {visibleRadius} and {spawnRadius})");
-            return false;
-        }
-        
-        // 카메라 시야 체크
-        Vector3 screenPoint = Camera.main.WorldToViewportPoint(position);
-        bool isVisible = screenPoint.z > 0 && 
-                        screenPoint.x >= 0 && screenPoint.x <= 1 && 
-                        screenPoint.y >= 0 && screenPoint.y <= 1;
-                        
-        if (isVisible)
-        {
-            Debug.Log("Position is visible in camera view");
-            return false;
-        }
-        
-        return true;
+        Vector3 screenPoint = mainCamera.WorldToViewportPoint(_position);
+        return screenPoint.z > 0 && 
+               screenPoint.x >= 0 && screenPoint.x <= 1 && 
+               screenPoint.y >= 0 && screenPoint.y <= 1;
     }
 
-    private void SpawnJunkAt(Vector3 position)
+    private void SpawnJunkAt(Vector3 _position)
     {
         GameObject prefab = junkPrefabs[Random.Range(0, junkPrefabs.Length)];
-        GameObject junk = Instantiate(prefab, position, Quaternion.identity, junkContainer);
+        GameObject junk = Instantiate(prefab, _position, Quaternion.identity, junkContainer);
         
         Vector3 upDirection = (junk.transform.position - planetCenter.position).normalized;
         junk.transform.rotation = Quaternion.LookRotation(Random.onUnitSphere, upDirection);
@@ -228,13 +192,13 @@ public class JunkSpawner : MonoBehaviour
         activeJunk.Add(junk);
     }
 
-    private bool IsTooCloseToOtherJunk(Vector3 position)
+    private bool IsTooCloseToOtherJunk(Vector3 _position)
     {
         foreach (GameObject junk in activeJunk.ToList())
         {
             if (junk == null) continue;
             
-            if (Vector3.Distance(position, junk.transform.position) < minJunkDistance)
+            if (Vector3.Distance(_position, junk.transform.position) < minJunkDistance)
             {
                 return true;
             }

@@ -6227,9 +6227,9 @@ MonoBehaviour:
   planetMeshFilter: {fileID: 3300000, guid: 0eba857bb8ab78c4d98d653565fd1902, type: 3}
   mainCamera: {fileID: 764328424}
   moveSpeed: 1
-  turnSpeed: 3
-  maxTurnAngle: 5
-  smoothRotationTime: 0.5
+  turnSpeed: 1
+  maxTurnAngle: 10
+  smoothRotationTime: 5
 --- !u!1 &747129354
 GameObject:
   m_ObjectHideFlags: 0
@@ -9531,11 +9531,11 @@ MonoBehaviour:
   minSpawnHeight: 17
   maxSpawnHeight: 30
   visibleRadius: 50
-  spawnRadius: 60
-  despawnRadius: 70
+  spawnRadius: 70
+  despawnRadius: 90
   spawnInterval: 0.5
-  maxJunkCount: 1000
-  minJunkDistance: 3
+  maxJunkCount: 200
+  minJunkDistance: 10
 --- !u!4 &1136611788
 Transform:
   m_ObjectHideFlags: 0
