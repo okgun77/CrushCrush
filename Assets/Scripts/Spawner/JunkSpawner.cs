@@ -23,7 +23,7 @@ public class JunkSpawner : MonoBehaviour
     [SerializeField] private float screenEdgeMargin = 0.1f;  // 화면 가장자리 여유 공간 (0.1 = 10%)
     
     [Header("Effects")]
-    [SerializeField] private JunkFadeEffect fadeEffectSettings;  // EffectManager의 JunkFadeEffect 참조
+    [SerializeField] private JunkEffectManager effectManager;
     
     private float planetRadius;                          // 행성의 실제 반지름
     private List<GameObject> activeJunk = new List<GameObject>();  // 현재 활성화된 쓰레기 목록
@@ -198,17 +198,18 @@ public class JunkSpawner : MonoBehaviour
         return isInView;
     }
 
-    private void SpawnJunkAt(Vector3 _position)
+    private void SpawnJunkAt(Vector3 position)
     {
-        GameObject prefab = junkPrefabs[Random.Range(0, junkPrefabs.Length)];
-        GameObject junk = Instantiate(prefab, _position, Quaternion.identity, junkContainer);
+        // 랜덤하게 프리팹 선택
+        GameObject selectedPrefab = junkPrefabs[Random.Range(0, junkPrefabs.Length)];
         
-        Vector3 upDirection = (junk.transform.position - planetCenter.position).normalized;
-        junk.transform.rotation = Quaternion.LookRotation(Random.onUnitSphere, upDirection);
+        // 선택된 프리팹으로 생성
+        GameObject junk = Instantiate(selectedPrefab, position, Quaternion.identity, junkContainer);
         
-        // 페이드 효과 설정값과 함께 추가
-        JunkFadeEffect.CreateEffect(junk, fadeEffectSettings);
+        // 효과 적용
+        effectManager.ApplyEffectToJunk(junk);
         
+        // 활성 쓰레기 목록에 추가
         activeJunk.Add(junk);
     }
 

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78fe7467d3cbf3c40a051ed5af7202d9, type: 3}
+  m_Name: JunkEffectSettings1
+  m_EditorClassIdentifier: 
+  floatAmplitudeRange: {x: 0.1, y: 0.4}
+  floatFrequencyRange: {x: 0.3, y: 0.7}
+  rotationSpeedRange: {x: 5, y: 15}
+  moveRadiusRange: {x: 0.4, y: 0.8}
+  moveSpeedRange: {x: 0.3, y: 0.7}

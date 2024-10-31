@@ -169,13 +169,17 @@ public class BreakObject : MonoBehaviour
             // Demolish() 호출 후 파편이 생성되므로 이 시점에서 파편을 초기화합니다.
             foreach (RayfireRigid fragment in rayfireRigid.fragments)
             {
-                if (fragment != null && fragment.gameObject.activeInHierarchy) // 비활성화되지 않은 파편만 처리
+                if (fragment != null && fragment.gameObject.activeInHierarchy)
                 {
-                    // 파편에 필요한 컴포넌트 추가 및 초기화
                     InitFragment(fragment);
 
-                    // UI 타겟으로 이동하도록 설정
                     var fragmentMovement = fragment.gameObject.AddComponent<FragmentMovement>();
+                    
+                    // 거리에 따른 설정 조정
+                    float distanceToCamera = Vector3.Distance(fragment.transform.position, Camera.main.transform.position);
+                    fragmentMovement.initialSpreadForce = Mathf.Lerp(2f, 5f, distanceToCamera / 50f);
+                    fragmentMovement.cameraMoveMultiplier = Mathf.Lerp(0.3f, 0.5f, distanceToCamera / 50f);
+                    
                     fragmentMovement.SetUITarget(uiManager.GetFragmentTargetIcon());
                 }
             }
@@ -197,9 +201,6 @@ public class BreakObject : MonoBehaviour
     }
 
 
-
-
-
     private void AddScore()
     {
         if (scoreManager == null)
@@ -216,7 +217,7 @@ public class BreakObject : MonoBehaviour
 
     private void InitFragment(RayfireRigid _fragment)
     {
-        // 모든 Collider 컴포넌트 제거
+        // 모든 종류의 Collider 제거
         Collider[] colliders = _fragment.gameObject.GetComponents<Collider>();
         foreach (Collider collider in colliders)
         {
@@ -255,6 +256,11 @@ public class BreakObject : MonoBehaviour
         {
             rb = _fragment.gameObject.AddComponent<Rigidbody>();
         }
+        
+        // Rigidbody 설정
+        rb.useGravity = false;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
 
         // RayfireRigid 설정
         RayfireRigid fragmentRigid = _fragment.GetComponent<RayfireRigid>();
@@ -288,29 +294,6 @@ public class BreakObject : MonoBehaviour
 
 
 
-
-    private bool ShouldUseBoxCollider(RayfireRigid _fragment)
-    {
-        // BoxCollider를 사용할 조건을 정의합니다.
-        // 예: 특정 메쉬 이름 또는 태그를 기준으로 결정
-        return true; // 기본적으로 BoxCollider를 사용하도록 설정
-    }
-
-    private void AdjustColliderSize(Collider _collider, RayfireRigid _fragment)
-    {
-        if (_collider is BoxCollider boxCollider)
-        {
-            boxCollider.size = _fragment.meshRenderer.bounds.size;
-            boxCollider.center = _fragment.meshRenderer.bounds.center - _fragment.transform.position;
-        }
-        else if (_collider is SphereCollider sphereCollider)
-        {
-            // SphereCollider의 반지름을 파편의 경계 박스를 기준으로 설정 
-            Vector3 boundsSize = _fragment.meshRenderer.bounds.size;
-            sphereCollider.radius = Mathf.Max(boundsSize.x, boundsSize.y, boundsSize.z) / 2.0f;
-            sphereCollider.center = _fragment.meshRenderer.bounds.center - _fragment.transform.position;
-        }
-    }
 
     private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity, Vector3 _initialAngularVelocity)
     {
