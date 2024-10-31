@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 180a2bec23ad89e44ae5c02c833dd5cf
+timeCreated: 1516283055
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 106259
+  packageName: Propane Tank
+  packageVersion: 1.0
+  assetPath: Assets/VertexField/Industrial/Demo scene/demo_propane.unity
+  uploadId: 224718

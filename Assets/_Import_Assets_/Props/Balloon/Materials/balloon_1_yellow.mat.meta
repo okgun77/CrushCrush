@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f95888940d554464bba40299211af091
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181916
+  packageName: Balloon radioactive.
+  packageVersion: 1.0
+  assetPath: Assets/Balloon/Materials/balloon_1_yellow.mat
+  uploadId: 398357
