@@ -3779,11 +3779,39 @@ MonoBehaviour:
   planetCenter: {fileID: 66751169}
   player: {fileID: 746779990}
   junkPrefabs:
-  - {fileID: 6101245094544215330, guid: a3b63a8c9be07ab49a354519d53a1416, type: 3}
-  - {fileID: 329072704345328313, guid: 670b36fa99479cb4daeb2087f0c6f010, type: 3}
-  - {fileID: 3552242436747660548, guid: cd2d59d425c58254ea05cb11229990ba, type: 3}
-  - {fileID: 9195328832990799857, guid: 4ad11c6d2576e63449d25fcce0d59a3d, type: 3}
-  - {fileID: 1931468845310326434, guid: 47921440590ecaf4ab204c94bb32b2cb, type: 3}
+  - {fileID: 1436240991688402, guid: a67b425587e1a1140b034f7f12dbbaf6, type: 3}
+  - {fileID: 1068071647995486, guid: c59fb0500e486ba4f9068e800fa3a2cb, type: 3}
+  - {fileID: 1398737122967622, guid: 68048ea19583998488617e7bf241cf23, type: 3}
+  - {fileID: 1886462451205260, guid: a7f1aa6a2b8971e4cbb8821f99116081, type: 3}
+  - {fileID: 1456539820692636, guid: b82d1d195cc4dab47a3b42fbffcf6c5e, type: 3}
+  - {fileID: 1884552429026272, guid: 1a55d99d69a7ba649b903eb5644b5fa9, type: 3}
+  - {fileID: 1247715798231374, guid: 0cbb4bbaf7f1cfc418e6fcfe4c429176, type: 3}
+  - {fileID: 1335719228593180, guid: 5b14a88438c18c54583cbba83fbfb17e, type: 3}
+  - {fileID: 1639371510821934, guid: 8fc8ae07d3ac5be40980f1d092144449, type: 3}
+  - {fileID: 1549298307964258, guid: 63197cc74af93a343a919290d94ad915, type: 3}
+  - {fileID: 1487380378802594, guid: 58993a6fe94aab3429cfd7ddb3eef904, type: 3}
+  - {fileID: 1179940770323736, guid: 83b72ffe1f1c33d43869a91ceb623b3a, type: 3}
+  - {fileID: 1238123599251008, guid: 697a25175c6621c438af381e66c52ca1, type: 3}
+  - {fileID: 1374858917508274, guid: a5a1886e3d5532948a55213d658d1605, type: 3}
+  - {fileID: 1793265429765402, guid: 6dd6e63eced1c9a41b90d907b97e9d31, type: 3}
+  - {fileID: 1461184161390636, guid: 28996dfffa1180848972dffde7ea9486, type: 3}
+  - {fileID: 1887442468358662, guid: f7710c049eb03cd4cb910458b14cf823, type: 3}
+  - {fileID: 1919424706260932, guid: b3565796fbcca564e947febf3594ed20, type: 3}
+  - {fileID: 1000013153248048, guid: 7f289163a6c60594ab84c8d4375b63a9, type: 3}
+  - {fileID: 1000010325068422, guid: 207a404fc4167de44b701002c85b3e5e, type: 3}
+  - {fileID: 1000011804541950, guid: 5c894ec865f6375479076a87e36f3c1c, type: 3}
+  - {fileID: 1000013040479746, guid: 4d69394ec550cbe46b6839f10c99c05f, type: 3}
+  - {fileID: 1000013628716364, guid: 227ab654bc8956441b8909853ea852e7, type: 3}
+  - {fileID: 1000011585897626, guid: d6170e3970e6788498a44993f810138b, type: 3}
+  - {fileID: 1000010811274378, guid: d4250b7b2e473024386bb67c7626562e, type: 3}
+  - {fileID: 1000013580012832, guid: 2b1188005c678b14fbe8b7c5b3729786, type: 3}
+  - {fileID: 1000010619805496, guid: 0d1dd7777e02e8042928f902c151568d, type: 3}
+  - {fileID: 1000010037619014, guid: 3134353d823b30646aa0cff7016620da, type: 3}
+  - {fileID: 1000010628347772, guid: b3e4684ab85634b41be8964953267dcb, type: 3}
+  - {fileID: 167382, guid: 48818b4debb4692438a471646d31c5a8, type: 3}
+  - {fileID: 196544, guid: dcb2307fc2270d147b92b9b5053c561a, type: 3}
+  - {fileID: 133428, guid: 90db996bb381d4c40be2d0dbf872562e, type: 3}
+  - {fileID: 180656, guid: 63cce314da2c8db4389579819656f914, type: 3}
   junkContainer: {fileID: 1310878984}
   minSpawnHeight: 10
   maxSpawnHeight: 30
@@ -12478,11 +12506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d3071a7aa7389249b58df5f8cfaf7bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amplitude: 0.5
-  frequency: 1
-  rotationSpeed: 30
-  startPosition: {x: 0, y: 0, z: 0}
-  randomOffset: 0
 --- !u!114 &1344013378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12495,11 +12518,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8514ef3108282b44fa9249dd653ace28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planetCenter: {fileID: 66751169}
-  orbitSpeed: 5
-  wobbleAmount: 0.1
-  orbitAxis: {x: 0, y: 0, z: 0}
-  startRadius: 0
 --- !u!114 &1344013379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12512,9 +12530,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f2c1754f34d76a498ce96f4763c06d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceAmount: 1
-  maxVelocity: 2
-  rb: {fileID: 0}
 --- !u!114 &1344013380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12527,15 +12542,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae2d287c212e3e44a0f0d1b376b4ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatAmplitude: 0.5
-  floatFrequency: 1
-  rotationSpeed: 30
-  rotationAxis: {x: 0, y: 0, z: 0}
-  moveRadius: 1
-  moveSpeed: 1
-  startPosition: {x: 0, y: 0, z: 0}
-  randomOffset: 0
-  startRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1350259431
 GameObject:
   m_ObjectHideFlags: 0

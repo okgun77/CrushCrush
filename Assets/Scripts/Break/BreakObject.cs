@@ -171,119 +171,103 @@ public class BreakObject : MonoBehaviour
         if (rayfireRigid != null)
         {
             GameObject originalObject = null;
+            MeshFilter targetMeshFilter = null;
 
             // 자신과 자식 오브젝트들의 모든 MeshFilter 찾기
             MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
-            MeshFilter targetMeshFilter = null;
-
+            
             if (meshFilters.Length == 0)
-            {
-                // LOD Group 체크
-                LODGroup lodGroup = GetComponent<LODGroup>();
-                if (lodGroup != null)
-                {
-                    originalObject = gameObject;
-                    LOD[] lods = lodGroup.GetLODs();
-                    if (lods.Length > 0 && lods[0].renderers.Length > 0)
-                    {
-                        foreach (var renderer in lods[0].renderers)
-                        {
-                            targetMeshFilter = renderer.GetComponent<MeshFilter>();
-                            if (targetMeshFilter != null) break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // 첫 번째 유효한 MeshFilter 사용
-                targetMeshFilter = meshFilters[0];
-            }
-
-            // MeshFilter를 찾았다면 RayfireRigid 설정
-            if (targetMeshFilter != null)
-            {
-                GameObject targetObject = targetMeshFilter.gameObject;
-                if (targetObject != gameObject)
-                {
-                    RayfireRigid newRayfireRigid = targetObject.AddComponent<RayfireRigid>();
-                    
-                    // 기존 RayfireRigid의 설정을 복사
-                    newRayfireRigid.demolitionType = rayfireRigid.demolitionType;
-                    newRayfireRigid.meshDemolition = rayfireRigid.meshDemolition;
-                    newRayfireRigid.physics = rayfireRigid.physics;
-                    newRayfireRigid.limitations = rayfireRigid.limitations;
-                    newRayfireRigid.materials = rayfireRigid.materials;
-                    
-                    // 기존 RayfireRigid 제거하고 새것으로 교체
-                    Destroy(rayfireRigid);
-                    rayfireRigid = newRayfireRigid;
-                }
-            }
-            else
             {
                 Debug.LogWarning("No MeshFilter found in object or its children: " + gameObject.name);
                 return;
             }
 
-            Vector3 currentVelocity = Vector3.zero;
-            Vector3 currentAngularVelocity = Vector3.zero;
-
-            if (moveScript != null)
+            // LOD Group 체크 및 처리
+            LODGroup lodGroup = GetComponent<LODGroup>();
+            if (lodGroup != null)
             {
-                currentVelocity = moveScript.GetCurrentVelocity();
-                Destroy(moveScript);
-            }
-
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                currentVelocity = rb.linearVelocity;
-                currentAngularVelocity = rb.angularVelocity;
-            }
-
-            rayfireRigid.Demolish();
-            audioManager.PlaySFX("BreakingBones02-Mono");
-
-            foreach (RayfireRigid fragment in rayfireRigid.fragments)
-            {
-                if (fragment != null && fragment.gameObject.activeInHierarchy)
+                originalObject = gameObject;
+                LOD[] lods = lodGroup.GetLODs();
+                if (lods.Length > 0 && lods[0].renderers.Length > 0)
                 {
-                    // 먼저 파편 초기화 (콜라이더 등 기본 설정)
-                    InitFragment(fragment);
-
-                    // 투명도 설정
-                    SetupMaterial(fragment);
-
-                    // 마지막으로 movement 컴포넌트 추가
-                    var fragmentMovement = fragment.gameObject.AddComponent<FragmentMovement>();
-                    float distanceToCamera = Vector3.Distance(fragment.transform.position, Camera.main.transform.position);
-                    fragmentMovement.initialSpreadForce = Mathf.Lerp(2f, 5f, distanceToCamera / 50f);
-                    fragmentMovement.cameraMoveMultiplier = Mathf.Lerp(0.3f, 0.5f, distanceToCamera / 50f);
-                    fragmentMovement.SetUITarget(uiManager.GetFragmentTargetIcon());
+                    // LOD0의 첫 번째 렌더러의 MeshFilter 사용
+                    targetMeshFilter = lods[0].renderers[0].GetComponent<MeshFilter>();
                 }
             }
-
-            // LOD Group이 있는 원본 오브젝트 제거
-            if (originalObject != null)
+            else
             {
-                Destroy(originalObject);
+                // LOD가 없는 경우 첫 번째 MeshFilter 사용
+                targetMeshFilter = meshFilters[0];
             }
 
-            if (rayfireBomb != null)
+            if (targetMeshFilter != null)
             {
-                rayfireBomb.Explode(0f); // 지연 없이 즉시 폭발
-            }
+                GameObject targetObject = targetMeshFilter.gameObject;
+                
+                // RayfireRigid 설정
+                RayfireRigid fragmentRigid;
+                if (targetObject != gameObject)
+                {
+                    fragmentRigid = targetObject.AddComponent<RayfireRigid>();
+                    CopyRayfireSettings(rayfireRigid, fragmentRigid);
+                }
+                else
+                {
+                    fragmentRigid = rayfireRigid;
+                }
 
-            // 점수 추가
-            AddScore();
+                // 현재 속도 저장
+                Vector3 currentVelocity = Vector3.zero;
+                Vector3 currentAngularVelocity = Vector3.zero;
+                if (moveScript != null)
+                {
+                    currentVelocity = moveScript.GetCurrentVelocity();
+                    Destroy(moveScript);
+                }
 
-            // 파편 레벨이 0일 때만 연속 파괴로 계산
-            if (objectProperties.GetFragmentLevel() == 0)
-            {
-                hpManager.IncreaseConsecutiveDestroys();
+                // 파괴 실행
+                fragmentRigid.Demolish();
+                audioManager.PlaySFX("BreakingBones02-Mono");
+
+                // 파편 처리
+                foreach (RayfireRigid fragment in fragmentRigid.fragments)
+                {
+                    if (fragment != null && fragment.gameObject.activeInHierarchy)
+                    {
+                        InitFragment(fragment);
+                        SetupMaterial(fragment);
+                        
+                        var fragmentMovement = fragment.gameObject.AddComponent<FragmentMovement>();
+                        float distanceToCamera = Vector3.Distance(fragment.transform.position, Camera.main.transform.position);
+                        fragmentMovement.initialSpreadForce = Mathf.Lerp(2f, 5f, distanceToCamera / 50f);
+                        fragmentMovement.cameraMoveMultiplier = Mathf.Lerp(0.3f, 0.5f, distanceToCamera / 50f);
+                        fragmentMovement.SetUITarget(uiManager.GetFragmentTargetIcon());
+                    }
+                }
+
+                // 원본 오브젝트 제거
+                if (originalObject != null)
+                {
+                    Destroy(originalObject);
+                }
+
+                // 점수 추가 및 연속 파괴 처리
+                AddScore();
+                if (objectProperties.GetFragmentLevel() == 0)
+                {
+                    hpManager.IncreaseConsecutiveDestroys();
+                }
             }
         }
+    }
+
+    private void CopyRayfireSettings(RayfireRigid source, RayfireRigid target)
+    {
+        target.demolitionType = source.demolitionType;
+        target.meshDemolition = source.meshDemolition;
+        target.physics = source.physics;
+        target.limitations = source.limitations;
+        target.materials = source.materials;
     }
 
     // 4. 머티리얼 설정 로직 분리
