@@ -143,43 +143,40 @@ public class BreakObject : MonoBehaviour
     {
         if (rayfireRigid != null)
         {
-            // 현재 속도와 회전 속도 가져오기
             Vector3 currentVelocity = Vector3.zero;
             Vector3 currentAngularVelocity = Vector3.zero;
 
             if (moveScript != null)
             {
                 currentVelocity = moveScript.GetCurrentVelocity();
-                Destroy(moveScript); // 이동 스크립트 제거
+                Destroy(moveScript);
             }
 
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb != null)
             {
-                currentVelocity = rb.linearVelocity;  // 현재 속도 가져오기
-                currentAngularVelocity = rb.angularVelocity;  // 현재 회전 속도 가져오기
+                currentVelocity = rb.linearVelocity;
+                currentAngularVelocity = rb.angularVelocity;
             }
 
-            // 오브젝트 파괴 및 파편 처리
             rayfireRigid.Demolish();
-
-            // 파괴 오디오 플레이
             audioManager.PlaySFX("BreakingBones02-Mono");
 
-            // Demolish() 호출 후 파편이 생성되므로 이 시점에서 파편을 초기화합니다.
             foreach (RayfireRigid fragment in rayfireRigid.fragments)
             {
                 if (fragment != null && fragment.gameObject.activeInHierarchy)
                 {
+                    // 먼저 파편 초기화 (콜라이더 등 기본 설정)
                     InitFragment(fragment);
 
+                    // 투명도 설정
+                    SetupMaterial(fragment);
+
+                    // 마지막으로 movement 컴포넌트 추가
                     var fragmentMovement = fragment.gameObject.AddComponent<FragmentMovement>();
-                    
-                    // 거리에 따른 설정 조정
                     float distanceToCamera = Vector3.Distance(fragment.transform.position, Camera.main.transform.position);
                     fragmentMovement.initialSpreadForce = Mathf.Lerp(2f, 5f, distanceToCamera / 50f);
                     fragmentMovement.cameraMoveMultiplier = Mathf.Lerp(0.3f, 0.5f, distanceToCamera / 50f);
-                    
                     fragmentMovement.SetUITarget(uiManager.GetFragmentTargetIcon());
                 }
             }
@@ -200,6 +197,38 @@ public class BreakObject : MonoBehaviour
         }
     }
 
+    private void SetupMaterial(RayfireRigid _fragment)
+    {
+        Renderer renderer = _fragment.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            Material[] newMaterials = new Material[renderer.materials.Length];
+            for (int i = 0; i < renderer.materials.Length; i++)
+            {
+                Material newMat = new Material(renderer.materials[i]);
+                if (newMat.HasProperty("_BaseColor"))
+                {
+                    Color color = newMat.GetColor("_BaseColor");
+                    color.a = 0.3f;
+                    newMat.SetColor("_BaseColor", color);
+                    
+                    newMat.SetOverrideTag("RenderType", "Transparent");
+                    newMat.SetFloat("_Surface", 1);
+                    newMat.SetFloat("_Blend", 1);
+                    newMat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    newMat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    newMat.SetInt("_ZWrite", 0);
+                    newMat.DisableKeyword("_ALPHATEST_ON");
+                    newMat.EnableKeyword("_ALPHABLEND_ON");
+                    newMat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                    newMat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+                    newMat.renderQueue = 3000;
+                }
+                newMaterials[i] = newMat;
+            }
+            renderer.materials = newMaterials;
+        }
+    }
 
     private void AddScore()
     {
@@ -292,9 +321,6 @@ public class BreakObject : MonoBehaviour
         }
     }
 
-
-
-
     private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity, Vector3 _initialAngularVelocity)
     {
         Renderer renderer = _fragment.GetComponent<Renderer>();
@@ -304,9 +330,11 @@ public class BreakObject : MonoBehaviour
             {
                 if (mat.HasProperty("_Color"))
                 {
-                    // 투명도 설정만 초기화
-                    mat.SetFloat("_Surface", 1);
-                    mat.SetFloat("_Blend", 1);
+                    mat.SetFloat("_Surface", 1); // Transparent
+                    mat.SetFloat("_Blend", 1); // Alpha Blend
+                    Color color = mat.color;
+                    color.a = 0.3f; // 알파 값 조정
+                    mat.color = color;
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
                     mat.SetInt("_ZWrite", 0);
@@ -315,10 +343,13 @@ public class BreakObject : MonoBehaviour
                     mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
                     mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                 }
+                else if (mat.HasProperty("_Alpha"))
+                {
+                    mat.SetFloat("_Alpha", 0.3f); // 알파 값 조정
+                }
             }
         }
     }
-
 
     // WarningManager에 의해 경고 상태가 업데이트됨
     public void SetWarningState(bool _state)

@@ -50,12 +50,11 @@ public class FragmentMovement : MonoBehaviour
             rb.AddForce(randomDirection * initialSpreadForce, ForceMode.Impulse);
             rb.AddTorque(Random.onUnitSphere * initialSpreadForce * 0.2f, ForceMode.Impulse);
             
-            // 머티리얼 캐싱
+            // 머티리얼 캐싱 (기존 머티리얼 설정을 유지)
             Renderer renderer = GetComponent<Renderer>();
             if (renderer != null)
             {
                 materials = renderer.materials;
-                SetMaterialsAlpha(1.0f);
             }
             
             StartCoroutine(StartMovingToTarget());
@@ -276,15 +275,13 @@ public class FragmentMovement : MonoBehaviour
 
         foreach (Material mat in materials)
         {
-            if (mat.HasProperty("_Color"))
+            if (mat == null) continue;
+
+            if (mat.HasProperty("_BaseColor"))
             {
-                Color color = mat.color;
+                Color color = mat.GetColor("_BaseColor");
                 color.a = _alpha;
-                mat.color = color;
-            }
-            else if (mat.HasProperty("_Alpha"))
-            {
-                mat.SetFloat("_Alpha", _alpha);
+                mat.SetColor("_BaseColor", color);
             }
         }
     }
