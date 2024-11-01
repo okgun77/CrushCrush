@@ -19,6 +19,33 @@ public class BreakObject : MonoBehaviour
 
     private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
 
+    // 1. 캐시 추가
+    private static readonly int BaseColorProperty = Shader.PropertyToID("_BaseColor");
+    private static readonly int SurfaceProperty = Shader.PropertyToID("_Surface");
+    private static readonly int BlendProperty = Shader.PropertyToID("_Blend");
+    private static readonly int SrcBlendProperty = Shader.PropertyToID("_SrcBlend");
+    private static readonly int DstBlendProperty = Shader.PropertyToID("_DstBlend");
+    private static readonly int ZWriteProperty = Shader.PropertyToID("_ZWrite");
+
+    // 2. 파편 설정 구조체 추가
+    private struct FragmentSettings
+    {
+        public float alpha;
+        public int renderQueue;
+        public bool useGravity;
+        public CollisionDetectionMode collisionMode;
+        public RigidbodyInterpolation interpolation;
+    }
+
+    private static readonly FragmentSettings DefaultFragmentSettings = new FragmentSettings
+    {
+        alpha = 0.3f,
+        renderQueue = 3000,
+        useGravity = false,
+        collisionMode = CollisionDetectionMode.ContinuousSpeculative,
+        interpolation = RigidbodyInterpolation.Interpolate
+    };
+
     private void Awake()
     {
         // RayfireRigid 컴포넌트 가져오기
@@ -81,7 +108,7 @@ public class BreakObject : MonoBehaviour
         audioManager = FindAnyObjectByType<AudioManager>();
         if (audioManager == null)
         {
-            Debug.LogError("AudioManager를 찾을 수 없습니다!");
+            Debug.LogError("AudioManager를 찾을 수 없습��다!");
             return;
         }
 
@@ -197,37 +224,45 @@ public class BreakObject : MonoBehaviour
         }
     }
 
+    // 4. 머티리얼 설정 로직 분리
+    private void SetupTransparentMaterial(Material material)
+    {
+        material.SetOverrideTag("RenderType", "Transparent");
+        material.SetFloat(SurfaceProperty, 1);
+        material.SetFloat(BlendProperty, 1);
+        material.SetInt(SrcBlendProperty, (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        material.SetInt(DstBlendProperty, (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        material.SetInt(ZWriteProperty, 0);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.EnableKeyword("_ALPHABLEND_ON");
+        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+        material.renderQueue = DefaultFragmentSettings.renderQueue;
+    }
+
     private void SetupMaterial(RayfireRigid _fragment)
     {
-        Renderer renderer = _fragment.GetComponent<Renderer>();
-        if (renderer != null)
+        var renderer = _fragment.GetComponent<Renderer>();
+        if (renderer == null) return;
+
+        // 3. 배열 재할당 최소화
+        var materials = renderer.materials;
+        var newMaterials = new Material[materials.Length];
+
+        for (int i = 0; i < materials.Length; i++)
         {
-            Material[] newMaterials = new Material[renderer.materials.Length];
-            for (int i = 0; i < renderer.materials.Length; i++)
+            var newMat = new Material(materials[i]);
+            if (newMat.HasProperty(BaseColorProperty))
             {
-                Material newMat = new Material(renderer.materials[i]);
-                if (newMat.HasProperty("_BaseColor"))
-                {
-                    Color color = newMat.GetColor("_BaseColor");
-                    color.a = 0.3f;
-                    newMat.SetColor("_BaseColor", color);
-                    
-                    newMat.SetOverrideTag("RenderType", "Transparent");
-                    newMat.SetFloat("_Surface", 1);
-                    newMat.SetFloat("_Blend", 1);
-                    newMat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                    newMat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                    newMat.SetInt("_ZWrite", 0);
-                    newMat.DisableKeyword("_ALPHATEST_ON");
-                    newMat.EnableKeyword("_ALPHABLEND_ON");
-                    newMat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                    newMat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-                    newMat.renderQueue = 3000;
-                }
-                newMaterials[i] = newMat;
+                var color = newMat.GetColor(BaseColorProperty);
+                color.a = DefaultFragmentSettings.alpha;
+                newMat.SetColor(BaseColorProperty, color);
+                
+                SetupTransparentMaterial(newMat);
             }
-            renderer.materials = newMaterials;
+            newMaterials[i] = newMat;
         }
+        renderer.materials = newMaterials;
     }
 
     private void AddScore()
@@ -244,81 +279,29 @@ public class BreakObject : MonoBehaviour
         scoreManager.AddScore(calculatedScore);
     }
 
+    // 5. 파편 초기화 최적화
     private void InitFragment(RayfireRigid _fragment)
     {
-        // 모든 종류의 Collider 제거
-        Collider[] colliders = _fragment.gameObject.GetComponents<Collider>();
-        foreach (Collider collider in colliders)
+        var fragmentGO = _fragment.gameObject;
+        
+        // 콜라이더 일괄 제거
+        foreach (var collider in fragmentGO.GetComponents<Collider>())
         {
             Destroy(collider);
         }
 
-        // 파편에 ObjectProperties가 없으면 추가
-        ObjectProperties fragmentProperties = _fragment.gameObject.GetComponent<ObjectProperties>();
-        if (fragmentProperties == null)
-        {
-            fragmentProperties = _fragment.gameObject.AddComponent<ObjectProperties>();
-        }
-
-        // 파편 오브젝트의 레벨과 속성을 상속
-        fragmentProperties.SetFragmentLevel(objectProperties.GetFragmentLevel() + 1);
-        fragmentProperties.SetScoreType(objectProperties.GetScoreType());
-        fragmentProperties.SetBreakable(true);
-
-        // 파편에 BreakObject가 없으면 추가
-        if (_fragment.gameObject.GetComponent<BreakObject>() == null)
-        {
-            var fragmentScript = _fragment.gameObject.AddComponent<BreakObject>();
-            fragmentScript.Initialize(
-                objectProperties.GetScoreType(),
-                objectProperties.GetFragmentLevel() + 1,
-                2.0f
-            );
-        }
-
-        // 파편의 물리적 속도와 알파 값을 설정
-        SetFragmentProperties(_fragment, Vector3.zero, Vector3.zero);
-
-        // Rigidbody 설정
-        Rigidbody rb = _fragment.GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            rb = _fragment.gameObject.AddComponent<Rigidbody>();
-        }
+        // ObjectProperties 설정
+        var fragmentProperties = fragmentGO.GetComponent<ObjectProperties>() 
+            ?? fragmentGO.AddComponent<ObjectProperties>();
         
+        SetupFragmentProperties(fragmentProperties);
+
         // Rigidbody 설정
-        rb.useGravity = false;
-        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        var rb = fragmentGO.GetComponent<Rigidbody>() ?? fragmentGO.AddComponent<Rigidbody>();
+        SetupRigidbody(rb);
 
         // RayfireRigid 설정
-        RayfireRigid fragmentRigid = _fragment.GetComponent<RayfireRigid>();
-        if (fragmentRigid == null)
-        {
-            fragmentRigid = _fragment.gameObject.AddComponent<RayfireRigid>();
-            fragmentRigid.demolitionType = DemolitionType.Runtime;
-        }
-
-        // RayfireBomb 설정
-        RayfireBomb fragmentBomb = _fragment.GetComponent<RayfireBomb>();
-        if (fragmentBomb == null && rayfireBomb != null)
-        {
-            fragmentBomb = _fragment.gameObject.AddComponent<RayfireBomb>();
-            fragmentBomb.range = rayfireBomb.range;
-            fragmentBomb.strength = rayfireBomb.strength;
-            fragmentBomb.variation = rayfireBomb.variation;
-            fragmentBomb.chaos = rayfireBomb.chaos;
-        }
-
-        // RayfireSound 설정
-        RayfireSound fragmentSound = _fragment.GetComponent<RayfireSound>();
-        if (fragmentSound == null && rayfireSound != null)
-        {
-            fragmentSound = _fragment.gameObject.AddComponent<RayfireSound>();
-            fragmentSound.enabled = true;
-            fragmentSound.demolition = rayfireSound.demolition;
-            fragmentSound.collision = rayfireSound.collision;
-        }
+        SetupRayfireComponents(_fragment);
     }
 
     private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity, Vector3 _initialAngularVelocity)
@@ -357,13 +340,60 @@ public class BreakObject : MonoBehaviour
         isWarningActive = _state;
     }
 
-    // 추가: 초기화 메서드 (파편을 동적으로 초기화할 때 사용)
+    // ��가: 초기화 메서드 (파편을 동적으로 초기화할 때 사용)
     public void Initialize(ScoreType _scoreType, int _fragmentLevel, float _speedMultiplier)
     {
         // 필요한 데이터를 초기화합니다.
         objectProperties.SetScoreType(_scoreType);
         objectProperties.SetFragmentLevel(_fragmentLevel);
         // 속도 배율 등 추가 속성을 초기화할 수 있습니다.
+    }
+
+    private void SetupFragmentProperties(ObjectProperties fragmentProperties)
+    {
+        if (fragmentProperties == null || objectProperties == null) return;
+        
+        fragmentProperties.SetFragmentLevel(objectProperties.GetFragmentLevel() + 1);
+        fragmentProperties.SetScoreType(objectProperties.GetScoreType());
+        fragmentProperties.SetBreakable(true);
+    }
+
+    private void SetupRigidbody(Rigidbody rb)
+    {
+        if (rb == null) return;
+        
+        rb.useGravity = DefaultFragmentSettings.useGravity;
+        rb.collisionDetectionMode = DefaultFragmentSettings.collisionMode;
+        rb.interpolation = DefaultFragmentSettings.interpolation;
+    }
+
+    private void SetupRayfireComponents(RayfireRigid fragment)
+    {
+        if (fragment == null) return;
+
+        // RayfireRigid 설정
+        fragment.demolitionType = DemolitionType.Runtime;
+
+        // RayfireBomb 설정
+        if (rayfireBomb != null)
+        {
+            var fragmentBomb = fragment.gameObject.GetComponent<RayfireBomb>() 
+                ?? fragment.gameObject.AddComponent<RayfireBomb>();
+            fragmentBomb.range = rayfireBomb.range;
+            fragmentBomb.strength = rayfireBomb.strength;
+            fragmentBomb.variation = rayfireBomb.variation;
+            fragmentBomb.chaos = rayfireBomb.chaos;
+        }
+
+        // RayfireSound 설정
+        if (rayfireSound != null)
+        {
+            var fragmentSound = fragment.gameObject.GetComponent<RayfireSound>() 
+                ?? fragment.gameObject.AddComponent<RayfireSound>();
+            fragmentSound.enabled = true;
+            fragmentSound.demolition = rayfireSound.demolition;
+            fragmentSound.collision = rayfireSound.collision;
+        }
     }
 
 }

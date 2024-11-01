@@ -10,7 +10,7 @@ public class FragmentMovement : MonoBehaviour
     public float maxCameraApproach = 15f;        // 최대 카메라 접근 거리
     
     public float delayBeforeMove = 0.8f;         // 타겟을 향해 움직이기 전 대기 시간
-    public float maxMoveSpeed = 8.0f;            // 타겟으로 이동할 때 최대 속도
+    public float maxMoveSpeed = 30.0f;            // 타겟으로 이동할 때 최대 속도
     public float slowDownRadius = 50f;           // 감속 시작 거리
     public float transitionDuration = 0.5f;      // 감속/가속 시간
     public float hardStopRadius = 20f;           // 급격한 감속을 시작할 거리
@@ -29,34 +29,24 @@ public class FragmentMovement : MonoBehaviour
     private const float MAX_TRANSITION_WAIT_TIME = 0.1f;  // 최대 추가 대기 시간
     private float extraWaitTimer = 0f;                    // 추가 대기 시간 타이머
 
+    // 1. 캐시 추가
+    private static readonly int BaseColorProperty = Shader.PropertyToID("_BaseColor");
+    
+    // 2. 벡터 재사용
+    private Vector3 cachedVelocity;
+    private Vector3 cachedDirection;
+    private Vector2 screenPosition;
+
     /// <summary>
     /// 초기화: 리지드바디 설정, 초기 퍼짐 효과 적용, 머티리얼 설정
     /// </summary>
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        mainCamera = Camera.main;
-        
+        InitializeComponents();
         if (rb != null)
         {
-            // 카메라와의 거리에 따른 접근 거리 계산
-            float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
-            float approachDistance = CalculateApproachDistance(distanceToCamera);
-            
-            // 초기 퍼짐 방향 계산 (카메라 방향 고려)
-            Vector3 randomDirection = CalculateSpreadDirection(approachDistance);
-            
-            // 힘 적용
-            rb.AddForce(randomDirection * initialSpreadForce, ForceMode.Impulse);
-            rb.AddTorque(Random.onUnitSphere * initialSpreadForce * 0.2f, ForceMode.Impulse);
-            
-            // 머티리얼 캐싱 (기존 머티리얼 설정을 유지)
-            Renderer renderer = GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                materials = renderer.materials;
-            }
-            
+            ApplyInitialForces();
+            CacheMaterials();
             StartCoroutine(StartMovingToTarget());
         }
     }
@@ -111,7 +101,7 @@ public class FragmentMovement : MonoBehaviour
         {
             float distanceInScreen = CalculateScreenDistance(fragmentScreenPos);
             
-            // 페이드 아웃 체크 먼저 수행
+            // 페이드 아웃 크 먼저 수행
             if (HandleFadeOut(distanceInScreen)) return;
 
             // 이동 처리
@@ -256,13 +246,14 @@ public class FragmentMovement : MonoBehaviour
     private void HandleMovement(Vector3 _fragmentScreenPos, float _distanceInScreen)
     {
         float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
-        Vector3 finalTargetPos = CalculateTargetPosition(distanceToCamera);
-        Vector3 directionToTarget = (finalTargetPos - transform.position).normalized;
+        
+        // 방향 계산 재사용
+        cachedDirection = (CalculateTargetPosition(distanceToCamera) - transform.position).normalized;
         
         float speedMultiplier = CalculateSpeedMultiplier(_distanceInScreen, distanceToCamera);
-        Vector3 targetVelocity = directionToTarget * maxMoveSpeed * speedMultiplier;
+        cachedVelocity = cachedDirection * maxMoveSpeed * speedMultiplier;
         
-        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * 5f);
+        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, cachedVelocity, Time.fixedDeltaTime * 5f);
     }
 
     /// <summary>
@@ -326,5 +317,34 @@ public class FragmentMovement : MonoBehaviour
         
         // 접근 거리를 반영한 최종 방향
         return spreadDir * (1f + _approachDistance / maxCameraApproach);
+    }
+
+    private void InitializeComponents()
+    {
+        rb = GetComponent<Rigidbody>();
+        mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogError("Main Camera not found!");
+        }
+    }
+
+    private void ApplyInitialForces()
+    {
+        float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
+        float approachDistance = CalculateApproachDistance(distanceToCamera);
+        Vector3 randomDirection = CalculateSpreadDirection(approachDistance);
+        
+        rb.AddForce(randomDirection * initialSpreadForce, ForceMode.Impulse);
+        rb.AddTorque(Random.onUnitSphere * initialSpreadForce * 0.2f, ForceMode.Impulse);
+    }
+
+    private void CacheMaterials()
+    {
+        Renderer renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            materials = renderer.materials;
+        }
     }
 }
