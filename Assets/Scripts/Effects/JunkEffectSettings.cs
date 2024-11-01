@@ -3,6 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "JunkEffectSettings", menuName = "Effects/Junk Effect Settings")]
 public class JunkEffectSettings : ScriptableObject
 {
+    [Header("Fade Settings")]
+    public float fadeInDuration = 0.5f;
+    public float fadeOutDuration = 0.3f;
+
     [Header("Float Settings")]
     public Vector2 floatAmplitudeRange = new Vector2(0.3f, 0.7f);
     public Vector2 floatFrequencyRange = new Vector2(0.8f, 1.2f);

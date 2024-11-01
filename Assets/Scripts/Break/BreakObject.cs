@@ -108,7 +108,7 @@ public class BreakObject : MonoBehaviour
         audioManager = FindAnyObjectByType<AudioManager>();
         if (audioManager == null)
         {
-            Debug.LogError("AudioManager를 찾을 수 없습��다!");
+            Debug.LogError("AudioManager를 찾을 수 없습다!");
             return;
         }
 
@@ -170,6 +170,41 @@ public class BreakObject : MonoBehaviour
     {
         if (rayfireRigid != null)
         {
+            GameObject originalObject = null;  // 원본 오브젝트 저장용
+
+            // MeshFilter 체크 및 설정
+            MeshFilter meshFilter = GetComponent<MeshFilter>();
+            if (meshFilter == null)
+            {
+                // LOD Group 체크
+                LODGroup lodGroup = GetComponent<LODGroup>();
+                if (lodGroup != null)
+                {
+                    originalObject = gameObject;  // LOD Group이 있는 원본 오브젝트 저장
+                    LOD[] lods = lodGroup.GetLODs();
+                    if (lods.Length > 0 && lods[0].renderers.Length > 0)
+                    {
+                        meshFilter = lods[0].renderers[0].GetComponent<MeshFilter>();
+                        if (meshFilter != null)
+                        {
+                            GameObject targetObject = meshFilter.gameObject;
+                            RayfireRigid newRayfireRigid = targetObject.AddComponent<RayfireRigid>();
+                            
+                            // 기존 RayfireRigid의 설정을 복사
+                            newRayfireRigid.demolitionType = rayfireRigid.demolitionType;
+                            newRayfireRigid.meshDemolition = rayfireRigid.meshDemolition;
+                            newRayfireRigid.physics = rayfireRigid.physics;
+                            newRayfireRigid.limitations = rayfireRigid.limitations;
+                            newRayfireRigid.materials = rayfireRigid.materials;
+                            
+                            // 기존 RayfireRigid 제거하고 새것으로 교체
+                            Destroy(rayfireRigid);
+                            rayfireRigid = newRayfireRigid;
+                        }
+                    }
+                }
+            }
+
             Vector3 currentVelocity = Vector3.zero;
             Vector3 currentAngularVelocity = Vector3.zero;
 
@@ -207,20 +242,26 @@ public class BreakObject : MonoBehaviour
                     fragmentMovement.SetUITarget(uiManager.GetFragmentTargetIcon());
                 }
             }
-        }
 
-        if (rayfireBomb != null)
-        {
-            rayfireBomb.Explode(0f); // 지연 없이 즉시 폭발
-        }
+            // LOD Group이 있는 원본 오브젝트 제거
+            if (originalObject != null)
+            {
+                Destroy(originalObject);
+            }
 
-        // 점수 추가
-        AddScore();
+            if (rayfireBomb != null)
+            {
+                rayfireBomb.Explode(0f); // 지연 없이 즉시 폭발
+            }
 
-        // 파편 레벨이 0일 때만 연속 파괴로 계산
-        if (objectProperties.GetFragmentLevel() == 0)
-        {
-            hpManager.IncreaseConsecutiveDestroys();
+            // 점수 추가
+            AddScore();
+
+            // 파편 레벨이 0일 때만 연속 파괴로 계산
+            if (objectProperties.GetFragmentLevel() == 0)
+            {
+                hpManager.IncreaseConsecutiveDestroys();
+            }
         }
     }
 
@@ -340,7 +381,7 @@ public class BreakObject : MonoBehaviour
         isWarningActive = _state;
     }
 
-    // ��가: 초기화 메서드 (파편을 동적으로 초기화할 때 사용)
+    // 가: 초기화 메서드 (파편을 동적으로 초기화할 때 사용)
     public void Initialize(ScoreType _scoreType, int _fragmentLevel, float _speedMultiplier)
     {
         // 필요한 데이터를 초기화합니다.

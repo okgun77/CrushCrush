@@ -17,3 +17,5 @@ MonoBehaviour:
   rotationSpeedRange: {x: 5, y: 15}
   moveRadiusRange: {x: 0.4, y: 0.8}
   moveSpeedRange: {x: 0.3, y: 0.7}
+  fadeInDuration: 3
+  targetAlpha: 1

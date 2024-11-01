@@ -200,16 +200,20 @@ public class JunkSpawner : MonoBehaviour
 
     private void SpawnJunkAt(Vector3 position)
     {
+        if (junkPrefabs.Length == 0) return;
+        
         // 랜덤하게 프리팹 선택
         GameObject selectedPrefab = junkPrefabs[Random.Range(0, junkPrefabs.Length)];
         
         // 선택된 프리팹으로 생성
-        GameObject junk = Instantiate(selectedPrefab, position, Quaternion.identity, junkContainer);
+        GameObject junk = Instantiate(selectedPrefab, position, Random.rotation, junkContainer);
         
-        // 효과 적용
-        effectManager.ApplyEffectToJunk(junk);
+        // 모든 효과를 한번에 적용
+        if (effectManager != null)
+        {
+            effectManager.ApplyEffectToJunk(junk);
+        }
         
-        // 활성 쓰레기 목록에 추가
         activeJunk.Add(junk);
     }
 
