@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4701836753387376}
   - component: {fileID: 33713531978332978}
   - component: {fileID: 23192738142306340}
+  - component: {fileID: -7237297098389350724}
   - component: {fileID: 5132476027009402931}
   - component: {fileID: -6543949795137524987}
   - component: {fileID: 2051202142088197528}
-  - component: {fileID: -7237297098389350724}
   m_Layer: 0
   m_Name: barrel_open
   m_TagString: Untagged
@@ -90,6 +90,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-7237297098389350724
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042173191404344}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7607311, y: 2.7974317, z: 1.764212}
+  m_Center: {x: 0.00000020861624, y: 1.3987159, z: 0.00000008940697}
 --- !u!114 &5132476027009402931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,24 +392,3 @@ MonoBehaviour:
   fragmentLevel: 3
   isBreakable: 1
   scoreType: 0
---- !u!65 &-7237297098389350724
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042173191404344}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.7607311, y: 2.7974317, z: 1.764212}
-  m_Center: {x: 0.00000020861624, y: 1.3987159, z: 0.00000008940697}

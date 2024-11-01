@@ -170,39 +170,60 @@ public class BreakObject : MonoBehaviour
     {
         if (rayfireRigid != null)
         {
-            GameObject originalObject = null;  // 원본 오브젝트 저장용
+            GameObject originalObject = null;
 
-            // MeshFilter 체크 및 설정
-            MeshFilter meshFilter = GetComponent<MeshFilter>();
-            if (meshFilter == null)
+            // 자신과 자식 오브젝트들의 모든 MeshFilter 찾기
+            MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+            MeshFilter targetMeshFilter = null;
+
+            if (meshFilters.Length == 0)
             {
                 // LOD Group 체크
                 LODGroup lodGroup = GetComponent<LODGroup>();
                 if (lodGroup != null)
                 {
-                    originalObject = gameObject;  // LOD Group이 있는 원본 오브젝트 저장
+                    originalObject = gameObject;
                     LOD[] lods = lodGroup.GetLODs();
                     if (lods.Length > 0 && lods[0].renderers.Length > 0)
                     {
-                        meshFilter = lods[0].renderers[0].GetComponent<MeshFilter>();
-                        if (meshFilter != null)
+                        foreach (var renderer in lods[0].renderers)
                         {
-                            GameObject targetObject = meshFilter.gameObject;
-                            RayfireRigid newRayfireRigid = targetObject.AddComponent<RayfireRigid>();
-                            
-                            // 기존 RayfireRigid의 설정을 복사
-                            newRayfireRigid.demolitionType = rayfireRigid.demolitionType;
-                            newRayfireRigid.meshDemolition = rayfireRigid.meshDemolition;
-                            newRayfireRigid.physics = rayfireRigid.physics;
-                            newRayfireRigid.limitations = rayfireRigid.limitations;
-                            newRayfireRigid.materials = rayfireRigid.materials;
-                            
-                            // 기존 RayfireRigid 제거하고 새것으로 교체
-                            Destroy(rayfireRigid);
-                            rayfireRigid = newRayfireRigid;
+                            targetMeshFilter = renderer.GetComponent<MeshFilter>();
+                            if (targetMeshFilter != null) break;
                         }
                     }
                 }
+            }
+            else
+            {
+                // 첫 번째 유효한 MeshFilter 사용
+                targetMeshFilter = meshFilters[0];
+            }
+
+            // MeshFilter를 찾았다면 RayfireRigid 설정
+            if (targetMeshFilter != null)
+            {
+                GameObject targetObject = targetMeshFilter.gameObject;
+                if (targetObject != gameObject)
+                {
+                    RayfireRigid newRayfireRigid = targetObject.AddComponent<RayfireRigid>();
+                    
+                    // 기존 RayfireRigid의 설정을 복사
+                    newRayfireRigid.demolitionType = rayfireRigid.demolitionType;
+                    newRayfireRigid.meshDemolition = rayfireRigid.meshDemolition;
+                    newRayfireRigid.physics = rayfireRigid.physics;
+                    newRayfireRigid.limitations = rayfireRigid.limitations;
+                    newRayfireRigid.materials = rayfireRigid.materials;
+                    
+                    // 기존 RayfireRigid 제거하고 새것으로 교체
+                    Destroy(rayfireRigid);
+                    rayfireRigid = newRayfireRigid;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("No MeshFilter found in object or its children: " + gameObject.name);
+                return;
             }
 
             Vector3 currentVelocity = Vector3.zero;

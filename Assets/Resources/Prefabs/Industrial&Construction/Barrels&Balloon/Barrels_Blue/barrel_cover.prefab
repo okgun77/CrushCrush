@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4076422313675092}
   - component: {fileID: 33073322088338196}
   - component: {fileID: 23686928903018028}
+  - component: {fileID: 5081228397873578011}
   - component: {fileID: 5610509163093670538}
   - component: {fileID: -6216596444809272563}
   - component: {fileID: -3391328623288286061}
-  - component: {fileID: 5081228397873578011}
   m_Layer: 0
   m_Name: barrel_cover
   m_TagString: Untagged
@@ -90,6 +90,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5081228397873578011
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107152907133844}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6122707, y: 0.106635146, z: 1.6154577}
+  m_Center: {x: -0.00000008940696, y: 0.053317573, z: -0.00000002980232}
 --- !u!114 &5610509163093670538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,24 +392,3 @@ MonoBehaviour:
   fragmentLevel: 3
   isBreakable: 1
   scoreType: 0
---- !u!65 &5081228397873578011
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1107152907133844}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.6122707, y: 0.106635146, z: 1.6154577}
-  m_Center: {x: -0.00000008940696, y: 0.053317573, z: -0.00000002980232}

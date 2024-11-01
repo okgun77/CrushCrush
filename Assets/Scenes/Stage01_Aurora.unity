@@ -3779,29 +3779,11 @@ MonoBehaviour:
   planetCenter: {fileID: 66751169}
   player: {fileID: 746779990}
   junkPrefabs:
-  - {fileID: 8706259154187051833, guid: e8ee3a5b1f3853d4ba750ed9eca2a621, type: 3}
-  - {fileID: 1426267206292778, guid: e060a53643eb2754ab6b89829a297616, type: 3}
-  - {fileID: 439239393980121046, guid: a41e2660e6fdc2b40aa3a2e8f0a67691, type: 3}
-  - {fileID: 4921675115321883647, guid: c45f18be1ca3e4f4284dd459d9165e39, type: 3}
-  - {fileID: 387364091424724237, guid: afea139cb22ed204d8f3f97810fb8c38, type: 3}
-  - {fileID: 1436240991688402, guid: a67b425587e1a1140b034f7f12dbbaf6, type: 3}
-  - {fileID: 1068071647995486, guid: c59fb0500e486ba4f9068e800fa3a2cb, type: 3}
-  - {fileID: 1398737122967622, guid: 68048ea19583998488617e7bf241cf23, type: 3}
-  - {fileID: 1886462451205260, guid: a7f1aa6a2b8971e4cbb8821f99116081, type: 3}
-  - {fileID: 1456539820692636, guid: b82d1d195cc4dab47a3b42fbffcf6c5e, type: 3}
-  - {fileID: 1884552429026272, guid: 1a55d99d69a7ba649b903eb5644b5fa9, type: 3}
-  - {fileID: 1247715798231374, guid: 0cbb4bbaf7f1cfc418e6fcfe4c429176, type: 3}
-  - {fileID: 1335719228593180, guid: 5b14a88438c18c54583cbba83fbfb17e, type: 3}
-  - {fileID: 1639371510821934, guid: 8fc8ae07d3ac5be40980f1d092144449, type: 3}
-  - {fileID: 1549298307964258, guid: 63197cc74af93a343a919290d94ad915, type: 3}
-  - {fileID: 1487380378802594, guid: 58993a6fe94aab3429cfd7ddb3eef904, type: 3}
-  - {fileID: 1179940770323736, guid: 83b72ffe1f1c33d43869a91ceb623b3a, type: 3}
-  - {fileID: 1238123599251008, guid: 697a25175c6621c438af381e66c52ca1, type: 3}
-  - {fileID: 1374858917508274, guid: a5a1886e3d5532948a55213d658d1605, type: 3}
-  - {fileID: 1793265429765402, guid: 6dd6e63eced1c9a41b90d907b97e9d31, type: 3}
-  - {fileID: 1461184161390636, guid: 28996dfffa1180848972dffde7ea9486, type: 3}
-  - {fileID: 1887442468358662, guid: f7710c049eb03cd4cb910458b14cf823, type: 3}
-  - {fileID: 1919424706260932, guid: b3565796fbcca564e947febf3594ed20, type: 3}
+  - {fileID: 6101245094544215330, guid: a3b63a8c9be07ab49a354519d53a1416, type: 3}
+  - {fileID: 329072704345328313, guid: 670b36fa99479cb4daeb2087f0c6f010, type: 3}
+  - {fileID: 3552242436747660548, guid: cd2d59d425c58254ea05cb11229990ba, type: 3}
+  - {fileID: 9195328832990799857, guid: 4ad11c6d2576e63449d25fcce0d59a3d, type: 3}
+  - {fileID: 1931468845310326434, guid: 47921440590ecaf4ab204c94bb32b2cb, type: 3}
   junkContainer: {fileID: 1310878984}
   minSpawnHeight: 10
   maxSpawnHeight: 30

@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4010957863899306}
   - component: {fileID: 33685502937822304}
   - component: {fileID: 23022795704370862}
+  - component: {fileID: 6426841125951744468}
   - component: {fileID: -3733944212111005851}
   - component: {fileID: 3988406408491344513}
   - component: {fileID: 6554412527915588377}
-  - component: {fileID: 6426841125951744468}
   m_Layer: 0
   m_Name: cylinder_2
   m_TagString: Untagged
@@ -90,6 +90,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6426841125951744468
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297971636683478}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.8335407, y: 1.0318598, z: 0.83518887}
+  m_Center: {x: 0.00000002980232, y: 0.51592964, z: 1.8329505e-15}
 --- !u!114 &-3733944212111005851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,24 +392,3 @@ MonoBehaviour:
   fragmentLevel: 3
   isBreakable: 1
   scoreType: 0
---- !u!65 &6426841125951744468
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297971636683478}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.8335407, y: 1.0318598, z: 0.83518887}
-  m_Center: {x: 0.00000002980232, y: 0.51592964, z: 1.8329505e-15}

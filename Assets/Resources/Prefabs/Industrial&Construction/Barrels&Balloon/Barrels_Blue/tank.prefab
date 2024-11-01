@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4397093044436496}
   - component: {fileID: 33775092613213466}
   - component: {fileID: 23748766853100608}
+  - component: {fileID: 7687245925203527756}
   - component: {fileID: -2714129348408576059}
   - component: {fileID: -6894540497161421237}
   - component: {fileID: 8463255885679393109}
-  - component: {fileID: 7687245925203527756}
   m_Layer: 0
   m_Name: tank
   m_TagString: Untagged
@@ -90,6 +90,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7687245925203527756
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238250091199066}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.3512601, y: 0.9360494, z: 0.859837}
+  m_Center: {x: 0.0000001490116, y: 0.4680247, z: 0.00000019371508}
 --- !u!114 &-2714129348408576059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,24 +392,3 @@ MonoBehaviour:
   fragmentLevel: 3
   isBreakable: 1
   scoreType: 0
---- !u!65 &7687245925203527756
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1238250091199066}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.3512601, y: 0.9360494, z: 0.859837}
-  m_Center: {x: 0.0000001490116, y: 0.4680247, z: 0.00000019371508}
