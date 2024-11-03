@@ -10,7 +10,7 @@ public class FragmentMovement : MonoBehaviour
     public float maxCameraApproach = 15f;        // 최대 카메라 접근 거리
     
     public float delayBeforeMove = 0.8f;         // 타겟을 향해 움직이기 전 대기 시간
-    public float maxMoveSpeed = 30.0f;            // 타겟으로 이동할 때 최대 속도
+    public float maxMoveSpeed = 60.0f;            // 타겟으로 이동할 때 최대 속도
     public float slowDownRadius = 50f;           // 감속 시작 거리
     public float transitionDuration = 0.5f;      // 감속/가속 시간
     public float hardStopRadius = 20f;           // 급격한 감속을 시작할 거리
@@ -180,6 +180,10 @@ public class FragmentMovement : MonoBehaviour
 
             if (_distanceInScreen <= fadeEndScreenDistance)
             {
+                // 파편이 사라질 때 FragmentCollector에 통지
+                var collector = FindObjectOfType<FragmentCollector>();
+                collector?.OnFragmentArrived();
+                
                 Destroy(gameObject);
                 return true;
             }
