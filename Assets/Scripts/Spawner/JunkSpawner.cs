@@ -14,13 +14,14 @@ public class JunkSpawner : MonoBehaviour
     [Header("Spawn Settings")]
     [SerializeField] private float minSpawnHeight = 2f;  // 행성 표면으로부터 최소 스폰 높이
     [SerializeField] private float maxSpawnHeight = 5f;  // 행성 표면으로부터 최대 스폰 높이
-    [SerializeField] private float visibleRadius = 30f;  // 플레이어 주변 최소 스폰 거리
-    [SerializeField] private float spawnRadius = 45f;    // 플레이어 주변 최대 스폰 거리
-    [SerializeField] private float despawnRadius = 60f;  // 플레이어로부터 제거될 거리
+    [SerializeField] private float visibleRadius = 30f;  // 플레이어 시야 내 최소 거리
+    [SerializeField] private float spawnRadius = 45f;    // 스폰 거리
+    [SerializeField] private float behindPlayerCleanupRadius = 35f;  // 뒤쪽 청소 거리
     [SerializeField] private float spawnInterval = 0.5f; // 스폰 시도 간격
     [SerializeField] private int maxJunkCount = 30;      // 최대 쓰레기 개수
     [SerializeField] private float minJunkDistance = 5f; // 쓰레기 간 최소 거리
     [SerializeField] private float screenEdgeMargin = 0.1f;  // 화면 가장자리 여유 공간 (0.1 = 10%)
+    [SerializeField] private float behindPlayerAngle = 120f;  // 플레이어 뒤쪽 판정 각도
     
     [Header("Effects")]
     [SerializeField] private JunkEffectManager effectManager;
@@ -132,7 +133,7 @@ public class JunkSpawner : MonoBehaviour
     {
         bool spawned = false;
         int attempts = 0;
-        const int MAX_ATTEMPTS = 10;
+        const int MAX_ATTEMPTS = 15;  // 시도 횟수 증가
         
         while (!spawned && attempts < MAX_ATTEMPTS)
         {
@@ -140,15 +141,14 @@ public class JunkSpawner : MonoBehaviour
             Vector3 spawnPosition = GetSpawnPositionOutsidePlayerView();
             float distanceToPlayer = Vector3.Distance(spawnPosition, player.position);
             
+            // 스폰 조건 완화
             if (distanceToPlayer >= visibleRadius && 
                 distanceToPlayer <= spawnRadius && 
-                !IsPositionVisible(spawnPosition) &&  // 시야 체크 가
-                !IsTooCloseToOtherJunk(spawnPosition))
+                !IsPositionVisible(spawnPosition) &&
+                !IsTooCloseToOtherJunk(spawnPosition, minJunkDistance * 0.8f))  // 거리 조건 약간 완화
             {
                 SpawnJunkAt(spawnPosition);
                 spawned = true;
-                if (Debug.isDebugBuild)
-                    Debug.Log($"Successfully spawned junk at attempt {attempts}");
             }
         }
         
@@ -217,18 +217,11 @@ public class JunkSpawner : MonoBehaviour
         activeJunk.Add(junk);
     }
 
-    private bool IsTooCloseToOtherJunk(Vector3 _position)
+    private bool IsTooCloseToOtherJunk(Vector3 _position, float minDistance)
     {
-        foreach (GameObject junk in activeJunk.ToList())
-        {
-            if (junk == null) continue;
-            
-            if (Vector3.Distance(_position, junk.transform.position) < minJunkDistance)
-            {
-                return true;
-            }
-        }
-        return false;
+        return activeJunk.Any(junk => 
+            junk != null && 
+            Vector3.Distance(_position, junk.transform.position) < minDistance);
     }
 
     private void CleanupJunk()
@@ -240,22 +233,18 @@ public class JunkSpawner : MonoBehaviour
             Vector3 junkPosition = activeJunk[i].transform.position;
             float distanceToPlayer = Vector3.Distance(junkPosition, player.position);
             
-            // 거리가 너무 멀거나
-            bool isTooFar = distanceToPlayer > despawnRadius;
-            
-            // 플레이어의 뒤쪽에 있고 일정 거리 이상인 경우 제거
+            // 플레이어와 쓰레기 사이의 방향
             Vector3 directionToJunk = (junkPosition - player.position).normalized;
-            float dotProduct = Vector3.Dot(player.forward, directionToJunk);
-            bool isBehindPlayer = dotProduct < -0.5f && distanceToPlayer > visibleRadius;
+            float angleToJunk = Vector3.Angle(player.forward, directionToJunk);
             
-            if (isTooFar || isBehindPlayer)
+            // 뒤쪽에 있는 오브젝트 판정 개선
+            bool isBehindPlayer = angleToJunk > behindPlayerAngle;
+            
+            // 제거 조건 수정
+            if ((isBehindPlayer && distanceToPlayer > behindPlayerCleanupRadius) || // 뒤쪽이면서 일정거리 이상
+                distanceToPlayer > spawnRadius * 1.5f ||  // 너무 멀리 있거나
+                (angleToJunk > 90f && distanceToPlayer > spawnRadius)) // 측면이면서 스폰반경 밖
             {
-                if (Debug.isDebugBuild)
-                {
-                    string reason = isTooFar ? "too far" : "behind player";
-                    Debug.Log($"Destroying junk: {reason}");
-                }
-                
                 Destroy(activeJunk[i]);
                 activeJunk.RemoveAt(i);
             }
