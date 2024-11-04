@@ -46,6 +46,8 @@ public class BreakObject : MonoBehaviour
         interpolation = RigidbodyInterpolation.Interpolate
     };
 
+    private static GameObject breakVFXPrefab; // 캐시된 VFX 프리팹
+
     private void Awake()
     {
         // RayfireRigid 컴포넌트 가져오기
@@ -135,6 +137,16 @@ public class BreakObject : MonoBehaviour
             Debug.LogError("UIManager를 찾을 수 없습니다!");
             return;
         }
+
+        // VFX 프리팹 로드
+        if (breakVFXPrefab == null)
+        {
+            breakVFXPrefab = Resources.Load<GameObject>("VFX/BreakVFX");
+            if (breakVFXPrefab == null)
+            {
+                Debug.LogError("BreakVFX prefab not found in Resources folder!");
+            }
+        }
     }
 
     private void OnDestroy()
@@ -170,6 +182,9 @@ public class BreakObject : MonoBehaviour
     {
         if (rayfireRigid != null)
         {
+            // 파괴 이펙트 생성 (파괴 로직 전에 실행)
+            SpawnBreakVFX();
+
             GameObject originalObject = null;
             MeshFilter targetMeshFilter = null;
 
@@ -316,7 +331,7 @@ public class BreakObject : MonoBehaviour
         if (scoreManager == null)
         {
             Debug.LogError("ScoreManager를 찾을 수 없습니다! AddScore 작업을 중단합니다.");
-            // return; // scoreManager가 null일 경우 작업을 중단
+            // return; // scoreManager가 null��� 경우 작업을 중단
         }
 
         Camera mainCamera = Camera.main;
@@ -439,6 +454,36 @@ public class BreakObject : MonoBehaviour
             fragmentSound.enabled = true;
             fragmentSound.demolition = rayfireSound.demolition;
             fragmentSound.collision = rayfireSound.collision;
+        }
+    }
+
+    private void SpawnBreakVFX()
+    {
+        if (breakVFXPrefab != null)
+        {
+            // VFX 생성
+            GameObject vfx = Instantiate(breakVFXPrefab, transform.position, Quaternion.identity);
+            
+            // 카메라와의 거리에 따라 크기 조절
+            float distanceToCamera = Vector3.Distance(transform.position, Camera.main.transform.position);
+            float scaleFactor = Mathf.Lerp(0.5f, 1.5f, distanceToCamera / 50f); // 거리 50유닛을 기준으로 0.8~2배 크기 조절
+            vfx.transform.localScale *= scaleFactor;
+            
+            // ParticleSystem 있는 경우 자동 제거
+            var particleSystem = vfx.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                // 파티클 시스템의 크기도 조절 (필요한 경우)
+                var main = particleSystem.main;
+                main.startSizeMultiplier *= scaleFactor;
+                
+                float duration = main.duration;
+                Destroy(vfx, duration);
+            }
+            else
+            {
+                Destroy(vfx, 2f);
+            }
         }
     }
 

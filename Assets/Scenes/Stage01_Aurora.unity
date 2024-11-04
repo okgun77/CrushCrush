@@ -3912,11 +3912,12 @@ MonoBehaviour:
   maxSpawnHeight: 30
   visibleRadius: 100
   spawnRadius: 105
-  despawnRadius: 120
+  behindPlayerCleanupRadius: 35
   spawnInterval: 0.5
   maxJunkCount: 400
   minJunkDistance: 15
   screenEdgeMargin: 0.1
+  behindPlayerAngle: 120
   effectManager: {fileID: 1411133108}
 --- !u!4 &364896944
 Transform:
@@ -4338,8 +4339,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4284426825
-  m_fontColor: {r: 0.28627452, g: 0.16470589, b: 0.37254903, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -10697,11 +10698,12 @@ MonoBehaviour:
   maxSpawnHeight: 27
   visibleRadius: 50
   spawnRadius: 70
-  despawnRadius: 60
+  behindPlayerCleanupRadius: 35
   spawnInterval: 0.5
   maxJunkCount: 300
   minJunkDistance: 5
   screenEdgeMargin: 0.1
+  behindPlayerAngle: 120
   effectManager: {fileID: 1411133108}
 --- !u!4 &1136611788
 Transform:
