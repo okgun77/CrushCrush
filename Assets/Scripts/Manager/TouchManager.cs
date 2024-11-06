@@ -114,7 +114,7 @@ public class TouchManager : MonoBehaviour
             Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.red, 1f); // 1초 동안 빨간색 선 표시
         }
 
-        ShowTouchPoint(_position);
+        // ShowTouchPoint(_position);
     }
 
 

@@ -3763,7 +3763,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &364896943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3779,59 +3779,7 @@ MonoBehaviour:
   planetCenter: {fileID: 66751169}
   player: {fileID: 746779990}
   junkPrefabs:
-  - {fileID: 1436240991688402, guid: a67b425587e1a1140b034f7f12dbbaf6, type: 3}
-  - {fileID: 1068071647995486, guid: c59fb0500e486ba4f9068e800fa3a2cb, type: 3}
-  - {fileID: 1398737122967622, guid: 68048ea19583998488617e7bf241cf23, type: 3}
-  - {fileID: 1886462451205260, guid: a7f1aa6a2b8971e4cbb8821f99116081, type: 3}
-  - {fileID: 1456539820692636, guid: b82d1d195cc4dab47a3b42fbffcf6c5e, type: 3}
-  - {fileID: 1884552429026272, guid: 1a55d99d69a7ba649b903eb5644b5fa9, type: 3}
-  - {fileID: 1247715798231374, guid: 0cbb4bbaf7f1cfc418e6fcfe4c429176, type: 3}
-  - {fileID: 1335719228593180, guid: 5b14a88438c18c54583cbba83fbfb17e, type: 3}
-  - {fileID: 1639371510821934, guid: 8fc8ae07d3ac5be40980f1d092144449, type: 3}
-  - {fileID: 1549298307964258, guid: 63197cc74af93a343a919290d94ad915, type: 3}
-  - {fileID: 1487380378802594, guid: 58993a6fe94aab3429cfd7ddb3eef904, type: 3}
-  - {fileID: 1179940770323736, guid: 83b72ffe1f1c33d43869a91ceb623b3a, type: 3}
-  - {fileID: 1238123599251008, guid: 697a25175c6621c438af381e66c52ca1, type: 3}
-  - {fileID: 1374858917508274, guid: a5a1886e3d5532948a55213d658d1605, type: 3}
-  - {fileID: 1793265429765402, guid: 6dd6e63eced1c9a41b90d907b97e9d31, type: 3}
-  - {fileID: 1461184161390636, guid: 28996dfffa1180848972dffde7ea9486, type: 3}
-  - {fileID: 1887442468358662, guid: f7710c049eb03cd4cb910458b14cf823, type: 3}
-  - {fileID: 1919424706260932, guid: b3565796fbcca564e947febf3594ed20, type: 3}
-  - {fileID: 1000013153248048, guid: 7f289163a6c60594ab84c8d4375b63a9, type: 3}
-  - {fileID: 1000011585897626, guid: d6170e3970e6788498a44993f810138b, type: 3}
-  - {fileID: 1000010811274378, guid: d4250b7b2e473024386bb67c7626562e, type: 3}
-  - {fileID: 1000013580012832, guid: 2b1188005c678b14fbe8b7c5b3729786, type: 3}
-  - {fileID: 1000010619805496, guid: 0d1dd7777e02e8042928f902c151568d, type: 3}
-  - {fileID: 1525489940925694, guid: 63c4c4efad090634f9ab8d029506e770, type: 3}
-  - {fileID: 1100122875247854, guid: 89257c0d891dc8f4082dc3e423011e3c, type: 3}
-  - {fileID: 1272924371097864, guid: 7c81d611b57ec9041a8d1bb4b9140179, type: 3}
-  - {fileID: 1438409094913872, guid: 79f4d240e8ca23f418a47e0280c3575c, type: 3}
-  - {fileID: 1354030839184480, guid: 278ed07002869e9499c89da4a8af90a4, type: 3}
-  - {fileID: 1818659088544242, guid: b71a46e4592bd7943b39b67994793bf2, type: 3}
-  - {fileID: 1781409886545028, guid: 5223c184653d3d241a493025a39f4f27, type: 3}
   - {fileID: 1510774975657396, guid: 4f8167d7b913044489d9e4273a94c577, type: 3}
-  - {fileID: 1754809807670932, guid: 56dd17bfcd373674d86c30bdb26c5c60, type: 3}
-  - {fileID: 1186119715096220, guid: 7ec763862cda02942986bcf6b00a2db3, type: 3}
-  - {fileID: 1096589633327164, guid: 1810d93581d589249b2ee789cab472ef, type: 3}
-  - {fileID: 1385358222865498, guid: 92dbdc9b72c9d594f981471cafbdc845, type: 3}
-  - {fileID: 1462780002140128, guid: ea1f767e8fe85ad42b3b5dd08d39314c, type: 3}
-  - {fileID: 1000014291894318, guid: 1c42bb692d63c7048b64ffbb7659576f, type: 3}
-  - {fileID: 1000010192389154, guid: b73422fd6a077f545a80c3aca61eb373, type: 3}
-  - {fileID: 100000, guid: fc54a910438cddf429b2165185db2766, type: 3}
-  - {fileID: 100000, guid: 52950f64291e965488a2242caf60f330, type: 3}
-  - {fileID: 100000, guid: 00ada8b8564fe314497a37c461bbe62c, type: 3}
-  - {fileID: 100000, guid: d4825d8145b07a84db3e79fba16d5416, type: 3}
-  - {fileID: 100000, guid: 01f64b0cd1428b54bb49f9e4871a6ae6, type: 3}
-  - {fileID: 100000, guid: 2e8c7867febb56345befdcadf5a53900, type: 3}
-  - {fileID: 100000, guid: 5b52af7006f688041b7619277bc61be7, type: 3}
-  - {fileID: 9119854835688774015, guid: d61e000b76b7b93459fd5c9b403641db, type: 3}
-  - {fileID: 2751521506394663254, guid: a91b800c4bfe99746aae7fe74ea2ba5f, type: 3}
-  - {fileID: 100000, guid: 7bac97d42141a364dabd57b08e6e7b8c, type: 3}
-  - {fileID: 959928407717566679, guid: ad26a05c00e74844bb50971b1d5a2bd2, type: 3}
-  - {fileID: 100000, guid: dcfd64b27cfb31646bce7665ef6e672f, type: 3}
-  - {fileID: 100000, guid: adae056bae122e34aa5e52e914b0a426, type: 3}
-  - {fileID: 100000, guid: 8770efc0a742fac4daa4edaf1952f77a, type: 3}
-  - {fileID: 100000, guid: 676f66a183f3542419a9ba9d985b53e0, type: 3}
   junkContainer: {fileID: 1310878984}
   minSpawnHeight: 10
   maxSpawnHeight: 30
@@ -7252,7 +7200,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 110000
-  field of view: 30
+  field of view: 40
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -19311,6 +19259,66 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: 390}
   m_SizeDelta: {x: 400, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2037905329
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2037905331}
+  - component: {fileID: 2037905330}
+  m_Layer: 0
+  m_Name: JunkSpawner_Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2037905330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037905329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591114dd5635d724cbf2566d1d706492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planetCenter: {fileID: 66751169}
+  player: {fileID: 746779990}
+  junkPrefabs:
+  - {fileID: 1510774975657396, guid: 4f8167d7b913044489d9e4273a94c577, type: 3}
+  junkContainer: {fileID: 1310878984}
+  minSpawnHeight: 10
+  maxSpawnHeight: 30
+  visibleRadius: 100
+  spawnRadius: 105
+  behindPlayerCleanupRadius: 35
+  spawnInterval: 0.5
+  maxJunkCount: 400
+  minJunkDistance: 15
+  screenEdgeMargin: 0.1
+  behindPlayerAngle: 120
+  effectManager: {fileID: 1411133108}
+--- !u!4 &2037905331
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037905329}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2040952528
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19897,6 +19905,7 @@ SceneRoots:
   - {fileID: 335804407}
   - {fileID: 1411133109}
   - {fileID: 364896944}
+  - {fileID: 2037905331}
   - {fileID: 1310878984}
   - {fileID: 1773276897}
   - {fileID: 73152994}

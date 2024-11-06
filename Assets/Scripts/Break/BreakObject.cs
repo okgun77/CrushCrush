@@ -260,10 +260,10 @@ public class BreakObject : MonoBehaviour
                     }
                 }
 
-                // 원본 오브젝트 제거
+                // 원본 오브젝트 풀링 처리
                 if (originalObject != null)
                 {
-                    Destroy(originalObject);
+                    ObjectPoolManager.Instance.ReturnObject(originalObject);
                 }
 
                 // 점수 추가 및 연속 파괴 처리
@@ -331,7 +331,7 @@ public class BreakObject : MonoBehaviour
         if (scoreManager == null)
         {
             Debug.LogError("ScoreManager를 찾을 수 없습니다! AddScore 작업을 중단합니다.");
-            // return; // scoreManager가 null��� 경우 작업을 중단
+            // return; // scoreManager가 null 경우 작업을 중단
         }
 
         Camera mainCamera = Camera.main;
@@ -345,6 +345,11 @@ public class BreakObject : MonoBehaviour
     {
         var fragmentGO = _fragment.gameObject;
         
+        // Rayfire 컴포넌트들 제거
+        Destroy(_fragment);  // RayfireRigid 제거
+        var bomb = fragmentGO.GetComponent<RayfireBomb>();
+        if (bomb != null) Destroy(bomb);  // RayfireBomb 제거
+
         // 콜라이더 일괄 제거
         foreach (var collider in fragmentGO.GetComponents<Collider>())
         {
@@ -360,9 +365,6 @@ public class BreakObject : MonoBehaviour
         // Rigidbody 설정
         var rb = fragmentGO.GetComponent<Rigidbody>() ?? fragmentGO.AddComponent<Rigidbody>();
         SetupRigidbody(rb);
-
-        // RayfireRigid 설정
-        SetupRayfireComponents(_fragment);
     }
 
     private void SetFragmentProperties(RayfireRigid _fragment, Vector3 _initialVelocity, Vector3 _initialAngularVelocity)
@@ -426,35 +428,6 @@ public class BreakObject : MonoBehaviour
         rb.useGravity = DefaultFragmentSettings.useGravity;
         rb.collisionDetectionMode = DefaultFragmentSettings.collisionMode;
         rb.interpolation = DefaultFragmentSettings.interpolation;
-    }
-
-    private void SetupRayfireComponents(RayfireRigid fragment)
-    {
-        if (fragment == null) return;
-
-        // RayfireRigid 설정
-        fragment.demolitionType = DemolitionType.Runtime;
-
-        // RayfireBomb 설정
-        if (rayfireBomb != null)
-        {
-            var fragmentBomb = fragment.gameObject.GetComponent<RayfireBomb>() 
-                ?? fragment.gameObject.AddComponent<RayfireBomb>();
-            fragmentBomb.range = rayfireBomb.range;
-            fragmentBomb.strength = rayfireBomb.strength;
-            fragmentBomb.variation = rayfireBomb.variation;
-            fragmentBomb.chaos = rayfireBomb.chaos;
-        }
-
-        // RayfireSound 설정
-        if (rayfireSound != null)
-        {
-            var fragmentSound = fragment.gameObject.GetComponent<RayfireSound>() 
-                ?? fragment.gameObject.AddComponent<RayfireSound>();
-            fragmentSound.enabled = true;
-            fragmentSound.demolition = rayfireSound.demolition;
-            fragmentSound.collision = rayfireSound.collision;
-        }
     }
 
     private void SpawnBreakVFX()

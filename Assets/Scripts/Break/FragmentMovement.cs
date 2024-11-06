@@ -181,7 +181,7 @@ public class FragmentMovement : MonoBehaviour
             if (_distanceInScreen <= fadeEndScreenDistance)
             {
                 // 파편이 사라질 때 FragmentCollector에 통지
-                var collector = FindObjectOfType<FragmentCollector>();
+                var collector = FindAnyObjectByType<FragmentCollector>();
                 collector?.OnFragmentArrived();
                 
                 Destroy(gameObject);
