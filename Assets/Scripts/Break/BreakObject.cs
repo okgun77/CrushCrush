@@ -7,7 +7,7 @@ public class BreakObject : MonoBehaviour
     private RayfireRigid rayfireRigid;
     private RayfireBomb rayfireBomb;
     private RayfireSound rayfireSound;
-    private MoveToTargetPoint moveScript;
+    // private MoveToTargetPoint moveScript;
     private ScoreManager scoreManager;
     private TouchManager touchManager;
     private WarningManager warningManager;
@@ -73,7 +73,7 @@ public class BreakObject : MonoBehaviour
         //}
 
         // MoveToTargetPoint 컴포넌트 가져오기
-        moveScript = GetComponent<MoveToTargetPoint>();
+        // moveScript = GetComponent<MoveToTargetPoint>();
 
         // ScoreManager 컴포넌트 가져오기
         scoreManager = FindAnyObjectByType<ScoreManager>();
@@ -234,11 +234,11 @@ public class BreakObject : MonoBehaviour
                 // 현재 속도 저장
                 Vector3 currentVelocity = Vector3.zero;
                 Vector3 currentAngularVelocity = Vector3.zero;
-                if (moveScript != null)
-                {
-                    currentVelocity = moveScript.GetCurrentVelocity();
-                    Destroy(moveScript);
-                }
+                // if (moveScript != null)
+                // {
+                //     currentVelocity = moveScript.GetCurrentVelocity();
+                //     Destroy(moveScript);
+                // }
 
                 // 파괴 실행
                 fragmentRigid.Demolish();
