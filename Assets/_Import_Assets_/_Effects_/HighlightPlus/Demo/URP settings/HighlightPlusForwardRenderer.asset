@@ -46,7 +46,8 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: -7137549924450841197}
   - {fileID: 8341379691966480104}
-  m_RendererFeatureMap: 93cd7dfa2854f29ce8be51a4a288c273
+  - {fileID: 1463057384767992566}
+  m_RendererFeatureMap: 93cd7dfa2854f29ce8be51a4a288c273f6b21b99f0d24d14
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -72,6 +73,30 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &1463057384767992566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4067eb14005684ea56a60547978721, type: 3}
+  m_Name: BetterFog
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  m_Settings:
+    Event: 550
+    _UseCustomDepthTexture: 1
+    _UseFogOffsetTexture: 1
+  m_FogFactorShader: {fileID: -6465566751694194690, guid: df55908a02214a74e8c03efec07f9292,
+    type: 3}
+  m_FogBlendShader: {fileID: -6465566751694194690, guid: 6cfd8ae44422c9842b98fc260a9bce21,
+    type: 3}
+  m_SMSSShader: {fileID: 4800000, guid: a1b51fce91521df409b3809a40fd7c2a, type: 3}
+  m_CustomDepthPassShader: {fileID: -6465566751694194690, guid: 8ac1b684e4456f1468b46d6ef423cd0e,
+    type: 3}
 --- !u!114 &8341379691966480104
 MonoBehaviour:
   m_ObjectHideFlags: 0
