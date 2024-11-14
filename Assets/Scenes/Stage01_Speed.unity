@@ -4943,6 +4943,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Advance Fog
       objectReference: {fileID: 0}
+    - target: {fileID: 1227606878304052852, guid: 143d5fceb9c140c42a858c255681cd67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3384815625873394926, guid: 143d5fceb9c140c42a858c255681cd67,
         type: 3}
       propertyPath: m_CastShadows

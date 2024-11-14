@@ -42,6 +42,7 @@ MonoBehaviour:
     - bc3f86dfdad14dc459c65e1909430a4a
     - a0c04565d300e7b429f18aac0d46063b
     - b50973e8e485d254e829bf4e4d62ab28
+    - d578baa6cf1a57846a54ce9f943d0fa5
     values:
     - goDatasByGlobalId:
         keys:
@@ -218,88 +219,8 @@ MonoBehaviour:
         - iColor: 9
           icon: 
       goDatasByInstanceId:
-        keys: e4d900009cd5000092d60000e6d7000028d90000b0d8000092d50000cada000040140100f80f0100ee10010042120100841301000c130100ee0f010026150100be210100761d01006c1e0100c01f0100022101008a2001006c1d0100a42201003a2f0100f22a0100e82b01003c2d01007e2e0100062e0100e82a010020300100e83c0100a038010096390100ea3a01002c3c0100b43b010096380100ce3d0100
-        values:
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 9
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 9
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 9
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 9
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 5
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 9
-          icon: 
+        keys: 
+        values: []
     - goDatasByGlobalId:
         keys: []
         values: []
@@ -337,60 +258,8 @@ MonoBehaviour:
         - iColor: 7
           icon: 
       goDatasByInstanceId:
-        keys: b6160100fe1a0100342401007c2801002a250100b0310100f8350100a6320100de360100c43401003c350100a63101005e3f0100a6430100544001008c44010072420100ea420100543f010072680100aa6c010060690100886d0100766b0100ee6b010068680100
-        values:
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 9
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 7
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 9
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 7
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 8
-          icon: 
-        - iColor: 9
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 7
-          icon: 
+        keys: 
+        values: []
     - goDatasByGlobalId:
         keys:
         - GlobalObjectId_V1-2-b50973e8e485d254e829bf4e4d62ab28-2037617261-0
@@ -416,21 +285,16 @@ MonoBehaviour:
         - iColor: 4
           icon: 
       goDatasByInstanceId:
-        keys: e06601002e74010006700100186f0100507301000e6f01001c72010094720100
+        keys: 
+        values: []
+    - goDatasByGlobalId:
+        keys:
+        - GlobalObjectId_V1-2-d578baa6cf1a57846a54ce9f943d0fa5-746779989-0
         values:
-        - iColor: 9
-          icon: 
-        - iColor: 9
-          icon: 
         - iColor: 8
           icon: 
-        - iColor: 2
-          icon: 
-        - iColor: 2
-          icon: 
+      goDatasByInstanceId:
+        keys: bcac0400
+        values:
         - iColor: 8
-          icon: 
-        - iColor: 4
-          icon: 
-        - iColor: 4
           icon: 
