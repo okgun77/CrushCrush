@@ -290,11 +290,21 @@ MonoBehaviour:
     - goDatasByGlobalId:
         keys:
         - GlobalObjectId_V1-2-d578baa6cf1a57846a54ce9f943d0fa5-746779989-0
+        - GlobalObjectId_V1-2-d578baa6cf1a57846a54ce9f943d0fa5-385846536-0
+        - GlobalObjectId_V1-2-d578baa6cf1a57846a54ce9f943d0fa5-1773276896-0
         values:
         - iColor: 8
           icon: 
+        - iColor: 3
+          icon: 
+        - iColor: 3
+          icon: 
       goDatasByInstanceId:
-        keys: bcac0400
+        keys: 92d700009ad60000f8da0000
         values:
         - iColor: 8
+          icon: 
+        - iColor: 3
+          icon: 
+        - iColor: 3
           icon: 

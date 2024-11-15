@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3774115051579664195}
   - component: {fileID: -8600461695337466229}
   - component: {fileID: -842709212027027417}
+  - component: {fileID: -1900427085095927242}
   m_Layer: 6
   m_Name: sunscreen-big
   m_TagString: BreakableObject
@@ -642,3 +643,17 @@ MonoBehaviour:
   fragmentLevel: 3
   isBreakable: 1
   scoreType: 0
+  defaultHealth: 100
+--- !u!114 &-1900427085095927242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010894558518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 070e29ff910361d4d85b4a0064c5a616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
