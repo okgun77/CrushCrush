@@ -57,7 +57,7 @@ public class SpawnableObject : MonoBehaviour
         float time = Time.time * waveFrequency * randomWaveSpeed + timeOffset;
         
         // moveDirection을 기준으로 한 오른쪽 벡터 계산
-        Vector3 right = Vector3.Cross(moveDirection, Vector3.up).normalized;
+        Vector3 right = Vector3.Cross(moveDirection, Vector3.left).normalized;
         
         // Sin 함수를 사용하여 좌우 움직임 계산
         return right * Mathf.Sin(time) * waveMagnitude;
