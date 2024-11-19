@@ -1,133 +1,74 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
-[System.Serializable]
-public class SpawnObject
-{
-    public GameObject prefab;
-}
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private SpawnObject[] spawnObjects;
-    [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private float spawnRange = 10f;
+    [Header("Spawn Settings")]
+    [SerializeField] private SpawnableItemData spawnableItemData;
+    private List<SpawnableItem> spawnableItems => spawnableItemData.items;
+    
+    [SerializeField] private float spawnDistance = 20f;
+    [SerializeField] private float spawnRadius = 10f;
+    
+    [Header("Spawn Interval Settings")]
+    [SerializeField] private float initialSpawnInterval = 5.0f;
+    [SerializeField] private float minimumSpawnInterval = 1.0f;
+    [SerializeField] private float spawnIntervalDecreaseRate = 0.1f;
 
-    [SerializeField] private float initialSpawnInterval = 5.0f; // 초기 스폰 간격
-    [SerializeField] private float minimumSpawnInterval = 1.0f; // 최소 스폰 간격
-    [SerializeField] private float spawnIntervalDecreaseRate = 0.1f; // 스폰 간격 감소량
-
-    private GameManager gameManager; // GameManager 참조는 선택적
+    private Transform playerTransform;
+    private GameManager gameManager;
+    private ObjectPoolManager poolManager;
+    private ObjectMovementManager movementManager;
+    
+    private float totalWeight;
+    private float currentSpawnInterval;
     private Coroutine spawnCoroutine;
     private bool isPaused = false;
+    private List<GameObject> activeObjects = new List<GameObject>();
 
-    private int lastSpawnPointIndex = -1;
-    private List<int> availableIndexes = new List<int>();
-    private List<GameObject> spawnedObjects = new List<GameObject>();
-
-    private void Start()
+    public void Init(GameManager gameManager, ObjectPoolManager poolManager, 
+                    ObjectMovementManager movementManager, Transform playerTransform)
     {
-        gameManager = FindAnyObjectByType<GameManager>();  // GameManager가 존재할 경우만 찾음
-        InitIndexes();
-        StartSpawning(); // 스폰 시작
+        this.gameManager = gameManager;
+        this.poolManager = poolManager;
+        this.movementManager = movementManager;
+        this.playerTransform = playerTransform;
+        
+        Initialize();
     }
 
-    private void InitIndexes()
+    private void Initialize()
     {
-        for (int i = 0; i < spawnObjects.Length; i++)
-        {
-            availableIndexes.Add(i);
-        }
+        CalculateTotalWeight();
+        currentSpawnInterval = initialSpawnInterval;
     }
 
-    private IEnumerator SpawnObjectCoroutine()
+    private void CalculateTotalWeight()
     {
-        float currentSpawnInterval = initialSpawnInterval;
-
-        while (!isPaused)
+        totalWeight = 0f;
+        foreach (var item in spawnableItems)
         {
-            SpawnObjectMethod();
-            yield return new WaitForSeconds(currentSpawnInterval);
-
-            if (currentSpawnInterval > minimumSpawnInterval)
-            {
-                currentSpawnInterval -= spawnIntervalDecreaseRate;
-                currentSpawnInterval = Mathf.Max(currentSpawnInterval, minimumSpawnInterval);
-            }
+            totalWeight += item.spawnWeight;
         }
-    }
-
-    private void SpawnObjectMethod()
-    {
-        if (spawnPoints.Length == 0 || spawnObjects.Length == 0)
-        {
-            Debug.LogWarning("Spawn points or spawn objects are not set!");
-            return;
-        }
-
-        GameObject objectToSpawn = GetRandomObject();
-        if (objectToSpawn == null)
-        {
-            Debug.LogWarning("No object to spawn!");
-            return;
-        }
-
-        lastSpawnPointIndex = (lastSpawnPointIndex + 1) % spawnPoints.Length;
-        Transform selectedSpawnPoint = spawnPoints[lastSpawnPointIndex];
-
-        Vector3 randomOffset = new Vector3(
-            Random.Range(-spawnRange, spawnRange),
-            Random.Range(-spawnRange, spawnRange),
-            Random.Range(-spawnRange, spawnRange)
-        );
-        Vector3 spawnPosition = selectedSpawnPoint.position + randomOffset;
-
-        GameObject spawnedObject = Instantiate(objectToSpawn, spawnPosition, Quaternion.identity);
-
-        // MoveManager를 통한 이동 관리 (선택적으로 사용)
-        if (gameManager != null)
-        {
-            var moveManager = gameManager.GetMoveManager();
-            if (moveManager != null)
-            {
-                moveManager.ApplyMovements(spawnedObject);
-            }
-        }
-
-        spawnedObjects.Add(spawnedObject);
-    }
-
-    public List<GameObject> GetSpawnedObjects()
-    {
-        spawnedObjects.RemoveAll(obj => obj == null);
-        return spawnedObjects;
-    }
-
-    private GameObject GetRandomObject()
-    {
-        if (availableIndexes.Count == 0)
-        {
-            InitIndexes();
-        }
-
-        int randomIndex = Random.Range(0, availableIndexes.Count);
-        int objectIndex = availableIndexes[randomIndex];
-        availableIndexes.RemoveAt(randomIndex);
-
-        return spawnObjects[objectIndex].prefab;
     }
 
     public void StartSpawning()
     {
-        isPaused = false;
-        if (spawnCoroutine == null)
+        if (spawnableItems == null || spawnableItems.Count == 0)
         {
-            spawnCoroutine = StartCoroutine(SpawnObjectCoroutine());
+            Debug.LogWarning("No items to spawn!");
+            return;
+        }
+
+        Debug.Log("Starting spawn routine..."); // 스폰 시작 확인
+        if (!isPaused && spawnCoroutine == null)
+        {
+            spawnCoroutine = StartCoroutine(SpawnRoutine());
         }
     }
 
-    public void StopSpawning()
+    public void PauseSpawning()
     {
         isPaused = true;
         if (spawnCoroutine != null)
@@ -136,4 +77,178 @@ public class SpawnManager : MonoBehaviour
             spawnCoroutine = null;
         }
     }
+
+    public void ResumeSpawning()
+    {
+        isPaused = false;
+        StartSpawning();
+    }
+
+    private IEnumerator SpawnRoutine()
+    {
+        while (!isPaused)
+        {
+            SpawnObject();
+            yield return new WaitForSeconds(currentSpawnInterval);
+
+            // 스폰 간격 감소
+            if (currentSpawnInterval > minimumSpawnInterval)
+            {
+                currentSpawnInterval -= spawnIntervalDecreaseRate;
+                currentSpawnInterval = Mathf.Max(currentSpawnInterval, minimumSpawnInterval);
+            }
+        }
+    }
+
+    private void SpawnObject()
+    {
+        if (spawnableItems == null || spawnableItems.Count == 0)
+        {
+            Debug.LogWarning("No spawnable items available!");
+            return;
+        }
+
+        if (movementManager == null)
+        {
+            Debug.LogError("MovementManager is not assigned!");
+            return;
+        }
+
+        Debug.Log($"Total Weight: {totalWeight}");
+        SpawnableItem selectedItem = SelectRandomItem();
+        if (selectedItem == null || selectedItem.prefab == null)
+        {
+            Debug.LogWarning("Selected item or prefab is null!");
+            return;
+        }
+ 
+        Vector3 spawnPosition = CalculateSpawnPosition();
+        Debug.Log($"Spawning {selectedItem.prefab.name} at {spawnPosition}");
+        
+        GameObject spawnedObject = poolManager.GetObject(selectedItem.prefab);
+        if (spawnedObject == null)
+        {
+            Debug.LogWarning("Failed to get object from pool!");
+            return;
+        }
+
+        spawnedObject.transform.position = spawnPosition;
+        
+        try
+        {
+            MovementData movementData = GenerateMovementData();
+            MovementType movementType = GetMovementTypeForObject(selectedItem.objectType);
+            Debug.Log($"Assigning movement pattern: {movementType} to {spawnedObject.name}");
+            movementManager.AssignMovementPattern(spawnedObject, movementType, movementData);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Error assigning movement pattern: {e.Message}");
+        }
+        
+        activeObjects.Add(spawnedObject);
+        CleanInactiveObjects();
+    }
+
+    private SpawnableItem SelectRandomItem()
+    {
+        float random = Random.Range(0f, totalWeight);
+        float weightSum = 0f;
+        
+        foreach (var item in spawnableItems)
+        {
+            weightSum += item.spawnWeight;
+            if (random <= weightSum)
+            {
+                return item;
+            }
+        }
+        
+        return spawnableItems[0];
+    }
+
+    private Vector3 CalculateSpawnPosition()
+    {
+        Vector3 playerForward = playerTransform.forward;
+        Vector3 spawnCenter = playerTransform.position + playerForward * spawnDistance;
+        
+        Vector3 right = Vector3.Cross(playerForward, Vector3.up).normalized;
+        Vector3 up = Vector3.Cross(right, playerForward).normalized;
+        
+        float randomX = Random.Range(-spawnRadius, spawnRadius);
+        float randomY = Random.Range(-spawnRadius, spawnRadius);
+        
+        return spawnCenter + right * randomX + up * randomY;
+    }
+
+    private MovementData GenerateMovementData()
+    {
+        return new MovementData
+        {
+            speed = Random.Range(5f, 10f),
+            amplitude = Random.Range(1f, 3f),
+            frequency = Random.Range(1f, 3f),
+            duration = Random.Range(5f, 10f)
+        };
+    }
+
+    private MovementType GetMovementTypeForObject(ObjectTypes objectType)
+    {
+        // 오브젝트 타입에 따른 움직임 패턴 결정
+        return objectType switch
+        {
+            ObjectTypes.BASIC => MovementType.Straight,
+            ObjectTypes.EXPLOSIVE => MovementType.Zigzag,
+            ObjectTypes.INDESTRUCTIBLE => MovementType.Spiral,
+            _ => MovementType.Straight
+        };
+    }
+
+    private void CleanInactiveObjects()
+    {
+        activeObjects.RemoveAll(obj => obj == null || !obj.activeInHierarchy);
+    }
+
+    public List<GameObject> GetActiveObjects()
+    {
+        CleanInactiveObjects();
+        return activeObjects;
+    }
+
+    private void OnDestroy()
+    {
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+        }
+    }
+
+    // 난이도 조절을 위한 메서드들
+    public void SetSpawnInterval(float interval)
+    {
+        currentSpawnInterval = Mathf.Max(interval, minimumSpawnInterval);
+    }
+
+    public void SetSpawnDistance(float distance)
+    {
+        spawnDistance = distance;
+    }
+
+    public void SetSpawnRadius(float radius)
+    {
+        spawnRadius = radius;
+    }
+
+
+    public float GetCurrentSpawnInterval()
+    {
+        return currentSpawnInterval;
+    }
+
+    // 추가: spawnableItemData에 접근하기 위한 public 메서드
+    public List<SpawnableItem> GetSpawnableItems()
+    {
+        return spawnableItemData?.items ?? new List<SpawnableItem>();
+    }
 }
+

@@ -25,10 +25,33 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
+    public void CreatePool(string key, GameObject prefab, int poolSize)
+    {
+        if (!poolDictionary.ContainsKey(key))
+        {
+            Queue<GameObject> objectPool = new Queue<GameObject>();
+
+            for (int i = 0; i < poolSize; i++)
+            {
+                GameObject obj = GameObject.Instantiate(prefab);
+                obj.name = key;
+                obj.SetActive(false);
+                obj.transform.SetParent(transform);
+                objectPool.Enqueue(obj);
+            }
+
+            poolDictionary.Add(key, objectPool);
+        }
+    }
+
     public GameObject GetObject(GameObject prefab)
     {
         string key = prefab.name;
-        
+        return GetObject(key, prefab);
+    }
+
+    public GameObject GetObject(string key, GameObject prefab)
+    {
         if (!poolDictionary.ContainsKey(key))
             poolDictionary[key] = new Queue<GameObject>();
 

@@ -43,10 +43,10 @@ public class DamageZone : MonoBehaviour
         // SpawnManager가 없을 경우 함수 실행 중단
         if (spawnManager == null) return;
 
-        // SpawnManager를 통해 스폰된 오브젝트 리스트를 가져옴
-        List<GameObject> breakObjects = spawnManager.GetSpawnedObjects();
+        // SpawnManager를 통해 활성화된 오브젝트 리스트를 가져옴
+        List<GameObject> activeObjects = spawnManager.GetActiveObjects();
 
-        foreach (GameObject obj in breakObjects)
+        foreach (GameObject obj in activeObjects)
         {
             // BreakObject로 수정
             BreakObject breakObject = obj.GetComponent<BreakObject>();
@@ -68,7 +68,7 @@ public class DamageZone : MonoBehaviour
             if (IsObjectPassed(obj))
             {
                 hpManager.TakeDamage(damageAmount);
-                Destroy(obj);
+                obj.SetActive(false); // Destroy 대신 비활성화 (오브젝트 풀링 사용)
             }
         }
     }

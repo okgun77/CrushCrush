@@ -10,9 +10,7 @@ public class GameOverMenuManager : MonoBehaviour
     [SerializeField] private GameObject gameOverMenuPrefab;
 
     private TouchManager touchManager;
-    
     private bool isPaused = false;
-    
 
     private void Start()
     {
@@ -44,7 +42,7 @@ public class GameOverMenuManager : MonoBehaviour
         var spawnManager = FindAnyObjectByType<SpawnManager>();
         if (spawnManager != null)
         {
-            spawnManager.StopSpawning();
+            spawnManager.PauseSpawning();
         }
 
         // TouchManager 일시정지
@@ -71,22 +69,22 @@ public class GameOverMenuManager : MonoBehaviour
         var spawnManager = FindAnyObjectByType<SpawnManager>();
         if (spawnManager != null)
         {
-            spawnManager.StartSpawning();
+            spawnManager.ResumeSpawning();
         }
 
-        // TouchManager 일시정지
+        // TouchManager 일시정지 해제
         if (touchManager != null)
         {
             touchManager.SetPaused(false);
         }
     }
 
-
     // IMovable 인터페이스를 구현한 MonoBehaviour 컴포넌트들을 찾음
     private List<IMovable> GetMovableObjects()
     {
         List<IMovable> movables = new List<IMovable>();
-        MonoBehaviour[] allBehaviours = FindObjectsOfType<MonoBehaviour>();
+        MonoBehaviour[] allBehaviours = Object.FindObjectsByType<MonoBehaviour>(
+            FindObjectsSortMode.None);
 
         foreach (var behaviour in allBehaviours)
         {
@@ -97,11 +95,6 @@ public class GameOverMenuManager : MonoBehaviour
         }
 
         return movables;
-    }
-
-    private void OnContinueButtonClicked()
-    {
-        PauseMenuDisable();
     }
 
     private void OnTitleButtonClicked()
@@ -115,7 +108,7 @@ public class GameOverMenuManager : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-        Application.Quit(); // 어플리케이션 종료
+        Application.Quit();
 #endif
     }
 
