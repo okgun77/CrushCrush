@@ -1545,7 +1545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 1000010619989362, guid: f0eab53ae2c976d47acc52143490423a, type: 3}
+  - {fileID: 1000010619989362, guid: 20859fb44a7ca794fab530560df929e6, type: 3}
   defaultSpawnWeight: 1
   spawnDistance: 20
   spawnRadius: 10
