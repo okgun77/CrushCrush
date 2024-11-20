@@ -22,18 +22,18 @@ public class SpiralMovement : IMovementPattern
         angle = 0f;
     }
 
-    public Vector3 CalculateMovement(Transform objectTransform, Transform targetTransform, float deltaTime)
+    public Vector3 CalculateMovement(Transform _objectTransform, Transform _targetTransform, float _deltaTime)
     {
-        elapsedTime += deltaTime;
+        elapsedTime += _deltaTime;
         
         // 초기 방향 저장 (처음 한번만)
-        if (elapsedTime <= deltaTime)
+        if (elapsedTime <= _deltaTime)
         {
-            initialDirection = (targetTransform.position - objectTransform.position).normalized;
+            initialDirection = (_targetTransform.position - _objectTransform.position).normalized;
         }
 
         // 나선형 움직임 계산
-        angle += frequency * deltaTime;
+        angle += frequency * _deltaTime;
         float currentRadius = amplitude * (elapsedTime / duration); // 시간에 따라 반경 증가
         
         // 진행 방향을 기준으로 한 right와 up 벡터 계산
@@ -44,10 +44,10 @@ public class SpiralMovement : IMovementPattern
         Vector3 offset = (right * Mathf.Cos(angle) + up * Mathf.Sin(angle)) * currentRadius;
         
         // 기본 전진 움직임과 나선형 움직임 합성
-        Vector3 forwardMovement = initialDirection * speed * deltaTime;
-        Vector3 spiralMovement = offset - objectTransform.position;
+        Vector3 forwardMovement = initialDirection * speed * _deltaTime;
+        Vector3 spiralMovement = offset - _objectTransform.position;
         
         // 최종 움직임 계산
-        return forwardMovement + spiralMovement * deltaTime;
+        return forwardMovement + spiralMovement * _deltaTime;
     }
 } 

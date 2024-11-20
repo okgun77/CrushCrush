@@ -8,9 +8,9 @@ public class ObjectMovementManager : MonoBehaviour
     private Transform playerTransform;
     private GameManager gameManager;
 
-    public void Init(GameManager gameManager)
+    public void Init(GameManager _gameManager)
     {
-        this.gameManager = gameManager;
+        this.gameManager = _gameManager;
         Initialize();
         
         Debug.Log("ObjectMovementManager initialized");
@@ -28,21 +28,21 @@ public class ObjectMovementManager : MonoBehaviour
         }
     }
 
-    public void AssignMovementPattern(GameObject obj, MovementType type, MovementData data)
+    public void AssignMovementPattern(GameObject _obj, MovementType _type, MovementData _data)
     {
-        if (obj == null) return;
+        if (_obj == null) return;
 
-        IMovementPattern pattern = CreatePattern(type);
-        pattern.Initialize(data);
+        IMovementPattern pattern = CreatePattern(_type);
+        pattern.Initialize(_data);
         
         // 이미 존재하는 패턴 제거
-        if (objectPatterns.ContainsKey(obj))
+        if (objectPatterns.ContainsKey(_obj))
         {
-            RemoveObject(obj);
+            RemoveObject(_obj);
         }
         
-        objectPatterns[obj] = pattern;
-        movementDataMap[obj] = data;
+        objectPatterns[_obj] = pattern;
+        movementDataMap[_obj] = _data;
     }
 
     private void Update()
@@ -78,9 +78,9 @@ public class ObjectMovementManager : MonoBehaviour
         }
     }
 
-    private IMovementPattern CreatePattern(MovementType type)
+    private IMovementPattern CreatePattern(MovementType _type)
     {
-        return type switch
+        return _type switch
         {
             MovementType.Straight => new StraightMovement(),
             MovementType.Zigzag => new ZigzagMovement(),
@@ -89,12 +89,12 @@ public class ObjectMovementManager : MonoBehaviour
         };
     }
 
-    public void RemoveObject(GameObject obj)
+    public void RemoveObject(GameObject _obj)
     {
-        if (obj != null && objectPatterns.ContainsKey(obj))
+        if (_obj != null && objectPatterns.ContainsKey(_obj))
         {
-            objectPatterns.Remove(obj);
-            movementDataMap.Remove(obj);
+            objectPatterns.Remove(_obj);
+            movementDataMap.Remove(_obj);
         }
     }
 

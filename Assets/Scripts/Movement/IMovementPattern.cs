@@ -2,9 +2,9 @@ using UnityEngine;
 
 public interface IMovementPattern
 {
-    Vector3 CalculateMovement(Transform objectTransform, Transform targetTransform, float deltaTime);
+    Vector3 CalculateMovement(Transform _objectTransform, Transform _targetTransform, float _deltaTime);
     bool IsComplete { get; }
-    void Initialize(MovementData data);
+    void Initialize(MovementData _data);
 }
 
 // 움직임 데이터 구조체
