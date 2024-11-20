@@ -77,6 +77,8 @@ public class GameManager : MonoBehaviour
         hpManager?.Init(this);
         audioManager?.Init(this);
 
+        movementManager?.Init(this);
+
         if (spawnManager != null)
         {
             Debug.Log("SpawnManager found, initializing...");
@@ -141,6 +143,9 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        spawnManager?.PauseSpawning();
+        if (spawnManager != null)
+        {
+            spawnManager.PauseSpawning();
+        }
     }
 }

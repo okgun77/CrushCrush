@@ -12,6 +12,8 @@ public class ObjectMovementManager : MonoBehaviour
     {
         this.gameManager = gameManager;
         Initialize();
+        
+        Debug.Log("ObjectMovementManager initialized");
     }
 
     private void Initialize()

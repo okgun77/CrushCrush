@@ -136,6 +136,12 @@ public class SpawnManager : MonoBehaviour
         
         try
         {
+            if (movementManager == null)
+            {
+                Debug.LogError("MovementManager is null in SpawnManager!");
+                return;
+            }
+            
             MovementData movementData = GenerateMovementData();
             MovementType movementType = GetMovementTypeForObject(selectedItem.objectType);
             Debug.Log($"Assigning movement pattern: {movementType} to {spawnedObject.name}");
@@ -143,7 +149,7 @@ public class SpawnManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Error assigning movement pattern: {e.Message}");
+            Debug.LogError($"Error assigning movement pattern: {e.Message}\n{e.StackTrace}");
         }
         
         activeObjects.Add(spawnedObject);
