@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
         if (audioManager == null)
         {
-            audioManager = FindObjectOfType<AudioManager>();
+            audioManager = FindFirstObjectByType<AudioManager>();
         }
 
         poolManager = ObjectPoolManager.Instance;
@@ -147,5 +147,23 @@ public class GameManager : MonoBehaviour
         {
             spawnManager.PauseSpawning();
         }
+    }
+
+    public void OnStageStart(int stageIndex)
+    {
+        Debug.Log($"Stage {stageIndex + 1} Started!");
+        // 스테이지 시작 시 필요한 처리
+    }
+
+    public void OnStageComplete(int stageIndex)
+    {
+        Debug.Log($"Stage {stageIndex + 1} Completed!");
+        // 스테이지 완료 시 필요한 처리
+    }
+
+    public void OnGameComplete()
+    {
+        Debug.Log("Game Completed!");
+        // 게임 클리어 시 필요한 처리
     }
 }

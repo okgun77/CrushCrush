@@ -27,6 +27,11 @@ public class SpawnManager : MonoBehaviour
     private bool isPaused = false;
     private List<GameObject> activeObjects = new List<GameObject>();
 
+    [Header("Movement Settings")]
+    private MovementType[] currentAvailablePatterns;
+    private MovementData currentMovementData;
+    private bool isSpawning = false;
+
     public void Init(GameManager gameManager, ObjectPoolManager poolManager, 
                     ObjectMovementManager movementManager, Transform playerTransform)
     {
@@ -61,7 +66,8 @@ public class SpawnManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Starting spawn routine..."); // 스폰 시작 확인
+        Debug.Log("Starting spawn routine...");
+        isSpawning = true;
         if (!isPaused && spawnCoroutine == null)
         {
             spawnCoroutine = StartCoroutine(SpawnRoutine());
@@ -82,6 +88,16 @@ public class SpawnManager : MonoBehaviour
     {
         isPaused = false;
         StartSpawning();
+    }
+
+    public void StopSpawning()
+    {
+        isSpawning = false;
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+            spawnCoroutine = null;
+        }
     }
 
     private IEnumerator SpawnRoutine()
@@ -189,6 +205,14 @@ public class SpawnManager : MonoBehaviour
 
     private MovementData GenerateMovementData()
     {
+        if (currentMovementData.speed != 0 || 
+            currentMovementData.amplitude != 0 || 
+            currentMovementData.frequency != 0 || 
+            currentMovementData.duration != 0)
+        {
+            return currentMovementData;
+        }
+
         return new MovementData
         {
             speed = Random.Range(5f, 10f),
@@ -200,7 +224,11 @@ public class SpawnManager : MonoBehaviour
 
     private MovementType GetMovementTypeForObject(ObjectTypes objectType)
     {
-        // 오브젝트 타입에 따른 움직임 패턴 결정
+        if (currentAvailablePatterns != null && currentAvailablePatterns.Length > 0)
+        {
+            return currentAvailablePatterns[Random.Range(0, currentAvailablePatterns.Length)];
+        }
+
         return objectType switch
         {
             ObjectTypes.BASIC => MovementType.Straight,
@@ -255,6 +283,19 @@ public class SpawnManager : MonoBehaviour
     public List<SpawnableItem> GetSpawnableItems()
     {
         return spawnableItemData?.items ?? new List<SpawnableItem>();
+    }
+
+    public void UpdateSpawnSettings(float interval, MovementType[] patterns, MovementData data)
+    {
+        currentSpawnInterval = interval;
+        currentAvailablePatterns = patterns;
+        currentMovementData = data;
+        
+        if (isSpawning)
+        {
+            StopSpawning();
+            StartSpawning();
+        }
     }
 }
 
