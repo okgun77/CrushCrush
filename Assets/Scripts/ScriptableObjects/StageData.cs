@@ -8,8 +8,9 @@ public class StageData : ScriptableObject
     public class Stage
     {
         public string stageName;
-        public StageCondition[] conditions;
         public SpawnSettings spawnSettings;
+        public StageCondition[] conditions;
+        public float duration = 60f;
         [TextArea(3, 5)]
         public string StageDescription;
     }

@@ -72,14 +72,24 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // 1. 기본 매니저들 초기화
         uiManager?.Init(this);
         scoreManager?.Init(this);
         slowMotionManager?.Init(this);
         hpManager?.Init(this);
         audioManager?.Init(this);
 
-        movementManager?.Init(this);
+        // 2. MovementManager 초기화
+        movementManager.Init(this);
 
+        // 3. SpawnManager 초기화 (MovementManager 이후에)
+        if (spawnManager != null)
+        {
+            Debug.Log("SpawnManager found, initializing...");
+            spawnManager.Init(this, poolManager, movementManager, playerTransform);
+        }
+
+        // 4. StageManager는 SpawnManager 초기화 후에
         if (stageManager != null)
         {
             Debug.Log("Initializing StageManager...");
@@ -88,12 +98,6 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("StageManager is not assigned in GameManager!");
-        }
-
-        if (spawnManager != null)
-        {
-            Debug.Log("SpawnManager found, initializing...");
-            spawnManager.Init(this, poolManager, movementManager, playerTransform);
         }
     }
 

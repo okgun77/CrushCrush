@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: StageData_01
   m_EditorClassIdentifier: 
   stages:
-  - stageName: Stage01
+  - stageName: Stage 1
     conditions:
-    - conditionName: Destroy 10 Object
+    - conditionName: Destroy 10 Objects
       type: 1
       targetValue: 10
       isSatisfied: 0
     spawnSettings:
       spawnInterval: 1
       availablePatterns: 00000000
-      movementSpeed: 1
+      movementSpeed: 5
       patternAmplitude: 1
       patternFrequency: 1
-      maxObjectCount: 2
+      maxObjectCount: 0
     StageDescription: 

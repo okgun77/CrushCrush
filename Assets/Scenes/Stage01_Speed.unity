@@ -5200,7 +5200,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageData: {fileID: 11400000, guid: fbcc4b8133398094795b53dac600d6e2, type: 2}
-  stageStartDelay: 5
+  stageStartDelay: 2
+  movementManager: {fileID: 393813230}
   showDebugLog: 1
 --- !u!1 &582076704
 GameObject:

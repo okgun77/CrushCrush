@@ -6,6 +6,7 @@ public class StageManager : MonoBehaviour
     [Header("Stage Settings")]
     [SerializeField] private StageData stageData;
     [SerializeField] private float stageStartDelay = 2f;
+    [SerializeField] private ObjectMovementManager movementManager;
 
     [Header("Debug")]
     [SerializeField] private bool showDebugLog = true;
@@ -14,10 +15,13 @@ public class StageManager : MonoBehaviour
     private SpawnManager spawnManager;
     private int currentStageIndex = -1;
     private StageState currentState = StageState.Ready;
+    private StageData.Stage currentStage => stageData.stages[currentStageIndex];
     
     private float timeElapsed;
     private int destroyCount;
     private int currentScore;
+    private float stageProgress = 0f;
+    private float stageDuration = 60f;
 
     #region Initialization
     public void Init(GameManager _gameManager, SpawnManager _spawnManager)
@@ -34,6 +38,17 @@ public class StageManager : MonoBehaviour
         if (stageData.stages == null || stageData.stages.Length == 0)
         {
             LogError("No stages defined in StageData!");
+            return;
+        }
+
+        if (movementManager == null)
+        {
+            movementManager = FindFirstObjectByType<ObjectMovementManager>();
+        }
+
+        if (movementManager == null)
+        {
+            LogError("MovementManager is not found in the scene!");
             return;
         }
 
@@ -78,6 +93,9 @@ public class StageManager : MonoBehaviour
         
         currentState = StageState.InProgress;
         ResetStageProgress();
+        stageProgress = 0f;
+        stageDuration = stage.duration;
+        movementManager.ResetDifficulty();
 
         UpdateSpawnSettings(stage.spawnSettings);
         gameManager.OnStageStart(stageIndex);
@@ -98,6 +116,8 @@ public class StageManager : MonoBehaviour
                     duration = settings.spawnInterval * 2
                 }
             );
+            
+            spawnManager.StartSpawning();
         }
     }
     #endregion
@@ -108,6 +128,11 @@ public class StageManager : MonoBehaviour
         if (currentState != StageState.InProgress) return;
 
         timeElapsed += Time.deltaTime;
+        stageProgress = Mathf.Clamp01(timeElapsed / stageDuration);
+        
+        // 진행도에 따라 난이도 업데이트
+        UpdateStageDifficulty(stageProgress);
+        
         CheckStageConditions();
     }
 
@@ -203,4 +228,19 @@ public class StageManager : MonoBehaviour
         Debug.LogError($"[StageManager] {message}");
     }
     #endregion
+
+    private void UpdateStageDifficulty(float progress)
+    {
+        // 움직임 난이도 조절
+        movementManager.UpdateDifficulty(progress);
+
+        // 스폰 간격 조절
+        if (spawnManager != null)
+        {
+            float initialInterval = currentStage.spawnSettings.spawnInterval;
+            float minInterval = currentStage.spawnSettings.minimumSpawnInterval;
+            float currentInterval = Mathf.Lerp(initialInterval, minInterval, progress);
+            spawnManager.SetSpawnInterval(currentInterval);
+        }
+    }
 }

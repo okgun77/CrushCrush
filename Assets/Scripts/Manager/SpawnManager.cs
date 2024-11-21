@@ -149,27 +149,23 @@ public class SpawnManager : MonoBehaviour
         }
 
         spawnedObject.transform.position = spawnPosition;
-        
-        try
-        {
-            if (movementManager == null)
-            {
-                Debug.LogError("MovementManager is null in SpawnManager!");
-                return;
-            }
-            
-            MovementData movementData = GenerateMovementData();
-            MovementType movementType = GetMovementTypeForObject(selectedItem.objectType);
-            Debug.Log($"Assigning movement pattern: {movementType} to {spawnedObject.name}");
-            movementManager.AssignMovementPattern(spawnedObject, movementType, movementData);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Error assigning movement pattern: {e.Message}\n{e.StackTrace}");
-        }
-        
+        spawnedObject.SetActive(true);
         activeObjects.Add(spawnedObject);
-        CleanInactiveObjects();
+
+        MovementType pattern = GetMovementTypeForObject(selectedItem.objectType);
+        Debug.Log($"Assigning movement pattern: {pattern} to {spawnedObject.name}");
+
+        MovementData movementData = GenerateMovementData();
+        
+        if (movementManager != null)
+        {
+            Debug.Log($"Starting movement for {spawnedObject.name} with pattern {pattern}");
+            movementManager.StartMovement(spawnedObject, pattern, movementData, playerTransform.position);
+        }
+        else
+        {
+            Debug.LogError("MovementManager is null!");
+        }
     }
 
     private SpawnableItem SelectRandomItem()

@@ -1,111 +1,122 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class ObjectMovementManager : MonoBehaviour
 {
-    private Dictionary<GameObject, IMovementPattern> objectPatterns;
-    private Dictionary<GameObject, MovementData> movementDataMap;
-    private Transform playerTransform;
+    [System.Serializable]
+    public class DifficultySettings
+    {
+        public float speedMultiplier = 1f;      // 속도 배율
+        public float amplitudeMultiplier = 1f;  // 진폭 배율
+        public float frequencyMultiplier = 1f;  // 주파수 배율
+    }
+
     private GameManager gameManager;
+    private Dictionary<GameObject, Coroutine> movementCoroutines = new Dictionary<GameObject, Coroutine>();
+    private DifficultySettings currentDifficulty = new DifficultySettings();
 
     public void Init(GameManager _gameManager)
     {
-        this.gameManager = _gameManager;
-        Initialize();
-        
+        gameManager = _gameManager;
+        ResetDifficulty();
         Debug.Log("ObjectMovementManager initialized");
     }
 
-    private void Initialize()
+    // 난이도 조절 메서드
+    public void UpdateDifficulty(float progressRatio) // 0.0 ~ 1.0
     {
-        objectPatterns = new Dictionary<GameObject, IMovementPattern>();
-        movementDataMap = new Dictionary<GameObject, MovementData>();
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        
-        if (playerTransform == null)
-        {
-            Debug.LogError("Player not found! Make sure the player object has the 'Player' tag.");
-        }
+        // 스테이지 진행도에 따라 난이도 상승
+        currentDifficulty.speedMultiplier = Mathf.Lerp(1f, 2f, progressRatio);
+        currentDifficulty.amplitudeMultiplier = Mathf.Lerp(1f, 1.5f, progressRatio);
+        currentDifficulty.frequencyMultiplier = Mathf.Lerp(1f, 1.5f, progressRatio);
     }
 
-    public void AssignMovementPattern(GameObject _obj, MovementType _type, MovementData _data)
+    public void ResetDifficulty()
     {
-        if (_obj == null) return;
-
-        IMovementPattern pattern = CreatePattern(_type);
-        pattern.Initialize(_data);
-        
-        // 이미 존재하는 패턴 제거
-        if (objectPatterns.ContainsKey(_obj))
-        {
-            RemoveObject(_obj);
-        }
-        
-        objectPatterns[_obj] = pattern;
-        movementDataMap[_obj] = _data;
+        currentDifficulty = new DifficultySettings();
     }
 
-    private void Update()
+    public void StartMovement(GameObject obj, MovementType pattern, MovementData data, Vector3 targetPosition)
     {
-        if (objectPatterns == null) return;
+        if (obj == null) return;
 
-        List<GameObject> completedObjects = new List<GameObject>();
-
-        foreach (var kvp in objectPatterns)
+        // 난이도 설정 적용
+        MovementData adjustedData = new MovementData
         {
-            GameObject obj = kvp.Key;
-            IMovementPattern pattern = kvp.Value;
-
-            if (obj == null || !obj.activeInHierarchy)
-            {
-                completedObjects.Add(obj);
-                continue;
-            }
-
-            if (pattern.IsComplete)
-            {
-                completedObjects.Add(obj);
-                continue;
-            }
-
-            Vector3 movement = pattern.CalculateMovement(obj.transform, playerTransform, Time.deltaTime);
-            obj.transform.position += movement;
-        }
-
-        foreach (var obj in completedObjects)
-        {
-            RemoveObject(obj);
-        }
-    }
-
-    private IMovementPattern CreatePattern(MovementType _type)
-    {
-        return _type switch
-        {
-            MovementType.Straight => new StraightMovement(),
-            MovementType.Zigzag => new ZigzagMovement(),
-            MovementType.Spiral => new SpiralMovement(),
-            _ => new StraightMovement()
+            speed = data.speed * currentDifficulty.speedMultiplier,
+            amplitude = data.amplitude * currentDifficulty.amplitudeMultiplier,
+            frequency = data.frequency * currentDifficulty.frequencyMultiplier,
+            duration = data.duration
         };
+
+        StopMovement(obj);
+        Coroutine coroutine = StartCoroutine(MoveObject(obj, pattern, adjustedData, targetPosition));
+        movementCoroutines[obj] = coroutine;
     }
 
-    public void RemoveObject(GameObject _obj)
+    private IEnumerator MoveObject(GameObject obj, MovementType pattern, MovementData data, Vector3 targetPosition)
     {
-        if (_obj != null && objectPatterns.ContainsKey(_obj))
+        float elapsedTime = 0f;
+        Vector3 startPosition = obj.transform.position;
+        Vector3 direction = (targetPosition - startPosition).normalized;
+
+        while (elapsedTime < data.duration)
         {
-            objectPatterns.Remove(_obj);
-            movementDataMap.Remove(_obj);
+            if (obj == null) yield break;
+
+            Vector3 newPosition = CalculatePosition(startPosition, direction, pattern, data, elapsedTime);
+            obj.transform.position = newPosition;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (obj != null)
+        {
+            movementCoroutines.Remove(obj);
         }
     }
 
-    public void ClearAllPatterns()
+    private Vector3 CalculatePosition(Vector3 start, Vector3 direction, MovementType pattern, MovementData data, float time)
     {
-        objectPatterns?.Clear();
-        movementDataMap?.Clear();
+        Vector3 basePosition = start + direction * data.speed * time;
+
+        switch (pattern)
+        {
+            case MovementType.Straight:
+                return basePosition;
+
+            case MovementType.Zigzag:
+                float zigzag = Mathf.Sin(time * data.frequency) * data.amplitude;
+                return basePosition + Vector3.right * zigzag;
+
+            case MovementType.Spiral:
+                float spiral = time * data.frequency;
+                float x = Mathf.Cos(spiral) * data.amplitude;
+                float y = Mathf.Sin(spiral) * data.amplitude;
+                return basePosition + new Vector3(x, y, 0);
+
+            default:
+                return basePosition;
+        }
+    }
+
+    public void StopMovement(GameObject obj)
+    {
+        if (movementCoroutines.TryGetValue(obj, out Coroutine coroutine))
+        {
+            StopCoroutine(coroutine);
+            movementCoroutines.Remove(obj);
+        }
     }
 
     private void OnDestroy()
     {
-        ClearAllPatterns();
+        foreach (var coroutine in movementCoroutines.Values)
+        {
+            StopCoroutine(coroutine);
+        }
+        movementCoroutines.Clear();
     }
 } 
