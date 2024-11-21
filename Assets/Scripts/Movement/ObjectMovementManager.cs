@@ -13,12 +13,18 @@ public class ObjectMovementManager : MonoBehaviour
     }
 
     private GameManager gameManager;
+    private Transform playerTransform;
     private Dictionary<GameObject, Coroutine> movementCoroutines = new Dictionary<GameObject, Coroutine>();
     private DifficultySettings currentDifficulty = new DifficultySettings();
 
     public void Init(GameManager _gameManager)
     {
         gameManager = _gameManager;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        if (playerTransform == null)
+        {
+            Debug.LogError("Player not found! Make sure there is an object with 'Player' tag in the scene.");
+        }
         ResetDifficulty();
         Debug.Log("ObjectMovementManager initialized");
     }
@@ -59,28 +65,30 @@ public class ObjectMovementManager : MonoBehaviour
     {
         float elapsedTime = 0f;
         Vector3 startPosition = obj.transform.position;
-        Vector3 direction = (targetPosition - startPosition).normalized;
 
-        while (elapsedTime < data.duration)
+        while (obj != null)
         {
-            if (obj == null) yield break;
+            if (playerTransform == null)
+            {
+                playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+                if (playerTransform == null) yield break;
+            }
 
-            Vector3 newPosition = CalculatePosition(startPosition, direction, pattern, data, elapsedTime);
+            Vector3 currentDirection = (playerTransform.position - obj.transform.position).normalized;
+            Vector3 newPosition = CalculatePosition(obj.transform.position, currentDirection, pattern, data, elapsedTime);
             obj.transform.position = newPosition;
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        if (obj != null)
-        {
-            movementCoroutines.Remove(obj);
-        }
+        movementCoroutines.Remove(obj);
     }
 
-    private Vector3 CalculatePosition(Vector3 start, Vector3 direction, MovementType pattern, MovementData data, float time)
+    private Vector3 CalculatePosition(Vector3 currentPos, Vector3 direction, MovementType pattern, MovementData data, float time)
     {
-        Vector3 basePosition = start + direction * data.speed * time;
+        // 기본 이동을 현재 위치 기준으로 계산
+        Vector3 basePosition = currentPos + direction * data.speed * Time.deltaTime;
 
         switch (pattern)
         {
@@ -89,13 +97,13 @@ public class ObjectMovementManager : MonoBehaviour
 
             case MovementType.Zigzag:
                 float zigzag = Mathf.Sin(time * data.frequency) * data.amplitude;
-                return basePosition + Vector3.right * zigzag;
+                return basePosition + Vector3.right * zigzag * Time.deltaTime;
 
             case MovementType.Spiral:
                 float spiral = time * data.frequency;
                 float x = Mathf.Cos(spiral) * data.amplitude;
                 float y = Mathf.Sin(spiral) * data.amplitude;
-                return basePosition + new Vector3(x, y, 0);
+                return basePosition + new Vector3(x, y, 0) * Time.deltaTime;
 
             default:
                 return basePosition;
@@ -119,4 +127,4 @@ public class ObjectMovementManager : MonoBehaviour
         }
         movementCoroutines.Clear();
     }
-} 
+}

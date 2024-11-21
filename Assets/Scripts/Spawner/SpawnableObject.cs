@@ -7,7 +7,7 @@ public class SpawnableObject : MonoBehaviour
     [SerializeField] private float waveFrequency = 2f;    // 흔들림 주기
     [SerializeField] private bool randomizeMovement = true; // 랜덤 움직임 여부
     
-    private Camera playerCamera;
+    private Transform playerTransform;
     private Vector3 moveDirection;
     private Vector3 startPosition;
     private float timeOffset;
@@ -15,11 +15,13 @@ public class SpawnableObject : MonoBehaviour
     
     private void Awake()
     {
-        playerCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        if (playerCamera == null)
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
         {
-            Debug.LogError("MainCamera not found!");
+            Debug.LogError("Player not found! Make sure there's an object with 'Player' tag.");
+            return;
         }
+        playerTransform = player.transform;
         
         // 각 오브젝트마다 다른 시작 시간과 속도를 가지도록 설정
         if (randomizeMovement)
@@ -37,13 +39,18 @@ public class SpawnableObject : MonoBehaviour
     
     private void InitializeMovement()
     {
-        moveDirection = (playerCamera.transform.position - transform.position).normalized;
+        if (playerTransform != null)
+        {
+            moveDirection = (playerTransform.position - transform.position).normalized;
+        }
     }
     
     private void Update()
     {
+        if (playerTransform == null) return;
+        
         // 기본 진행 방향 계산
-        moveDirection = (playerCamera.transform.position - transform.position).normalized;
+        moveDirection = (playerTransform.position - transform.position).normalized;
         
         // 좌우 움직임 추가
         Vector3 waveMotion = CalculateWaveMotion();
@@ -57,7 +64,7 @@ public class SpawnableObject : MonoBehaviour
         float time = Time.time * waveFrequency * randomWaveSpeed + timeOffset;
         
         // moveDirection을 기준으로 한 오른쪽 벡터 계산
-        Vector3 right = Vector3.Cross(moveDirection, Vector3.left).normalized;
+        Vector3 right = Vector3.Cross(moveDirection, Vector3.up).normalized;
         
         // Sin 함수를 사용하여 좌우 움직임 계산
         return right * Mathf.Sin(time) * waveMagnitude;
@@ -69,7 +76,7 @@ public class SpawnableObject : MonoBehaviour
         Vector3 movement = (moveDirection * moveSpeed + waveMotion) * Time.deltaTime;
         transform.position += movement;
         
-        // 오브젝트가 진행 방향을 바라보도록 회전 (선택사항)
+        // 오브젝트가 진행 방향을 바라보도록 회전
         if (movement != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(movement);
@@ -81,7 +88,6 @@ public class SpawnableObject : MonoBehaviour
         moveSpeed = newSpeed;
     }
     
-    // 움직임 패턴 변경을 위한 메서드들
     public void SetWaveMagnitude(float magnitude)
     {
         waveMagnitude = magnitude;
