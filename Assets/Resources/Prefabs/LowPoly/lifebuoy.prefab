@@ -637,12 +637,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eebccaa5dc92a54aa3f6a9ef3167b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectTypes: 0
+  objectType: 0
+  defaultHealth: 100
   health: 100
   fragmentLevel: 3
   isBreakable: 1
   scoreType: 0
-  defaultHealth: 100
 --- !u!114 &2662194173682087009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -650,9 +650,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000011872215508}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 070e29ff910361d4d85b4a0064c5a616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
+  waveMagnitude: 2
+  waveFrequency: 2
+  randomizeMovement: 1

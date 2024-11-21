@@ -5200,7 +5200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageData: {fileID: 11400000, guid: fbcc4b8133398094795b53dac600d6e2, type: 2}
-  stageStartDelay: 2
+  stageStartDelay: 5
   showDebugLog: 1
 --- !u!1 &582076704
 GameObject:
@@ -15970,6 +15970,7 @@ MonoBehaviour:
   touchManager: {fileID: 889742494}
   movementManager: {fileID: 393813230}
   audioManager: {fileID: 335804406}
+  stageManager: {fileID: 579788716}
 --- !u!4 &1900878041
 Transform:
   m_ObjectHideFlags: 0

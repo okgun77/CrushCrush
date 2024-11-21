@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     // [SerializeField] private MoveManager moveManager;
     [SerializeField] private ObjectMovementManager movementManager;
     [SerializeField] private AudioManager audioManager;
+    [SerializeField] private StageManager stageManager;
 
     private ObjectPoolManager poolManager;
     private Transform playerTransform;
@@ -79,15 +80,20 @@ public class GameManager : MonoBehaviour
 
         movementManager?.Init(this);
 
+        if (stageManager != null)
+        {
+            Debug.Log("Initializing StageManager...");
+            stageManager.Init(this, spawnManager);
+        }
+        else
+        {
+            Debug.LogError("StageManager is not assigned in GameManager!");
+        }
+
         if (spawnManager != null)
         {
             Debug.Log("SpawnManager found, initializing...");
             spawnManager.Init(this, poolManager, movementManager, playerTransform);
-            spawnManager.StartSpawning();
-        }
-        else
-        {
-            Debug.LogError("SpawnManager is not assigned in GameManager!");
         }
     }
 

@@ -24,6 +24,20 @@ public class StageManager : MonoBehaviour
     {
         gameManager = _gameManager;
         spawnManager = _spawnManager;
+
+        if (stageData == null)
+        {
+            LogError("StageData is not assigned!");
+            return;
+        }
+        
+        if (stageData.stages == null || stageData.stages.Length == 0)
+        {
+            LogError("No stages defined in StageData!");
+            return;
+        }
+
+        Log($"Initialized with {stageData.stages.Length} stages");
         ResetStageProgress();
         StartNextStage();
     }
@@ -58,15 +72,14 @@ public class StageManager : MonoBehaviour
         }
 
         var stage = stageData.stages[stageIndex];
+        Log($"Starting Stage {stageIndex + 1}: {stage.stageName}");
+        Log($"Spawn Interval: {stage.spawnSettings.spawnInterval}");
+        Log($"Movement Patterns: {string.Join(", ", stage.spawnSettings.availablePatterns)}");
+        
         currentState = StageState.InProgress;
         ResetStageProgress();
 
-        // 스폰 매니저 설정 업데이트
         UpdateSpawnSettings(stage.spawnSettings);
-
-        Log($"Starting Stage {stageIndex + 1}: {stage.stageName}");
-        
-        // 스테이지 시작 이벤트 발생
         gameManager.OnStageStart(stageIndex);
     }
 
