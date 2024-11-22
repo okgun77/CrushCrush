@@ -27,7 +27,7 @@ MonoBehaviour:
     - conditionName: Destroy 10 Objects
       type: 1
       targetValue: 10
-      isSatisfied: 0
+      isSatisfied: 1
     duration: 60
     StageDescription: 
   - stageName: Phase 2
@@ -36,7 +36,7 @@ MonoBehaviour:
       minimumSpawnInterval: 0.5
       spawnIntervalDecreaseRate: 0.1
       maxObjectCount: 0
-      availablePatterns: 01000000
+      availablePatterns: 02000000
       movementSpeed: 4
       patternAmplitude: 1
       patternFrequency: 1
@@ -44,6 +44,6 @@ MonoBehaviour:
     - conditionName: Destroy 10 Objects
       type: 1
       targetValue: 10
-      isSatisfied: 0
+      isSatisfied: 1
     duration: 60
     StageDescription: 
