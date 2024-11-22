@@ -90,6 +90,8 @@ public class StageManager : MonoBehaviour
         Log($"Starting Stage {stageIndex + 1}: {stage.stageName}");
         Log($"Spawn Interval: {stage.spawnSettings.spawnInterval}");
         Log($"Movement Patterns: {string.Join(", ", stage.spawnSettings.availablePatterns)}");
+
+        spawnManager.StopSpawning();            // 이전 스폰 완전히 중지
         
         currentState = StageState.InProgress;
         ResetStageProgress();
@@ -98,6 +100,8 @@ public class StageManager : MonoBehaviour
         movementManager.ResetDifficulty();
 
         UpdateSpawnSettings(stage.spawnSettings);
+        spawnManager.StartSpawning();           // 새로운 설정으로 스폰 시작
+
         gameManager.OnStageStart(stageIndex);
     }
 
@@ -177,6 +181,7 @@ public class StageManager : MonoBehaviour
     private void CompleteCurrentStage()
     {
         currentState = StageState.Complete;
+        spawnManager.StopSpawning();                        // 현재 스테이지의 스폰 중지
         Log($"Stage {currentStageIndex + 1} Complete!");
         
         // 스테이지 완료 이벤트 발생

@@ -268,6 +268,13 @@ public class BreakObject : MonoBehaviour
 
                 // 점수 추가 및 연속 파괴 처리
                 AddScore();
+
+                var stageManager = FindAnyObjectByType<StageManager>();
+                if (stageManager != null)
+                {
+                    stageManager.AddDestroyCount();
+                }
+
                 if (objectProperties.GetFragmentLevel() == 0)
                 {
                     hpManager.IncreaseConsecutiveDestroys();
