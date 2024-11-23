@@ -149,6 +149,14 @@ public class SpawnManager : MonoBehaviour
         }
 
         spawnedObject.transform.position = spawnPosition;
+        
+        // 스폰 효과 시작
+        var spawnEffect = spawnedObject.GetComponent<SpawnFadeEffect>();
+        if (spawnEffect != null)
+        {
+            spawnEffect.StartEffect();
+        }
+        
         spawnedObject.SetActive(true);
         activeObjects.Add(spawnedObject);
 
@@ -294,4 +302,3 @@ public class SpawnManager : MonoBehaviour
         }
     }
 }
-
