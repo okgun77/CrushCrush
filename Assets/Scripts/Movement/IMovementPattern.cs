@@ -15,4 +15,7 @@ public struct MovementData
     public float amplitude;
     public float frequency;
     public float duration;
-} 
+    public int rotationDirection;    // 회전 방향 (-1: 왼쪽, 1: 오른쪽)
+    public float speedMultiplier;    // 기본 속도에 대한 배율
+    public float amplitudeMultiplier; // 기본 반경에 대한 배율
+}

@@ -56,6 +56,14 @@ public class ObjectMovementManager : MonoBehaviour
             duration = data.duration
         };
 
+        // 스파이럴 패턴일 경우 랜덤한 움직임 값 설정
+        if (pattern == MovementType.Spiral)
+        {
+            adjustedData.rotationDirection = Random.value < 0.5f ? -1 : 1;  // 50% 확률로 왼쪽/오른쪽 회전
+            adjustedData.speedMultiplier = Random.Range(0.8f, 1.5f);       // 속도 변화
+            adjustedData.amplitudeMultiplier = Random.Range(0.7f, 1.3f);   // 반경 변화
+        }
+
         StopMovement(obj);
         Coroutine coroutine = StartCoroutine(MoveObject(obj, pattern, adjustedData, targetPosition));
         movementCoroutines[obj] = coroutine;
@@ -100,9 +108,12 @@ public class ObjectMovementManager : MonoBehaviour
                 return basePosition + Vector3.right * zigzag * Time.deltaTime;
 
             case MovementType.Spiral:
-                float spiral = time * data.frequency;
-                float x = Mathf.Cos(spiral) * data.amplitude;
-                float y = Mathf.Sin(spiral) * data.amplitude;
+                float speedVariation = Mathf.Sin(time * 0.5f) + 1f;
+                float spiral = time * data.frequency * speedVariation * data.rotationDirection;
+                float radiusVariation = Mathf.Sin(time * 0.3f) * 0.3f + 1f;
+                float currentRadius = data.amplitude * data.amplitudeMultiplier * (0.2f + (time / data.duration)) * radiusVariation;
+                float x = Mathf.Cos(spiral) * currentRadius;
+                float y = Mathf.Sin(spiral) * currentRadius;
                 return basePosition + new Vector3(x, y, 0) * Time.deltaTime;
 
             default:
