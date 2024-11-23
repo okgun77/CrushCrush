@@ -6,7 +6,7 @@ public class StageManager : MonoBehaviour
     [Header("Stage Settings")]
     [SerializeField] private StageData stageData;
     [SerializeField] private float stageStartDelay = 2f;
-    [SerializeField] private ObjectMovementManager movementManager;
+    [SerializeField] private MovementManager movementManager;
 
     [Header("Debug")]
     [SerializeField] private bool showDebugLog = true;
@@ -43,7 +43,7 @@ public class StageManager : MonoBehaviour
 
         if (movementManager == null)
         {
-            movementManager = FindFirstObjectByType<ObjectMovementManager>();
+            movementManager = FindFirstObjectByType<MovementManager>();
         }
 
         if (movementManager == null)
@@ -97,8 +97,11 @@ public class StageManager : MonoBehaviour
         ResetStageProgress();
         stageProgress = 0f;
         stageDuration = stage.duration;
-        movementManager.ResetDifficulty();
-
+        
+        // DifficultyManager에 현재 스테이지의 SpawnSettings 전달
+        gameManager.DifficultyManager.SetStageSettings(stage.spawnSettings);
+        
+        // 스폰 매니저 설정 업데이트
         UpdateSpawnSettings(stage.spawnSettings);
         spawnManager.StartSpawning();           // 새로운 설정으로 스폰 시작
 
@@ -107,21 +110,29 @@ public class StageManager : MonoBehaviour
 
     private void UpdateSpawnSettings(SpawnSettings settings)
     {
-        if (spawnManager != null)
+        if (settings == null)
         {
-            spawnManager.UpdateSpawnSettings(
-                settings.spawnInterval,
-                settings.availablePatterns,
-                new MovementData
-                {
-                    speed = settings.movementSpeed,
-                    amplitude = settings.patternAmplitude,
-                    frequency = settings.patternFrequency,
-                    duration = settings.spawnInterval * 2
-                }
-            );
+            LogError("SpawnSettings is null!");
+            return;
+        }
+
+        // 기본 스폰 설정 적용
+        spawnManager.SetSpawnInterval(settings.spawnInterval);
+        spawnManager.SetMaxObjectCount(settings.maxObjectCount);
+        
+        // 이동 패턴 설정
+        if (settings.availablePatterns != null && settings.availablePatterns.Length > 0)
+        {
+            spawnManager.SetAvailablePatterns(settings.availablePatterns);
             
-            spawnManager.StartSpawning();
+            // 이동 관련 설정
+            spawnManager.SetMovementSpeed(settings.baseSpeed);
+            spawnManager.SetPatternAmplitude(settings.patternAmplitude);
+            spawnManager.SetPatternFrequency(settings.patternFrequency);
+        }
+        else
+        {
+            LogError("No movement patterns defined in SpawnSettings!");
         }
     }
     #endregion

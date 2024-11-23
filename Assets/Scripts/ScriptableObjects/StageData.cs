@@ -14,6 +14,6 @@ public class StageData : ScriptableObject
         [TextArea(3, 5)]
         public string StageDescription;
     }
-
+    
     public Stage[] stages;
 }

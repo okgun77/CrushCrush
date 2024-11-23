@@ -19,20 +19,34 @@ public class IconPunchEffect : MonoBehaviour
     /// </summary>
     public void PlayEffect()
     {
-        // 이미 재생 중인 효과가 있다면 완료
-        if (currentTween != null && currentTween.IsPlaying())
+        // 이전 Tween이 있다면 Kill하고 원래 크기로 즉시 복원
+        if (currentTween != null)
         {
-            currentTween.Complete();
+            currentTween.Kill(true);  // true를 전달하여 즉시 완료 상태로 만듦
+            currentTween = null;
+            transform.localScale = Vector3.one;  // 기본 크기로 리셋
         }
 
         // 새로운 펀치 효과 시작
-        currentTween = transform
-            .DOPunchScale(Vector3.one * (punchScale - 1f), duration, vibrato, elasticity)
-            .SetEase(Ease.OutQuad);
-    }
+        if (this != null && gameObject != null && gameObject.activeInHierarchy)
+        {
+            transform.localScale = Vector3.one;  // 시작 전 크기 리셋
+            
+            // punchScale이 1.2라면 0.2만큼만 증가하도록 수정
+            Vector3 punchAmount = Vector3.one * (punchScale - 1f);
+            
+            currentTween = transform
+                .DOPunchScale(punchAmount, duration, vibrato, elasticity)
+                .SetEase(Ease.OutQuad);
+        }
+    }       
 
     private void OnDestroy()
     {
-        currentTween?.Kill();
+        if (currentTween != null)
+        {
+            currentTween.Kill(true);
+            transform.localScale = Vector3.one;
+        }
     }
-} 
+}

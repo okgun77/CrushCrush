@@ -3,8 +3,8 @@ using System.Collections;
 
 public class SpawnFadeEffect : MonoBehaviour
 {
-    [SerializeField] private float fadeDuration = 0.5f;
-    [SerializeField] private float scaleDuration = 0.4f;
+    [SerializeField] private float fadeDuration = 2.0f;
+    [SerializeField] private float scaleDuration = 2.0f;
     [SerializeField] private AnimationCurve scaleCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     
     private Renderer[] renderers;
@@ -12,17 +12,36 @@ public class SpawnFadeEffect : MonoBehaviour
     private Vector3 targetScale;
     private Coroutine fadeCoroutine;
 
+    // 스폰 시 페이드 인 효과를 적용하는 정적 메서드
+    public static GameObject SpawnWithFadeEffect(GameObject prefab, Vector3 position, Quaternion rotation, float fadeDuration = 0.5f, float scaleDuration = 0.4f)
+    {
+        GameObject spawnedObject = Instantiate(prefab, position, rotation);
+        SpawnFadeEffect fadeEffect = spawnedObject.AddComponent<SpawnFadeEffect>();
+        fadeEffect.fadeDuration = fadeDuration;
+        fadeEffect.scaleDuration = scaleDuration;
+        fadeEffect.StartEffect();
+        return spawnedObject;
+    }
+
     private void Awake()
     {
         renderers = GetComponentsInChildren<Renderer>(true);
         originalColors = new Color[renderers.Length];
         targetScale = transform.localScale;
 
-        // 원래 색상 저장
+        // 원래 색상 저장 및 머티리얼 설정
         for (int i = 0; i < renderers.Length; i++)
         {
             if (renderers[i] != null && renderers[i].material != null)
             {
+                renderers[i].material.SetFloat("_Mode", 2); // Fade 모드로 설정
+                renderers[i].material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                renderers[i].material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                renderers[i].material.SetInt("_ZWrite", 0);
+                renderers[i].material.DisableKeyword("_ALPHATEST_ON");
+                renderers[i].material.EnableKeyword("_ALPHABLEND_ON");
+                renderers[i].material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                renderers[i].material.renderQueue = 3000;
                 originalColors[i] = renderers[i].material.color;
             }
         }
@@ -117,5 +136,8 @@ public class SpawnFadeEffect : MonoBehaviour
         }
 
         fadeCoroutine = null;
+        
+        // 효과가 완료되면 컴포넌트 제거
+        Destroy(this);
     }
 }

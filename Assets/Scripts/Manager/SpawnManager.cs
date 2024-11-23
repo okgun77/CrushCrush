@@ -9,7 +9,8 @@ public class SpawnManager : MonoBehaviour
     private List<SpawnableItem> spawnableItems => spawnableItemData.items;
     
     [SerializeField] private float spawnDistance = 20f;
-    [SerializeField] private float spawnRadius = 10f;
+    [SerializeField] private float spawnWidthRatio = 0.8f; // 화면 너비의 몇 %를 사용할지
+    [SerializeField] private float spawnHeightRatio = 0.6f; // 화면 높이의 몇 %를 사용할지
     
     [Header("Spawn Interval Settings")]
     [SerializeField] private float initialSpawnInterval = 5.0f;
@@ -19,7 +20,7 @@ public class SpawnManager : MonoBehaviour
     private Transform playerTransform;
     private GameManager gameManager;
     private ObjectPoolManager poolManager;
-    private ObjectMovementManager movementManager;
+    private MovementManager movementManager;
     
     private float totalWeight;
     private float currentSpawnInterval;
@@ -33,7 +34,7 @@ public class SpawnManager : MonoBehaviour
     private bool isSpawning = false;
 
     public void Init(GameManager gameManager, ObjectPoolManager poolManager, 
-                    ObjectMovementManager movementManager, Transform playerTransform)
+                    MovementManager movementManager, Transform playerTransform)
     {
         this.gameManager = gameManager;
         this.poolManager = poolManager;
@@ -150,12 +151,13 @@ public class SpawnManager : MonoBehaviour
 
         spawnedObject.transform.position = spawnPosition;
         
-        // 스폰 효과 시작
-        var spawnEffect = spawnedObject.GetComponent<SpawnFadeEffect>();
-        if (spawnEffect != null)
+        // 스폰 효과 자동 적용
+        SpawnFadeEffect spawnEffect = spawnedObject.GetComponent<SpawnFadeEffect>();
+        if (spawnEffect == null)
         {
-            spawnEffect.StartEffect();
+            spawnEffect = spawnedObject.AddComponent<SpawnFadeEffect>();
         }
+        spawnEffect.StartEffect();
         
         spawnedObject.SetActive(true);
         activeObjects.Add(spawnedObject);
@@ -195,16 +197,42 @@ public class SpawnManager : MonoBehaviour
 
     private Vector3 CalculateSpawnPosition()
     {
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogError("Main Camera not found!");
+            return Vector3.zero;
+        }
+
+        // 스폰 중심점 계산
         Vector3 playerForward = playerTransform.forward;
         Vector3 spawnCenter = playerTransform.position + playerForward * spawnDistance;
+
+        // 카메라의 뷰포트 상의 스폰 가능 영역 계산
+        float viewportWidth = spawnWidthRatio;
+        float viewportHeight = spawnHeightRatio;
         
-        Vector3 right = Vector3.Cross(playerForward, Vector3.up).normalized;
-        Vector3 up = Vector3.Cross(right, playerForward).normalized;
+        // 랜덤한 뷰포트 좌표 생성 (-0.5 ~ 0.5 범위로 조정)
+        float randomX = Random.Range(-viewportWidth/2, viewportWidth/2);
+        float randomY = Random.Range(-viewportHeight/2, viewportHeight/2);
+
+        // 스폰 중심점에서의 뷰포트 좌표
+        Vector3 spawnCenterViewport = mainCamera.WorldToViewportPoint(spawnCenter);
         
-        float randomX = Random.Range(-spawnRadius, spawnRadius);
-        float randomY = Random.Range(-spawnRadius, spawnRadius);
+        // 랜덤 위치의 뷰포트 좌표
+        Vector3 randomViewport = new Vector3(
+            spawnCenterViewport.x + randomX,
+            spawnCenterViewport.y + randomY,
+            spawnCenterViewport.z
+        );
+
+        // 뷰포트 좌표를 월드 좌표로 변환
+        Vector3 spawnPosition = mainCamera.ViewportToWorldPoint(randomViewport);
         
-        return spawnCenter + right * randomX + up * randomY;
+        // z 좌표는 원래 스폰 거리를 유지
+        spawnPosition.z = spawnCenter.z;
+
+        return spawnPosition;
     }
 
     private MovementData GenerateMovementData()
@@ -274,9 +302,46 @@ public class SpawnManager : MonoBehaviour
 
     public void SetSpawnRadius(float radius)
     {
-        spawnRadius = radius;
+        spawnWidthRatio = radius;
+        spawnHeightRatio = radius;
     }
 
+    public void SetMaxObjectCount(int count)
+    {
+        // 최대 오브젝트 수 설정
+    }
+
+    public void SetAvailablePatterns(MovementType[] patterns)
+    {
+        currentAvailablePatterns = patterns;
+    }
+
+    public void SetMovementSpeed(float speed)
+    {
+        if (currentMovementData.Equals(default(MovementData)))
+        {
+            currentMovementData = new MovementData();
+        }
+        currentMovementData.speed = speed;
+    }
+
+    public void SetPatternAmplitude(float amplitude)
+    {
+        if (currentMovementData.Equals(default(MovementData)))
+        {
+            currentMovementData = new MovementData();
+        }
+        currentMovementData.amplitude = amplitude;
+    }
+
+    public void SetPatternFrequency(float frequency)
+    {
+        if (currentMovementData.Equals(default(MovementData)))
+        {
+            currentMovementData = new MovementData();
+        }
+        currentMovementData.frequency = frequency;
+    }
 
     public float GetCurrentSpawnInterval()
     {

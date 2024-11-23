@@ -10,9 +10,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HPManager hpManager;
     [SerializeField] private TouchManager touchManager;
     // [SerializeField] private MoveManager moveManager;
-    [SerializeField] private ObjectMovementManager movementManager;
+    [SerializeField] private MovementManager movementManager;
     [SerializeField] private AudioManager audioManager;
     [SerializeField] private StageManager stageManager;
+    [SerializeField] private DifficultyManager difficultyManager;  // 추가
+    [SerializeField] private ProgressionManager progressionManager;  // 추가
 
     private ObjectPoolManager poolManager;
     private Transform playerTransform;
@@ -21,11 +23,6 @@ public class GameManager : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 120;
-
-        if (audioManager == null)
-        {
-            audioManager = FindFirstObjectByType<AudioManager>();
-        }
 
         poolManager = ObjectPoolManager.Instance;
         Debug.Log("ObjectPoolManager created");
@@ -68,37 +65,45 @@ public class GameManager : MonoBehaviour
 
         if (movementManager == null)
         {
-            Debug.LogError("ObjectMovementManager is not assigned!");
+            Debug.LogError("MovementManager is not assigned!");
             return;
         }
 
+        // AudioManager 찾기
+        if (audioManager == null)
+        {
+            audioManager = FindAnyObjectByType<AudioManager>();
+            if (audioManager == null)
+            {
+                Debug.LogWarning("AudioManager not found in the scene.");
+            }
+        }
+
         // 1. 기본 매니저들 초기화
+        movementManager.Init(this);  // MovementManager를 먼저 초기화
+        
+        // 2. SpawnManager 초기화 (MovementManager 초기화 후)
+        if (spawnManager != null && playerTransform != null)
+        {
+            spawnManager.Init(this, poolManager, movementManager, playerTransform);
+        }
+        else
+        {
+            Debug.LogError("SpawnManager or PlayerTransform is not assigned!");
+            return;
+        }
+
+        // 3. 나머지 매니저들 초기화
         uiManager?.Init(this);
         scoreManager?.Init(this);
         slowMotionManager?.Init(this);
         hpManager?.Init(this);
         audioManager?.Init(this);
+        difficultyManager?.Init(this);
+        progressionManager?.Init(this, difficultyManager);
 
-        // 2. MovementManager 초기화
-        movementManager.Init(this);
-
-        // 3. SpawnManager 초기화 (MovementManager 이후에)
-        if (spawnManager != null)
-        {
-            Debug.Log("SpawnManager found, initializing...");
-            spawnManager.Init(this, poolManager, movementManager, playerTransform);
-        }
-
-        // 4. StageManager는 SpawnManager 초기화 후에
-        if (stageManager != null)
-        {
-            Debug.Log("Initializing StageManager...");
-            stageManager.Init(this, spawnManager);
-        }
-        else
-        {
-            Debug.LogError("StageManager is not assigned in GameManager!");
-        }
+        // 4. StageManager는 마지막에 초기화 (모든 의존성이 준비된 후)
+        stageManager?.Init(this, spawnManager);
     }
 
     public void RestartGame()
@@ -150,6 +155,8 @@ public class GameManager : MonoBehaviour
     {
         hpManager.Heal(_amount);
     }
+
+    public DifficultyManager DifficultyManager => difficultyManager;
 
     private void OnDestroy()
     {
