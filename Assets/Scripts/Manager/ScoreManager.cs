@@ -16,6 +16,7 @@ public class ScoreManager : MonoBehaviour
     private int score;
     private Dictionary<ScoreType, int> scoreTable;
     private GameManager gameManager;
+    private int consecutiveDestroys = 0;
 
     public void Init(GameManager _gameManager)
     {
@@ -75,5 +76,21 @@ public class ScoreManager : MonoBehaviour
     {
         // 거리가 가까울수록 가중치가 높아짐
         return Mathf.Clamp01(1 / _distanceToCamera);
+    }
+
+    public void IncreaseConsecutiveDestroys()
+    {
+        consecutiveDestroys++;
+        // 연속 파괴에 따른 추가 점수나 보너스 효과를 여기에 구현
+    }
+
+    public void ResetConsecutiveDestroys()
+    {
+        consecutiveDestroys = 0;
+    }
+
+    public int GetConsecutiveDestroys()
+    {
+        return consecutiveDestroys;
     }
 }

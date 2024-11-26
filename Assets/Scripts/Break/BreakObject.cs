@@ -7,17 +7,15 @@ public class BreakObject : MonoBehaviour
     private RayfireRigid rayfireRigid;
     private RayfireBomb rayfireBomb;
     private RayfireSound rayfireSound;
-    // private MoveToTargetPoint moveScript;
     private ScoreManager scoreManager;
     private TouchManager touchManager;
     private WarningManager warningManager;
-    private HPManager hpManager;
     private AudioManager audioManager;
-    private ObjectProperties objectProperties;  // ObjectProperties 참조
+    private ObjectProperties objectProperties;
     private Transform targetPoint;
     private UIManager uiManager;
 
-    private bool isWarningActive = false; // 경고 상태를 추적하기 위한 플래그
+    private bool isWarningActive = false;
 
     // 1. 캐시 추가
     private static readonly int BaseColorProperty = Shader.PropertyToID("_BaseColor");
@@ -65,16 +63,6 @@ public class BreakObject : MonoBehaviour
             Debug.LogWarning("RayfireBomb 컴포넌트가 없습니다!");
         }
 
-        // RayfireSound 컴포넌트 가져오기
-        //rayfireSound = GetComponent<RayfireSound>();
-        //if (rayfireSound == null)
-        //{
-        //    Debug.LogWarning("RayfireSound 컴포넌트가 없습니다!");
-        //}
-
-        // MoveToTargetPoint 컴포넌트 가져오기
-        // moveScript = GetComponent<MoveToTargetPoint>();
-
         // ScoreManager 컴포넌트 가져오기
         scoreManager = FindAnyObjectByType<ScoreManager>();
         if (scoreManager == null)
@@ -95,14 +83,6 @@ public class BreakObject : MonoBehaviour
         if (warningManager == null)
         {
             Debug.LogError("WarningManager를 찾을 수 없습니다!");
-            return;
-        }
-
-        // HPManager 컴포넌트 가져오기
-        hpManager = FindAnyObjectByType<HPManager>();
-        if (hpManager == null)
-        {
-            Debug.LogError("HPManager를 찾을 수 없습니다!");
             return;
         }
 
@@ -190,7 +170,7 @@ public class BreakObject : MonoBehaviour
 
             // 자신과 자식 오브젝트들의 모든 MeshFilter 찾기
             MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
-            
+
             if (meshFilters.Length == 0)
             {
                 Debug.LogWarning("No MeshFilter found in object or its children: " + gameObject.name);
@@ -218,7 +198,7 @@ public class BreakObject : MonoBehaviour
             if (targetMeshFilter != null)
             {
                 GameObject targetObject = targetMeshFilter.gameObject;
-                
+
                 // RayfireRigid 설정
                 RayfireRigid fragmentRigid;
                 if (targetObject != gameObject)
@@ -251,7 +231,7 @@ public class BreakObject : MonoBehaviour
                     {
                         InitFragment(fragment);
                         SetupMaterial(fragment);
-                        
+
                         var fragmentMovement = fragment.gameObject.AddComponent<FragmentMovement>();
                         float distanceToCamera = Vector3.Distance(fragment.transform.position, Camera.main.transform.position);
                         fragmentMovement.initialSpreadForce = Mathf.Lerp(2f, 5f, distanceToCamera / 50f);
@@ -277,7 +257,7 @@ public class BreakObject : MonoBehaviour
 
                 if (objectProperties.GetFragmentLevel() == 0)
                 {
-                    hpManager.IncreaseConsecutiveDestroys();
+                    scoreManager.IncreaseConsecutiveDestroys();
                 }
             }
         }
@@ -325,7 +305,7 @@ public class BreakObject : MonoBehaviour
                 var color = newMat.GetColor(BaseColorProperty);
                 color.a = DefaultFragmentSettings.alpha;
                 newMat.SetColor(BaseColorProperty, color);
-                
+
                 SetupTransparentMaterial(newMat);
             }
             newMaterials[i] = newMat;
@@ -351,7 +331,7 @@ public class BreakObject : MonoBehaviour
     private void InitFragment(RayfireRigid _fragment)
     {
         var fragmentGO = _fragment.gameObject;
-        
+
         // Rayfire 컴포넌트들 제거
         Destroy(_fragment);  // RayfireRigid 제거
         var bomb = fragmentGO.GetComponent<RayfireBomb>();
@@ -364,9 +344,9 @@ public class BreakObject : MonoBehaviour
         }
 
         // ObjectProperties 설정
-        var fragmentProperties = fragmentGO.GetComponent<ObjectProperties>() 
+        var fragmentProperties = fragmentGO.GetComponent<ObjectProperties>()
             ?? fragmentGO.AddComponent<ObjectProperties>();
-        
+
         SetupFragmentProperties(fragmentProperties);
 
         // Rigidbody 설정
@@ -422,7 +402,7 @@ public class BreakObject : MonoBehaviour
     private void SetupFragmentProperties(ObjectProperties fragmentProperties)
     {
         if (fragmentProperties == null || objectProperties == null) return;
-        
+
         fragmentProperties.SetFragmentLevel(objectProperties.GetFragmentLevel() + 1);
         fragmentProperties.SetScoreType(objectProperties.GetScoreType());
         fragmentProperties.SetBreakable(true);
@@ -431,7 +411,7 @@ public class BreakObject : MonoBehaviour
     private void SetupRigidbody(Rigidbody rb)
     {
         if (rb == null) return;
-        
+
         rb.useGravity = DefaultFragmentSettings.useGravity;
         rb.collisionDetectionMode = DefaultFragmentSettings.collisionMode;
         rb.interpolation = DefaultFragmentSettings.interpolation;
@@ -443,12 +423,12 @@ public class BreakObject : MonoBehaviour
         {
             // VFX 생성
             GameObject vfx = Instantiate(breakVFXPrefab, transform.position, Quaternion.identity);
-            
+
             // 카메라와의 거리에 따라 크기 조절
             float distanceToCamera = Vector3.Distance(transform.position, Camera.main.transform.position);
             float scaleFactor = Mathf.Lerp(0.5f, 1.5f, distanceToCamera / 50f); // 거리 50유닛을 기준으로 0.8~2배 크기 조절
             vfx.transform.localScale *= scaleFactor;
-            
+
             // ParticleSystem 있는 경우 자동 제거
             var particleSystem = vfx.GetComponent<ParticleSystem>();
             if (particleSystem != null)
@@ -456,7 +436,7 @@ public class BreakObject : MonoBehaviour
                 // 파티클 시스템의 크기도 조절 (필요한 경우)
                 var main = particleSystem.main;
                 main.startSizeMultiplier *= scaleFactor;
-                
+
                 float duration = main.duration;
                 Destroy(vfx, duration);
             }
@@ -466,5 +446,4 @@ public class BreakObject : MonoBehaviour
             }
         }
     }
-
 }
