@@ -1,22 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
-public enum ScoreType
-{
-    TypeA,
-    TypeB,
-    TypeC
-}
+using ScoreType = GameEnums.ScoreType;
 
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private int maxFragmentLevel = 3;
+
+    private ScoreType scoreType;
     private int score;
     private Dictionary<ScoreType, int> scoreTable;
     private GameManager gameManager;
     private int consecutiveDestroys = 0;
+
 
     public void Init(GameManager _gameManager)
     {
@@ -51,8 +48,6 @@ public class ScoreManager : MonoBehaviour
     {
         int baseScore = GetScoreForScoreType(_scoreType);
         float fragmentMultiplier = Mathf.Pow(0.5f, _fragmentLevel);
-
-        // 거리 기반 가중치 계산
         float distanceMultiplier = CalculateDistanceMultiplier(_distanceToCamera);
 
         return Mathf.CeilToInt(baseScore * fragmentMultiplier * distanceMultiplier);

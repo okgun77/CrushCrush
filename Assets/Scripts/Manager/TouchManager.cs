@@ -10,8 +10,6 @@ public class TouchManager : MonoBehaviour
     [SerializeField] private GameObject touchPointPrefab;                               // 터치 지점을 표시할 Quad 프리팹
     [SerializeField] private Vector3 touchPointScale = new Vector3(0.1f, 0.1f, 0.1f);   // 터치 포인트의 크기 설정
     [SerializeField] private float rayDistance = 100f;  // 레이캐스트가 나아갈 거리
-    [SerializeField] private AttackManager attackManager;                               // AttackManager 참조
-    // [SerializeField] private int maxTouchCheckFrames = 3;                               // 터치 체크 최대 프레임
 
     private AudioManager audioManager;
     private List<BreakObject> breakableObjects = new List<BreakObject>();   // List of BreakObject instead of BreakableObject
@@ -36,11 +34,6 @@ public class TouchManager : MonoBehaviour
             return;
         }
 
-        attackManager = FindFirstObjectByType<AttackManager>();
-        if (attackManager == null)
-        {
-            Debug.LogError("AttackManager를 찾을 수 없습니다");
-        }
 
     }
 
@@ -90,15 +83,8 @@ public class TouchManager : MonoBehaviour
                     breakObject.Initialize(objectProperties.GetScoreType(), objectProperties.GetFragmentLevel(), 2.0f); // 초기화
                 }
 
-                // DamageHandler가 없으면 추가
-                DamageHandler damageHandler = hit.collider.gameObject.GetComponent<DamageHandler>();
-                if (damageHandler == null)
-                {
-                    damageHandler = hit.collider.gameObject.AddComponent<DamageHandler>();
-                }
+                breakObject.OnTouch();
 
-                // AttackManager를 사용하여 공격 실행
-                attackManager.PerformAttack(hit.collider.gameObject);  // 타겟에 공격 수행
             }
             else
             {

@@ -32,7 +32,7 @@ public class SpawnableItemData : ScriptableObject
                             {
                                 prefab = prefab,
                                 spawnWeight = 1f,
-                                objectType = objectProperties.GetObjectType()
+                                objectType = objectProperties.ObjectType
                             });
                         }
                         else
@@ -54,7 +54,7 @@ public class SpawnableItemData : ScriptableObject
                 var objectProperties = item.prefab.GetComponent<ObjectProperties>();
                 if (objectProperties != null)
                 {
-                    item.objectType = objectProperties.GetObjectType();
+                    item.objectType = objectProperties.ObjectType;
                 }
             }
         }
@@ -100,7 +100,7 @@ public class SpawnableItem
     [Range(0f, 100f)]
     public float spawnWeight = 1f;
     [ReadOnly]
-    public ObjectTypes objectType;
+    public GameEnums.ObjectType objectType;
 }
 
 // ReadOnly 속성 구현

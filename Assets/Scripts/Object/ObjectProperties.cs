@@ -1,27 +1,23 @@
+using System;
 using UnityEngine;
-
-public enum ObjectTypes
-{
-    BASIC,          // 기본형 오브젝트
-    EXPLOSIVE,      // 폭발형 오브젝트
-    INDESTRUCTIBLE  // 파괴 불가능한 오브젝트
-}
 
 public class ObjectProperties : MonoBehaviour
 {
-    [Header("Object Type Settings")]
-    [SerializeField] private ObjectTypes objectType;  // objectTypes -> objectType으로 변경
+    
 
     [Header("Health Settings")]
-    [SerializeField] private int defaultHealth = 100;  // 기본 체력 값
-    [SerializeField] private int health;              // 현재 체력
+    [SerializeField] private int defaultHealth = 100;
+    [SerializeField] private int health;
 
     [Header("Fragment Settings")]
-    [SerializeField] private int fragmentLevel = 0;   // 파편 레벨 (0: 원본 오브젝트)
-    [SerializeField] private bool isBreakable = true; // 기본값 true로 설정
+    [SerializeField] private int fragmentLevel = 0;
+    [SerializeField] private bool isBreakable = true;
 
     [Header("Score Settings")]
-    [SerializeField] private ScoreType scoreType = ScoreType.TypeA;
+    [SerializeField] private GameEnums.ScoreType scoreType = GameEnums.ScoreType.TypeA;
+
+    private GameEnums.ObjectType objectType = GameEnums.ObjectType.BASIC;  // 기본값 설정
+
 
     private void Awake()
     {
@@ -30,17 +26,17 @@ public class ObjectProperties : MonoBehaviour
     }
 
     // Getter 메서드들
-    public ObjectTypes GetObjectType() => objectType;
+    public GameEnums.ObjectType ObjectType => objectType;
     public bool IsBreakable() => isBreakable;
     public int GetHealth() => health;
     public int GetFragmentLevel() => fragmentLevel;
-    public ScoreType GetScoreType() => scoreType;
+    public GameEnums.ScoreType GetScoreType() => scoreType;
     public int GetDefaultHealth() => defaultHealth;
 
     // Setter 메서드들
-    public void SetObjectType(ObjectTypes type) => objectType = type;
+    public void SetObjectType(GameEnums.ObjectType type) => objectType = type;
     public void SetFragmentLevel(int level) => fragmentLevel = level;
-    public void SetScoreType(ScoreType type) => scoreType = type;
+    public void SetScoreType(GameEnums.ScoreType type) => scoreType = type;
     public void SetBreakable(bool breakable) => isBreakable = breakable;
     
     // 체력 관련 메서드들
@@ -60,7 +56,7 @@ public class ObjectProperties : MonoBehaviour
         health = defaultHealth;
         fragmentLevel = 0;
         isBreakable = true;
-        scoreType = ScoreType.TypeA;
+        scoreType = GameEnums.ScoreType.TypeA;
     }
 
     // 속성 복사 메서드 추가 (프리팹 생성 시 유용)

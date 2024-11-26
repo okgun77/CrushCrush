@@ -16,6 +16,7 @@ public class BreakObject : MonoBehaviour
     private UIManager uiManager;
 
     private bool isWarningActive = false;
+    private GameEnums.ScoreType scoreType;
 
     // 1. 캐시 추가
     private static readonly int BaseColorProperty = Shader.PropertyToID("_BaseColor");
@@ -318,12 +319,12 @@ public class BreakObject : MonoBehaviour
         if (scoreManager == null)
         {
             Debug.LogError("ScoreManager를 찾을 수 없습니다! AddScore 작업을 중단합니다.");
-            // return; // scoreManager가 null 경우 작업을 중단
+            return;
         }
 
         Camera mainCamera = Camera.main;
         float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
-        int calculatedScore = scoreManager.CalculateScore(objectProperties.GetScoreType(), objectProperties.GetFragmentLevel(), distanceToCamera); // fragmentLevel과 scoreType을 ObjectProperties에서 가져옴
+        int calculatedScore = scoreManager.CalculateScore(objectProperties.GetScoreType(), objectProperties.GetFragmentLevel(), distanceToCamera);
         scoreManager.AddScore(calculatedScore);
     }
 
@@ -391,7 +392,7 @@ public class BreakObject : MonoBehaviour
     }
 
     // 가: 초기화 메서드 (파편을 동적으로 초기화할 때 사용)
-    public void Initialize(ScoreType _scoreType, int _fragmentLevel, float _speedMultiplier)
+    public void Initialize(GameEnums.ScoreType _scoreType, int _fragmentLevel, float _speedMultiplier)
     {
         // 필요한 데이터를 초기화합니다.
         objectProperties.SetScoreType(_scoreType);
@@ -446,4 +447,6 @@ public class BreakObject : MonoBehaviour
             }
         }
     }
+
+    public void SetScoreType(GameEnums.ScoreType type) => scoreType = type;
 }

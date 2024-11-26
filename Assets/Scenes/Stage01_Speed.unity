@@ -2907,7 +2907,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacfdaf9aa9198148a14c60d2d5c682e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenBoundaryRatio: 0.1
 --- !u!4 &393813231
 Transform:
   m_ObjectHideFlags: 0
@@ -4327,53 +4326,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &526951367
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 526951369}
-  - component: {fileID: 526951368}
-  m_Layer: 0
-  m_Name: HPManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &526951368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 526951367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c909f31260eb6446bf413035233cebc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHP: 100
-  consecutiveDestroyThreshold: 10
-  hpIncreaseAmount: 3
---- !u!4 &526951369
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 526951367}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &531693722
 GameObject:
   m_ObjectHideFlags: 0
@@ -6537,7 +6489,6 @@ MonoBehaviour:
     type: 3}
   touchPointScale: {x: 0.07, y: 0.07, z: 0.07}
   rayDistance: 100
-  attackManager: {fileID: 1044353431}
 --- !u!4 &889742495
 Transform:
   m_ObjectHideFlags: 0
@@ -7676,51 +7627,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1033730511}
   m_CullTransparentMesh: 0
---- !u!1 &1044353430
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1044353432}
-  - component: {fileID: 1044353431}
-  m_Layer: 0
-  m_Name: AttackManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1044353431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1044353430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b069fecb63f76a8428f2e6cbed7ea140, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackPower: 100
---- !u!4 &1044353432
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1044353430}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1050354999
 GameObject:
   m_ObjectHideFlags: 0
@@ -13875,6 +13781,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageAmount: 5
   warningDistance: 5
+  spawnManager: {fileID: 0}
+  warningManager: {fileID: 0}
 --- !u!65 &1900656685
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13940,17 +13848,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 378d4eb862edd6c48afed11560f35f45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiManager: {fileID: 1011784855}
   spawnManager: {fileID: 257279687}
+  movementManager: {fileID: 393813230}
+  uiManager: {fileID: 1011784855}
   scoreManager: {fileID: 656249330}
   slowMotionManager: {fileID: 1171024536}
-  hpManager: {fileID: 526951368}
-  touchManager: {fileID: 889742494}
-  movementManager: {fileID: 393813230}
   audioManager: {fileID: 335804406}
-  stageManager: {fileID: 579788716}
   difficultyManager: {fileID: 1170035164}
   progressionManager: {fileID: 1424828643}
+  stageManager: {fileID: 579788716}
+  touchManager: {fileID: 889742494}
 --- !u!4 &1900878041
 Transform:
   m_ObjectHideFlags: 0
@@ -15316,8 +15223,6 @@ SceneRoots:
   - {fileID: 1668917096}
   - {fileID: 1171024537}
   - {fileID: 1011784856}
-  - {fileID: 526951369}
-  - {fileID: 1044353432}
   - {fileID: 889742495}
   - {fileID: 335804407}
   - {fileID: 1900656686}

@@ -275,7 +275,7 @@ public class SpawnManager : MonoBehaviour
         };
     }
 
-    private MovementType GetMovementTypeForObject(ObjectTypes objectType)
+    private MovementType GetMovementTypeForObject(GameEnums.ObjectType objectType)
     {
         if (currentAvailablePatterns != null && currentAvailablePatterns.Length > 0)
         {
@@ -284,9 +284,9 @@ public class SpawnManager : MonoBehaviour
 
         return objectType switch
         {
-            ObjectTypes.BASIC => MovementType.Straight,
-            ObjectTypes.EXPLOSIVE => MovementType.Zigzag,
-            ObjectTypes.INDESTRUCTIBLE => MovementType.Spiral,
+            GameEnums.ObjectType.BASIC => MovementType.Straight,
+            GameEnums.ObjectType.EXPLOSIVE => MovementType.Zigzag,
+            GameEnums.ObjectType.INDESTRUCTIBLE => MovementType.Spiral,
             _ => MovementType.Straight
         };
     }
