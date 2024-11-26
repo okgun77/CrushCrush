@@ -3,18 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private UIManager uiManager;
     [SerializeField] private SpawnManager spawnManager;
+    [SerializeField] private MovementManager movementManager;
+    [SerializeField] private UIManager uiManager;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private SlowMotionManager slowMotionManager;
-    [SerializeField] private HPManager hpManager;
-    [SerializeField] private TouchManager touchManager;
-    // [SerializeField] private MoveManager moveManager;
-    [SerializeField] private MovementManager movementManager;
     [SerializeField] private AudioManager audioManager;
+    [SerializeField] private DifficultyManager difficultyManager;
+    [SerializeField] private ProgressionManager progressionManager;
     [SerializeField] private StageManager stageManager;
-    [SerializeField] private DifficultyManager difficultyManager;  // 추가
-    [SerializeField] private ProgressionManager progressionManager;  // 추가
+    [SerializeField] private TouchManager touchManager;
 
     private ObjectPoolManager poolManager;
     private Transform playerTransform;
@@ -97,7 +95,6 @@ public class GameManager : MonoBehaviour
         uiManager?.Init(this);
         scoreManager?.Init(this);
         slowMotionManager?.Init(this);
-        hpManager?.Init(this);
         audioManager?.Init(this);
         difficultyManager?.Init(this);
         progressionManager?.Init(this, difficultyManager);
@@ -127,11 +124,6 @@ public class GameManager : MonoBehaviour
         uiManager.ShowGameOverUI();
     }
 
-    public void TakeDamage(int _damage)
-    {
-        hpManager.TakeDamage(_damage);
-    }
-
     public void AddScore(int _score)
     {
         scoreManager.AddScore(_score);
@@ -146,14 +138,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // public MoveManager GetMoveManager()
-    // {
-    //     return moveManager;
-    // }
-
     public void HealPlayer(int _amount)
     {
-        hpManager.Heal(_amount);
+        // hpManager.Heal(_amount);
     }
 
     public DifficultyManager DifficultyManager => difficultyManager;
