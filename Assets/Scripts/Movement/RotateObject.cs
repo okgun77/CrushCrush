@@ -2,24 +2,42 @@ using UnityEngine;
 
 public class RotateObject : MonoBehaviour, IMovable
 {
-    [SerializeField] private Vector3 rotationSpeed = new Vector3(50, 50, 50); // 회전 속도 설정
-    private bool isPaused = false; // 일시정지 상태 플래그
+    [SerializeField] private Vector3 baseRotationSpeed = new Vector3(50, 50, 50);
+    private Vector3 currentRotationSpeed;
+    private bool isPaused = false;
+    
+    private void Start()
+    {
+        currentRotationSpeed = baseRotationSpeed;
+    }
 
     private void Update()
     {
         if (!isPaused)
         {
-            // 프레임마다 지정된 속도로 회전
-            transform.Rotate(rotationSpeed * Time.deltaTime);
+            transform.Rotate(currentRotationSpeed * Time.deltaTime);
         }
     }
 
-    public void SetRotationSpeed(Vector3 _rotationSpeed)
+    // 움직임 방향에 따른 회전 속도 조절
+    public void UpdateRotation(Vector3 movementDirection, float speedMultiplier)
     {
-        rotationSpeed = _rotationSpeed;
+        // 이동 방향과 속도에 따른 회전 계산
+        float speed = movementDirection.magnitude * speedMultiplier;
+        
+        // 이동 방향에 따른 회전축 결정
+        Vector3 rotationAxis = Vector3.Cross(Vector3.forward, movementDirection).normalized;
+        
+        // 기본 자전과 이동에 따른 회전 조합
+        currentRotationSpeed = baseRotationSpeed + (rotationAxis * speed * 50f);
     }
 
-    // 일시정지 상태 적용
+    public void SetBaseRotationSpeed(Vector3 rotationSpeed)
+    {
+        baseRotationSpeed = rotationSpeed;
+        currentRotationSpeed = baseRotationSpeed;
+    }
+
     public void SetPaused(bool _isPaused)
     {
         isPaused = _isPaused;

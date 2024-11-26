@@ -73,6 +73,14 @@ public class MovementManager : MonoBehaviour
     {
         float elapsedTime = 0f;
         Vector3 startPosition = obj.transform.position;
+        Vector3 previousPosition = obj.transform.position;
+        
+        // 회전 컴포넌트 가져오기
+        RotateObject rotator = obj.GetComponent<RotateObject>();
+        if (rotator == null)
+        {
+            rotator = obj.AddComponent<RotateObject>();
+        }
 
         while (obj != null && obj.activeInHierarchy)
         {
@@ -88,7 +96,6 @@ public class MovementManager : MonoBehaviour
             Vector3 currentDirection;
             if (directionToPlayer.magnitude < 0.001f)
             {
-                // 플레이어와 너무 가까울 경우 기본 방향 사용
                 currentDirection = Vector3.forward;
             }
             else
@@ -98,19 +105,36 @@ public class MovementManager : MonoBehaviour
 
             Vector3 newPosition = CalculatePosition(obj.transform.position, currentDirection, pattern, data, elapsedTime);
             
-            // 위치 값 유효성 검사
-            if (float.IsNaN(newPosition.x) || float.IsNaN(newPosition.y))
+            // 이동 방향 계산 및 회전 업데이트
+            Vector3 movementDirection = (newPosition - obj.transform.position).normalized;
+            if (rotator != null)
             {
-                Debug.LogWarning($"Invalid position calculated for {obj.name}. Using current position instead.");
-                newPosition = obj.transform.position;
+                rotator.UpdateRotation(movementDirection, data.speed * currentDifficulty.speedMultiplier);
             }
             
-            obj.transform.position = newPosition;
+            // 위치 값 유효성 검사
+            if (!float.IsNaN(newPosition.x) && !float.IsNaN(newPosition.y) && !float.IsNaN(newPosition.z))
+            {
+                obj.transform.position = newPosition;
+            }
+            
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         movementCoroutines.Remove(obj);
+    }
+
+    private Vector3 ClampToScreen(Vector3 position)
+    {
+        Vector3 viewportPoint = Camera.main.WorldToViewportPoint(position);
+        
+        // 화면 경계에서 약간의 여유 공간을 둡니다 (10%)
+        float padding = 0.1f;
+        viewportPoint.x = Mathf.Clamp(viewportPoint.x, padding, 1 - padding);
+        viewportPoint.y = Mathf.Clamp(viewportPoint.y, padding, 1 - padding);
+        
+        return Camera.main.ViewportToWorldPoint(viewportPoint);
     }
 
     private Vector3 CalculatePosition(Vector3 currentPos, Vector3 direction, MovementType pattern, MovementData data, float time)
@@ -119,39 +143,48 @@ public class MovementManager : MonoBehaviour
         
         // 기본 이동을 현재 위치 기준으로 계산
         Vector3 basePosition = currentPos + direction * data.speed * Time.deltaTime;
+        Vector3 finalPosition;
 
         try
         {
             switch (pattern)
             {
                 case MovementType.Straight:
-                    return basePosition;
+                    finalPosition = basePosition;
+                    break;
 
                 case MovementType.Zigzag:
                     if (data.frequency <= 0) data.frequency = 1f;
                     if (data.amplitude <= 0) data.amplitude = 1f;
                     float zigzag = Mathf.Sin(time * data.frequency) * data.amplitude;
-                    return basePosition + Vector3.right * zigzag * Time.deltaTime;
+                    finalPosition = basePosition + Vector3.right * zigzag * Time.deltaTime;
+                    break;
 
                 case MovementType.Spiral:
                     if (data.frequency <= 0) data.frequency = 1f;
                     if (data.amplitude <= 0) data.amplitude = 1f;
                     float speedVariation = Mathf.Sin(time * 0.5f) + 1f;
-                    float spiral = time * data.frequency * speedVariation * data.rotationDirection;
-                    float radiusVariation = Mathf.Sin(time * 0.3f) * 0.3f + 1f;
-                    float currentRadius = data.amplitude * data.amplitudeMultiplier * (0.2f + (time / Mathf.Max(data.duration, 1f))) * radiusVariation;
-                    float x = Mathf.Cos(spiral) * currentRadius;
-                    float y = Mathf.Sin(spiral) * currentRadius;
-                    return basePosition + new Vector3(x, y, 0) * Time.deltaTime;
+                    float spiral = Mathf.Sin(time * data.frequency) * data.amplitude;
+                    Vector3 offset = new Vector3(
+                        Mathf.Cos(time * data.frequency),
+                        Mathf.Sin(time * data.frequency),
+                        0
+                    ) * data.amplitude;
+                    finalPosition = basePosition + offset * Time.deltaTime;
+                    break;
 
                 default:
-                    return basePosition;
+                    finalPosition = basePosition;
+                    break;
             }
+
+            // 화면 경계 제한 적용
+            return ClampToScreen(finalPosition);
         }
         catch (System.Exception e)
         {
             Debug.LogError($"Error calculating position: {e.Message}");
-            return currentPos; // 오류 발생 시 현재 위치 유지
+            return currentPos;
         }
     }
 

@@ -26,6 +26,11 @@ public class SpawnSettings
     public float patternAmplitude = 1f;
     public float patternFrequency = 1f;
 
+    [Header("Rotation Settings")]
+    public Vector3 baseRotationSpeed = new Vector3(50, 50, 50);
+    public float rotationSpeedMultiplier = 1f;
+    public AnimationCurve rotationSpeedCurve;
+
     public float GetSpawnInterval(float progress)
     {
         if (spawnIntervalCurve == null) return spawnInterval;

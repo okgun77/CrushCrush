@@ -151,6 +151,19 @@ public class SpawnManager : MonoBehaviour
 
         spawnedObject.transform.position = spawnPosition;
         
+        // 회전 컴포넌트 설정
+        RotateObject rotator = spawnedObject.GetComponent<RotateObject>();
+        if (rotator == null)
+        {
+            rotator = spawnedObject.AddComponent<RotateObject>();
+        }
+        
+        // 현재 스폰 설정에서 회전 속도 가져오기
+        if (currentMovementData.baseRotationSpeed != Vector3.zero)
+        {
+            rotator.SetBaseRotationSpeed(currentMovementData.baseRotationSpeed);
+        }
+        
         // 스폰 효과 자동 적용
         SpawnFadeEffect spawnEffect = spawnedObject.GetComponent<SpawnFadeEffect>();
         if (spawnEffect == null)
@@ -237,6 +250,7 @@ public class SpawnManager : MonoBehaviour
 
     private MovementData GenerateMovementData()
     {
+        // 구조체의 필드 값들을 확인하여 초기화 여부를 판단
         if (currentMovementData.speed != 0 || 
             currentMovementData.amplitude != 0 || 
             currentMovementData.frequency != 0 || 
@@ -250,7 +264,14 @@ public class SpawnManager : MonoBehaviour
             speed = Random.Range(5f, 10f),
             amplitude = Random.Range(1f, 3f),
             frequency = Random.Range(1f, 3f),
-            duration = Random.Range(5f, 10f)
+            duration = Random.Range(5f, 10f),
+            rotationDirection = 1,
+            speedMultiplier = 1f,
+            amplitudeMultiplier = 1f,
+            // 회전 관련 설정 초기화
+            baseRotationSpeed = new Vector3(50f, 50f, 50f),
+            rotationSpeedMultiplier = 1f,
+            useMovementBasedRotation = true
         };
     }
 
