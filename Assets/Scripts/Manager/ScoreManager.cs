@@ -1,31 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using ScoreType = GameEnums.ScoreType;
 
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private int maxFragmentLevel = 3;
-
-    private ScoreType scoreType;
+    private TextMeshProUGUI scoreText;
+    private int maxFragmentLevel = 3;
     private int score;
-    private Dictionary<ScoreType, int> scoreTable;
+    private Dictionary<EScoreType, int> scoreTable;
     private GameManager gameManager;
     private int consecutiveDestroys = 0;
-
 
     public void Init(GameManager _gameManager)
     {
         gameManager = _gameManager;
         score = 0;
+        scoreText = GetComponent<TextMeshProUGUI>();
         UpdateScoreUI();
 
-        scoreTable = new Dictionary<ScoreType, int>
+        scoreTable = new Dictionary<EScoreType, int>
         {
-            { ScoreType.TypeA, 10 },
-            { ScoreType.TypeB, 20 },
-            { ScoreType.TypeC, 30 }
+            { EScoreType.TYPE_A, 10 },
+            { EScoreType.TYPE_B, 20 },
+            { EScoreType.TYPE_C, 30 }
         };
     }
 
@@ -35,7 +32,7 @@ public class ScoreManager : MonoBehaviour
         UpdateScoreUI();
     }
 
-    public int GetScoreForScoreType(ScoreType _scoreType)
+    public int GetScoreForScoreType(EScoreType _scoreType)
     {
         if (scoreTable.TryGetValue(_scoreType, out int value))
         {
@@ -44,7 +41,7 @@ public class ScoreManager : MonoBehaviour
         return 0;
     }
 
-    public int CalculateScore(ScoreType _scoreType, int _fragmentLevel, float _distanceToCamera)
+    public int CalculateScore(EScoreType _scoreType, int _fragmentLevel, float _distanceToCamera)
     {
         int baseScore = GetScoreForScoreType(_scoreType);
         float fragmentMultiplier = Mathf.Pow(0.5f, _fragmentLevel);
@@ -66,10 +63,8 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    // 거리 기반 가중치 계산 함수
     private float CalculateDistanceMultiplier(float _distanceToCamera)
     {
-        // 거리가 가까울수록 가중치가 높아짐
         return Mathf.Clamp01(1 / _distanceToCamera);
     }
 

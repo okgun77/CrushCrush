@@ -14,9 +14,10 @@ public class ObjectProperties : MonoBehaviour
     [SerializeField] private bool isBreakable = true;
 
     [Header("Score Settings")]
-    [SerializeField] private GameEnums.ScoreType scoreType = GameEnums.ScoreType.TypeA;
+    
+    private EScoreType scoreType = EScoreType.TYPE_A;
 
-    private GameEnums.ObjectType objectType = GameEnums.ObjectType.BASIC;  // 기본값 설정
+    private EObjectType objectType = EObjectType.BASIC;  // 기본값 설정
 
 
     private void Awake()
@@ -26,17 +27,17 @@ public class ObjectProperties : MonoBehaviour
     }
 
     // Getter 메서드들
-    public GameEnums.ObjectType ObjectType => objectType;
+    public EObjectType ObjectType => objectType;
     public bool IsBreakable() => isBreakable;
     public int GetHealth() => health;
     public int GetFragmentLevel() => fragmentLevel;
-    public GameEnums.ScoreType GetScoreType() => scoreType;
+    public EScoreType GetScoreType() => scoreType;
     public int GetDefaultHealth() => defaultHealth;
 
     // Setter 메서드들
-    public void SetObjectType(GameEnums.ObjectType type) => objectType = type;
+    public void SetObjectType(EObjectType type) => objectType = type;
     public void SetFragmentLevel(int level) => fragmentLevel = level;
-    public void SetScoreType(GameEnums.ScoreType type) => scoreType = type;
+    public void SetScoreType(EScoreType type) => scoreType = type;
     public void SetBreakable(bool breakable) => isBreakable = breakable;
     
     // 체력 관련 메서드들
@@ -56,7 +57,7 @@ public class ObjectProperties : MonoBehaviour
         health = defaultHealth;
         fragmentLevel = 0;
         isBreakable = true;
-        scoreType = GameEnums.ScoreType.TypeA;
+        scoreType = EScoreType.TYPE_A;
     }
 
     // 속성 복사 메서드 추가 (프리팹 생성 시 유용)

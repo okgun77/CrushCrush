@@ -16,7 +16,7 @@ public class BreakObject : MonoBehaviour
     private UIManager uiManager;
 
     private bool isWarningActive = false;
-    private GameEnums.ScoreType scoreType;
+    private EScoreType scoreType;
 
     // 1. 캐시 추가
     private static readonly int BaseColorProperty = Shader.PropertyToID("_BaseColor");
@@ -392,7 +392,7 @@ public class BreakObject : MonoBehaviour
     }
 
     // 가: 초기화 메서드 (파편을 동적으로 초기화할 때 사용)
-    public void Initialize(GameEnums.ScoreType _scoreType, int _fragmentLevel, float _speedMultiplier)
+    public void Initialize(EScoreType _scoreType, int _fragmentLevel, float _speedMultiplier)
     {
         // 필요한 데이터를 초기화합니다.
         objectProperties.SetScoreType(_scoreType);
@@ -448,5 +448,5 @@ public class BreakObject : MonoBehaviour
         }
     }
 
-    public void SetScoreType(GameEnums.ScoreType type) => scoreType = type;
+    public void SetScoreType(EScoreType type) => scoreType = type;
 }

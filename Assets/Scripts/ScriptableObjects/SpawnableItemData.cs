@@ -100,7 +100,7 @@ public class SpawnableItem
     [Range(0f, 100f)]
     public float spawnWeight = 1f;
     [ReadOnly]
-    public GameEnums.ObjectType objectType;
+    public EObjectType objectType;
 }
 
 // ReadOnly 속성 구현
