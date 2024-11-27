@@ -4940,8 +4940,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4b96a68c6f540749ae94e0a3bfd0ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 1146321044}
-  maxFragmentLevel: 3
 --- !u!4 &656249331
 Transform:
   m_ObjectHideFlags: 0
@@ -5353,6 +5351,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 746779990}
+  - component: {fileID: 746779992}
+  - component: {fileID: 746779991}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5379,6 +5379,33 @@ Transform:
   - {fileID: 1389365135}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &746779991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 746779989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5408cba695110143a4354811a02d55f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackSystem: {fileID: 746779992}
+--- !u!114 &746779992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 746779989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8145fbe01236a734ca034f416f052fab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseDamage: 10
+  attackSpeed: 1
 --- !u!1 &747129354
 GameObject:
   m_ObjectHideFlags: 0
@@ -12023,6 +12050,51 @@ Transform:
   - {fileID: 1162319359}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -40, y: 0, z: 0}
+--- !u!1 &1627795385
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1627795387}
+  - component: {fileID: 1627795386}
+  m_Layer: 0
+  m_Name: CombatManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1627795386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627795385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff54c2d31f1f9f459c86dae44d253eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAttack: {fileID: 746779991}
+--- !u!4 &1627795387
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627795385}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1635413059
 GameObject:
   m_ObjectHideFlags: 0
@@ -13779,10 +13851,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12ffd2878a43c5048ad488aca0c8d64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 5
-  warningDistance: 5
-  spawnManager: {fileID: 0}
-  warningManager: {fileID: 0}
 --- !u!65 &1900656685
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15229,3 +15297,4 @@ SceneRoots:
   - {fileID: 1561928351}
   - {fileID: 1424265925}
   - {fileID: 1773276897}
+  - {fileID: 1627795387}

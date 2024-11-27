@@ -14,6 +14,10 @@ public class ObjectProperties : MonoBehaviour
     [SerializeField] private bool isBreakable = true;
 
     [Header("Score Settings")]
+
+    [Header("Enemy Settings")]
+    [SerializeField] private EnemyData enemyData;  // ScriptableObject 참조
+    [SerializeField] private EObjectType enemyType;
     
     private EScoreType scoreType = EScoreType.TYPE_A;
 
@@ -23,6 +27,13 @@ public class ObjectProperties : MonoBehaviour
     private void Awake()
     {
         // 초기 체력 설정
+        health = defaultHealth;
+
+
+        if (enemyData != null)
+        {
+            defaultHealth = enemyData.GetBaseHealth(enemyType);
+        }
         health = defaultHealth;
     }
 
