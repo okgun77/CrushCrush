@@ -639,12 +639,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eebccaa5dc92a54aa3f6a9ef3167b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectType: 0
-  defaultHealth: 100
-  health: 100
+  defaultHealth: 200
+  health: 200
   fragmentLevel: 3
   isBreakable: 1
-  scoreType: 0
 --- !u!114 &5919328263061289923
 MonoBehaviour:
   m_ObjectHideFlags: 0
