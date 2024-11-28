@@ -14,6 +14,8 @@ public class BreakObject : MonoBehaviour
     private ObjectProperties objectProperties;
     private Transform targetPoint;
     private UIManager uiManager;
+    private EffectManager effectManager;
+
 
     private bool isWarningActive = false;
     private EScoreType scoreType;
@@ -119,15 +121,23 @@ public class BreakObject : MonoBehaviour
             return;
         }
 
-        // VFX 프리팹 로드
-        if (breakVFXPrefab == null)
+        effectManager = FindAnyObjectByType<EffectManager>();
+        if (effectManager == null)
         {
-            breakVFXPrefab = Resources.Load<GameObject>("VFX/BreakVFX");
-            if (breakVFXPrefab == null)
-            {
-                Debug.LogError("BreakVFX prefab not found in Resources folder!");
-            }
+            Debug.LogError("EffectManager를 찾을 수 없습니다!");
+            return;
         }
+
+
+        // VFX 프리팹 로드
+        // if (breakVFXPrefab == null)
+        // {
+        //     breakVFXPrefab = Resources.Load<GameObject>("VFX/BreakVFX");
+        //     if (breakVFXPrefab == null)
+        //     {
+        //         Debug.LogError("BreakVFX prefab not found in Resources folder!");
+        //     }
+        // }
     }
 
     private void OnDestroy()
@@ -164,7 +174,9 @@ public class BreakObject : MonoBehaviour
         if (rayfireRigid != null)
         {
             // 파괴 이펙트 생성 (파괴 로직 전에 실행)
-            SpawnBreakVFX();
+            // SpawnBreakVFX();
+            effectManager.PlayEffect(EEffectType.BREAK, transform.position);
+
 
             GameObject originalObject = null;
             MeshFilter targetMeshFilter = null;

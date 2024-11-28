@@ -61,3 +61,13 @@ public enum EUIState
     GAME_OVER,
     LENGTH
 } 
+
+public enum EEffectType
+{
+    NONE = -1,
+    BREAK,      // 부수기
+    EXPLOSION,  // 폭발
+    HIT,        // 피격
+    SPAWN,      // 생성
+    LENGTH
+}
