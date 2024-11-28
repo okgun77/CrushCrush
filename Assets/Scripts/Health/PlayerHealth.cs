@@ -1,37 +1,67 @@
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour, IDamageable
+public class PlayerHealth : HealthSystem, IDamageable
 {
-    [SerializeField] private HealthSystem healthSystem;
+    [SerializeField] private float maxHealth = 100f;
+    private UIManager uiManager;
 
-    private void Awake()
+    private void Start()
     {
-        // HealthSystem이 없다면 추가
-        if (healthSystem == null)
+        SetMaxHealth(maxHealth);
+        
+        // UIManager 찾기
+        uiManager = FindAnyObjectByType<UIManager>();
+        if (uiManager == null)
         {
-            healthSystem = gameObject.AddComponent<HealthSystem>();
+            Debug.LogWarning("UIManager not found!");
         }
     }
 
-    public void TakeDamage(float _damage)
+    public override void TakeDamage(float _damage)
     {
-        healthSystem.TakeDamage(_damage);
+        base.TakeDamage(_damage);
+        Debug.Log($"Player took damage: {_damage}, Current Health: {GetHealthPercent() * 100}%");
 
-        if (healthSystem.IsDead())
+        // UI 업데이트
+        if (uiManager != null)
+        {
+            uiManager.OnDamageTaken();
+        }
+
+        if (IsDead())
         {
             OnPlayerDeath();
         }
     }
 
-    public bool IsAlive()
-    {
-        return !healthSystem.IsDead();
-    }
-
     private void OnPlayerDeath()
     {
-        // 플레이어 사망 처리
         Debug.Log("Player Dead!!");
-        // GameManager에게 게임오버 알림등 추가 구현
+        
+        // UI에 게임오버 표시
+        if (uiManager != null)
+        {
+            uiManager.ShowGameOverUI();
+        }
     }
+
+    public void Heal(float _amount)
+    {
+        base.Heal(_amount);
+        
+        // UI 업데이트
+        if (uiManager != null)
+        {
+            uiManager.OnHeal();
+        }
+    }
+
+    public bool IsAlive()
+    {
+        return !IsDead();
+    }
+
+    public float GetMaxHealth() => maxHealth;
+    public float GetCurrentHealthPercent() => GetHealthPercent();
+    public float GetCurrentHealth() => currentHealth;
 }

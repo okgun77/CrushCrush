@@ -23,6 +23,8 @@ public class ObjectProperties : MonoBehaviour
 
     private EObjectType objectType = EObjectType.BASIC;  // 기본값 설정
 
+    [Header("Attack Settings")]
+    [SerializeField] private float attackDamage = 10f;
 
     private void Awake()
     {
@@ -33,6 +35,7 @@ public class ObjectProperties : MonoBehaviour
         if (enemyData != null)
         {
             defaultHealth = enemyData.GetBaseHealth(enemyType);
+            attackDamage = enemyData.GetAttackDamage(enemyType);
         }
         health = defaultHealth;
     }
@@ -44,12 +47,14 @@ public class ObjectProperties : MonoBehaviour
     public int GetFragmentLevel() => fragmentLevel;
     public EScoreType GetScoreType() => scoreType;
     public int GetDefaultHealth() => defaultHealth;
+    public float GetAttackDamage() => attackDamage;
 
     // Setter 메서드들
     public void SetObjectType(EObjectType type) => objectType = type;
     public void SetFragmentLevel(int level) => fragmentLevel = level;
     public void SetScoreType(EScoreType type) => scoreType = type;
     public void SetBreakable(bool breakable) => isBreakable = breakable;
+    public void SetAttackDamage(float damage) => attackDamage = damage;
     
     // 체력 관련 메서드들
     public void ReduceHealth(int damage)
@@ -82,5 +87,6 @@ public class ObjectProperties : MonoBehaviour
         fragmentLevel = other.fragmentLevel;
         isBreakable = other.isBreakable;
         scoreType = other.scoreType;
+        attackDamage = other.attackDamage;
     }
 }

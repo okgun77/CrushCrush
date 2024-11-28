@@ -16,3 +16,4 @@ MonoBehaviour:
   - enemyType: 0
     baseHealth: 100
     scoreValue: 1
+    attackDamage: 10

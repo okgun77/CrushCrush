@@ -5,6 +5,7 @@ using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("UI Elements")]
     [SerializeField] private GameObject slowMotionPanel;
     [SerializeField] private TextMeshProUGUI timeScaleText;
     [SerializeField] private TextMeshProUGUI scoreText;
@@ -13,29 +14,36 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Image fillImage;
     [SerializeField] private GameObject damagePanel;
-    [SerializeField] private RectTransform fragmentTargetIcon; // UI 아이콘 참조 추가
+    [SerializeField] private RectTransform fragmentTargetIcon;
 
+    [Header("Visual Effects")]
     [SerializeField] private Color damageBlinkColor = Color.red;
     [SerializeField] private Color healBlinkColor = Color.green;
     [SerializeField] private float blinkDuration = 1f;
     [SerializeField] private int blinkCount = 3;
-    private GameManager gameManager;
 
+    private GameManager gameManager;
+    private PlayerHealth playerHealth;
     private Coroutine blinkCoroutine;
     private Coroutine damagePanelCoroutine;
-    private int blinkRequests = 0; // 깜빡임 요청 수
+    private int blinkRequests = 0;
 
     public void Init(GameManager _gameManager)
     {
         gameManager = _gameManager;
-        if (hpSlider != null)
+        
+        // PlayerHealth 찾기
+        playerHealth = FindAnyObjectByType<PlayerHealth>();
+        if (playerHealth != null && hpSlider != null)
         {
-            hpSlider.maxValue = 100;
-            hpSlider.value = 100;
+            hpSlider.maxValue = playerHealth.GetMaxHealth();
+            hpSlider.value = playerHealth.GetMaxHealth();
             hpSlider.interactable = false;
+            UpdateHPUI(true);
         }
     }
 
+    #region Panel Controls
     public void ShowSlowMotionPanel()
     {
         if (slowMotionPanel != null)
@@ -52,6 +60,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ShowGameOverUI()
+    {
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+        }
+    }
+    #endregion
+
+    #region UI Updates
     public void UpdateTimeScaleText(float _timeScale)
     {
         if (timeScaleText != null)
@@ -68,49 +86,49 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateHPUI(int _currentHP, int _maxHP, bool _immediate = false)
+    public void UpdateHPUI(bool _immediate = false)
     {
+        if (playerHealth == null) return;
+
+        float currentHealth = playerHealth.GetCurrentHealth();
+        float maxHealth = playerHealth.GetMaxHealth();
+
         if (hpText != null)
         {
-            hpText.text = $"HP: {_currentHP}";
+            hpText.text = $"HP: {currentHealth:F0}/{maxHealth:F0}";
         }
+
         if (hpSlider != null)
         {
             if (_immediate)
             {
-                hpSlider.value = _currentHP;
+                hpSlider.value = currentHealth;
             }
             else
             {
-                StartCoroutine(SmoothSliderChange(hpSlider, hpSlider.value, _currentHP, 0.5f));
+                StartCoroutine(SmoothSliderChange(hpSlider, hpSlider.value, currentHealth, 0.5f));
             }
         }
     }
+    #endregion
 
-    public void ShowGameOverUI()
+    #region Visual Effects
+    public void OnDamageTaken()
     {
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.SetActive(true);
-        }
+        UpdateHPUI();
+        BlinkHPSlider(damageBlinkColor);
+        BlinkDamagePanel();
     }
 
-    private IEnumerator SmoothSliderChange(Slider _slider, float _fromValue, float _toValue, float _duration)
+    public void OnHeal()
     {
-        float elapsed = 0f;
-        while (elapsed < _duration)
-        {
-            _slider.value = Mathf.Lerp(_fromValue, _toValue, elapsed / _duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        _slider.value = _toValue;
+        UpdateHPUI();
+        BlinkHPSlider(healBlinkColor);
     }
 
     public void BlinkHPSlider(Color _blinkColor)
     {
-        blinkRequests++; // 새로운 깜빡임 요청 추가
-
+        blinkRequests++;
         if (blinkCoroutine == null)
         {
             blinkCoroutine = StartCoroutine(BlinkCoroutine(_blinkColor, blinkDuration, blinkCount));
@@ -124,13 +142,27 @@ public class UIManager : MonoBehaviour
             damagePanelCoroutine = StartCoroutine(DamagePanelCoroutine(damageBlinkColor, blinkDuration, blinkCount));
         }
     }
+    #endregion
+
+    #region Coroutines
+    private IEnumerator SmoothSliderChange(Slider _slider, float _fromValue, float _toValue, float _duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < _duration)
+        {
+            _slider.value = Mathf.Lerp(_fromValue, _toValue, elapsed / _duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        _slider.value = _toValue;
+    }
 
     private IEnumerator BlinkCoroutine(Color _blinkColor, float _duration, int _blinkCount)
     {
         Color originalColor = fillImage.color;
         float halfDuration = _duration / (_blinkCount * 2);
 
-        for (int i = 0; i < _blinkCount * blinkRequests; i++) // 누적된 요청 수만큼 깜빡임
+        for (int i = 0; i < _blinkCount * blinkRequests; i++)
         {
             fillImage.color = _blinkColor;
             yield return new WaitForSeconds(halfDuration);
@@ -138,8 +170,8 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(halfDuration);
         }
 
-        blinkRequests = 0; // 요청 수 초기화
-        blinkCoroutine = null; // 코루틴 초기화
+        blinkRequests = 0;
+        blinkCoroutine = null;
     }
 
     private IEnumerator DamagePanelCoroutine(Color _blinkColor, float _duration, int _blinkCount)
@@ -151,7 +183,7 @@ public class UIManager : MonoBehaviour
         Image panelImage = damagePanel.GetComponent<Image>();
         if (panelImage == null) yield break;
 
-        for (int i = 0; i < _blinkCount; i++) // 지정된 횟수만큼 깜빡임
+        for (int i = 0; i < _blinkCount; i++)
         {
             panelImage.color = _blinkColor;
             yield return new WaitForSeconds(halfDuration);
@@ -160,21 +192,10 @@ public class UIManager : MonoBehaviour
         }
 
         damagePanel.SetActive(false);
-        damagePanelCoroutine = null; // 코루틴 초기화
+        damagePanelCoroutine = null;
     }
+    #endregion
 
-    public void OnDamageTaken()
-    {
-        BlinkHPSlider(damageBlinkColor);
-        BlinkDamagePanel();
-    }
-
-    public void OnHeal()
-    {
-        BlinkHPSlider(healBlinkColor);
-    }
-
-    // UI 아이콘의 RectTransform을 반환하는 메서드
     public RectTransform GetFragmentTargetIcon()
     {
         return fragmentTargetIcon;

@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
-    [SerializeField] private float maxHealth;
+    protected float currentHealth;
+    protected float maxHealth;
 
-    private float currentHealth;
-
-    private void Awake()
+    protected virtual void Awake()
     {
         currentHealth = maxHealth;
     }
 
-    public void TakeDamage(float _damage)
+    public virtual void TakeDamage(float _damage)
     {
         currentHealth = Mathf.Max(0, currentHealth - _damage);
+        Debug.Log($"HealthSystem - Taking Damage: {_damage}, Current Health: {currentHealth}");
     }
 
     public void Heal(float _amount)
@@ -31,10 +31,9 @@ public class HealthSystem : MonoBehaviour
         return currentHealth / maxHealth;
     }
 
-    public void SetMaxHealth(float _maxHealth)
+    public virtual void SetMaxHealth(float _maxHealth)
     {
         maxHealth = _maxHealth;
         currentHealth = maxHealth;
     }
-
 }
