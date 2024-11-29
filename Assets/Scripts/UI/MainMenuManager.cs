@@ -27,7 +27,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnStartButtonClicked()
     {
-        SceneManager.LoadScene("Stage01_Aurora");
+        SceneManager.LoadScene("Stage01_Speed");
     }
 
     private void OnOptionButtonClicked()

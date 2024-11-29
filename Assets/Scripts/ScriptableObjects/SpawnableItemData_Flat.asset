@@ -13,16 +13,7 @@ MonoBehaviour:
   m_Name: SpawnableItemData_Flat
   m_EditorClassIdentifier: 
   items:
-  - prefab: {fileID: 8931991890887077613, guid: d5f97b9a99969924b9b3faf22e7470e6,
-      type: 3}
-    spawnWeight: 1
-    objectType: 0
-  - prefab: {fileID: 7733834080667110801, guid: a6577043422d26944b306c842210bf62,
-      type: 3}
-    spawnWeight: 1
-    objectType: 0
-  - prefab: {fileID: 2688384769230613616, guid: b07bc85bb6c7615429a4df04216fa389,
-      type: 3}
+  - prefab: {fileID: 1000010619989362, guid: f9ff6fbd79564874f9a85bdbace0ab31, type: 3}
     spawnWeight: 1
     objectType: 0
   draggedPrefabs: []
