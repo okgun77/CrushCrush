@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 546891559348904050}
   - component: {fileID: 5919328263061289923}
   m_Layer: 6
-  m_Name: ball-beach_ed
+  m_Name: ball-beach_2
   m_TagString: BreakableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
