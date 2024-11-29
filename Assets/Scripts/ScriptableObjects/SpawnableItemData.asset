@@ -16,4 +16,81 @@ MonoBehaviour:
   - prefab: {fileID: 1000010619989362, guid: f0eab53ae2c976d47acc52143490423a, type: 3}
     spawnWeight: 1
     objectType: 0
+  - prefab: {fileID: 1342534575175866, guid: 75c33665db8b89341abf96081d7e6cd3, type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 8298032839690743210, guid: 0f0aa30fbd3cc414c97b897efea89c02,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 7692126009351804123, guid: 403c07fe06054d54db2ada31d3a1a57a,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 5219155158520868895, guid: c5068fd696881ce498d30ca1260d389d,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 8515545433315260158, guid: 12a73d3f4c950ee4b8f6af3628a43575,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 19709336277231693, guid: 45584427cc61c7843ba57b331bb25e1c, type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 1000010171710194, guid: ac2ca6ebed858cc42b0357c9446ede71, type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 2249724334349086868, guid: 536435420d26f6244bed64659089ea93,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 5454694744021496138, guid: b6d498a6931245945990cea6375c69fd,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 4982104264264128687, guid: 1f09f93712ec4d04e84db4124f076e44,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 1000011872215508, guid: 568bd657a3e9912428012375a2322701, type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 1000010456809442, guid: d313718bccba8804e967d5ee33315a1a, type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 6323407276188773432, guid: ffaaa3fbbef33ed4c95353d27804279b,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 8786425554820189424, guid: 5ac4ba31f759cff45ae14064a026a17d,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 5747883216531614416, guid: 4b4822d275480644b9c7ddfa27367e1e,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 8546097872917928589, guid: 161d8803d43bf074884ddcab9cf5afeb,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 8914076820894133640, guid: e9dd02f94cd4b8a448e3d67eeeba8fa5,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 1644375453210114, guid: af787d684af7e344aa42e4eab22c2054, type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 3407457183884081005, guid: 16d358adb15cdf24aaf82a47f116ecd8,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 3667165656394162692, guid: 89028ef45a4a4f84c8538b7cc9435a7f,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 1000010894558518, guid: 2fc2beb5acfb43f44a46a1f9ee4b3924, type: 3}
+    spawnWeight: 1
+    objectType: 0
   draggedPrefabs: []

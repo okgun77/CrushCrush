@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c3e47595b6c2994b895a09242e24b05, type: 3}
+  m_Name: SpawnableItemData_Flat
+  m_EditorClassIdentifier: 
+  items:
+  - prefab: {fileID: 8931991890887077613, guid: d5f97b9a99969924b9b3faf22e7470e6,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 7733834080667110801, guid: a6577043422d26944b306c842210bf62,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  - prefab: {fileID: 2688384769230613616, guid: b07bc85bb6c7615429a4df04216fa389,
+      type: 3}
+    spawnWeight: 1
+    objectType: 0
+  draggedPrefabs: []
