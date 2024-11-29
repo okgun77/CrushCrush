@@ -1,15 +1,20 @@
 using UnityEngine;
 
-public class PlayerHealth : HealthSystem, IDamageable
+public class PlayerHealth : MonoBehaviour, IDamageable
 {
     [SerializeField] private float maxHealth = 100f;
     private UIManager uiManager;
+    private HealthSystem healthSystem;
+
+    private void Awake()
+    {
+        healthSystem = new HealthSystem();
+    }
 
     private void Start()
     {
-        SetMaxHealth(maxHealth);
+        healthSystem.SetMaxHealth(maxHealth);
         
-        // UIManager 찾기
         uiManager = FindAnyObjectByType<UIManager>();
         if (uiManager == null)
         {
@@ -17,18 +22,17 @@ public class PlayerHealth : HealthSystem, IDamageable
         }
     }
 
-    public override void TakeDamage(float _damage)
+    public void TakeDamage(float _damage)
     {
-        base.TakeDamage(_damage);
-        Debug.Log($"Player took damage: {_damage}, Current Health: {GetHealthPercent() * 100}%");
+        healthSystem.TakeDamage(_damage);
+        Debug.Log($"Player took damage: {_damage}, Current Health: {healthSystem.GetCurrentHealthPercent() * 100}%");
 
-        // UI 업데이트
         if (uiManager != null)
         {
             uiManager.OnDamageTaken();
         }
 
-        if (IsDead())
+        if (healthSystem.IsDead())
         {
             OnPlayerDeath();
         }
@@ -38,7 +42,6 @@ public class PlayerHealth : HealthSystem, IDamageable
     {
         Debug.Log("Player Dead!!");
         
-        // UI에 게임오버 표시
         if (uiManager != null)
         {
             uiManager.ShowGameOverUI();
@@ -47,21 +50,16 @@ public class PlayerHealth : HealthSystem, IDamageable
 
     public void Heal(float _amount)
     {
-        base.Heal(_amount);
+        healthSystem.Heal(_amount);
         
-        // UI 업데이트
         if (uiManager != null)
         {
             uiManager.OnHeal();
         }
     }
 
-    public bool IsAlive()
-    {
-        return !IsDead();
-    }
-
+    public bool IsAlive() => !healthSystem.IsDead();
     public float GetMaxHealth() => maxHealth;
-    public float GetCurrentHealthPercent() => GetHealthPercent();
-    public float GetCurrentHealth() => currentHealth;
+    public float GetCurrentHealthPercent() => healthSystem.GetCurrentHealthPercent();
+    public float GetCurrentHealth() => healthSystem.GetCurrentHealth();
 }

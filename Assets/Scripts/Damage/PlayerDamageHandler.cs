@@ -44,7 +44,10 @@ public class PlayerDamageHandler : MonoBehaviour
                     float damage = properties.GetAttackDamage();
                     Debug.Log($"Applying damage to player: {damage}");
                     playerHealth.TakeDamage(damage);
-                    Debug.Log($"Player health after damage: {playerHealth.GetHealthPercent() * 100}%");
+                    Debug.Log($"Player health after damage: {playerHealth.GetCurrentHealthPercent() * 100}%");
+                    
+                    // 오브젝트 풀에 반환
+                    ObjectPoolManager.Instance.ReturnObject(obj);
                 }
             }
         }

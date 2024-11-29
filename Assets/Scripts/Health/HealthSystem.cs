@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class HealthSystem : MonoBehaviour
+public class HealthSystem
 {
     protected float currentHealth;
     protected float maxHealth;
 
-    protected virtual void Awake()
+    public HealthSystem()
     {
         currentHealth = maxHealth;
     }
@@ -26,9 +26,14 @@ public class HealthSystem : MonoBehaviour
         return currentHealth <= 0;
     }
 
-    public float GetHealthPercent()
+    public float GetCurrentHealthPercent()
     {
         return currentHealth / maxHealth;
+    }
+
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
     }
 
     public virtual void SetMaxHealth(float _maxHealth)

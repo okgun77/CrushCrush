@@ -7,7 +7,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        healthSystem = gameObject.AddComponent<HealthSystem>();
+        healthSystem = new HealthSystem();
         objectProperties = GetComponent<ObjectProperties>();
         
         // ObjectProperties의 체력 값을 HealthSystem에 적용
@@ -41,9 +41,6 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void OnDestroy()
     {
-        if (healthSystem != null)
-        {
-            Destroy(healthSystem);
-        }
+        healthSystem = null;
     }
 }
