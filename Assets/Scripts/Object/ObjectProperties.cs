@@ -19,7 +19,7 @@ public class ObjectProperties : MonoBehaviour
     [SerializeField] private EnemyData enemyData;  // ScriptableObject 참조
     [SerializeField] private EObjectType enemyType;
     
-    private EScoreType scoreType = EScoreType.TYPE_A;
+    private EScoreType scoreType = EScoreType.NORMAL;
 
     private EObjectType objectType = EObjectType.BASIC;  // 기본값 설정
 
@@ -73,7 +73,7 @@ public class ObjectProperties : MonoBehaviour
         health = defaultHealth;
         fragmentLevel = 0;
         isBreakable = true;
-        scoreType = EScoreType.TYPE_A;
+        scoreType = EScoreType.NORMAL;
     }
 
     // 속성 복사 메서드 추가 (프리팹 생성 시 유용)

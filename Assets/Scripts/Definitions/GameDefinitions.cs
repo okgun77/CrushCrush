@@ -14,9 +14,9 @@ public enum EObjectType
 public enum EScoreType 
 { 
     NONE = -1,
-    TYPE_A,
-    TYPE_B,
-    TYPE_C,
+    NORMAL,
+    BOSS_1,
+    BOSS_2,
     LENGTH 
 }
 

@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
     private Coroutine blinkCoroutine;
     private Coroutine damagePanelCoroutine;
     private int blinkRequests = 0;
+    private ScoreManager scoreManager;
 
     public void Init(GameManager _gameManager)
     {
@@ -40,6 +41,24 @@ public class UIManager : MonoBehaviour
             hpSlider.value = playerHealth.GetMaxHealth();
             hpSlider.interactable = false;
             UpdateHPUI(true);
+        }
+
+        // ScoreManager 찾고 이벤트 구독
+        scoreManager = FindAnyObjectByType<ScoreManager>();
+        if (scoreManager != null)
+        {
+            scoreManager.OnScoreChanged += UpdateScoreText;
+            // 초기 점수 표시
+            UpdateScoreText(scoreManager.GetScore());
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // 이벤트 구독 해제
+        if (scoreManager != null)
+        {
+            scoreManager.OnScoreChanged -= UpdateScoreText;
         }
     }
 
@@ -82,7 +101,7 @@ public class UIManager : MonoBehaviour
     {
         if (scoreText != null)
         {
-            scoreText.text = $"Score: {_score}";
+            scoreText.text = $"Score: {_score:N0}";
         }
     }
 

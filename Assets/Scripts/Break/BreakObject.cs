@@ -328,16 +328,25 @@ public class BreakObject : MonoBehaviour
 
     private void AddScore()
     {
-        if (scoreManager == null)
-        {
-            Debug.LogError("ScoreManager를 찾을 수 없습니다! AddScore 작업을 중단합니다.");
-            return;
-        }
+        if (scoreManager == null || objectProperties == null) return;
 
-        Camera mainCamera = Camera.main;
-        float distanceToCamera = Vector3.Distance(transform.position, mainCamera.transform.position);
-        int calculatedScore = scoreManager.CalculateScore(objectProperties.GetScoreType(), objectProperties.GetFragmentLevel(), distanceToCamera);
+        // 카메라와의 거리 계산
+        float distanceToCamera = Vector3.Distance(transform.position, Camera.main.transform.position);
+        
+        // 점수 계산 및 추가
+        int calculatedScore = scoreManager.CalculateScore(
+            objectProperties.GetScoreType(),
+            objectProperties.GetFragmentLevel(),
+            distanceToCamera
+        );
+        
         scoreManager.AddScore(calculatedScore);
+        
+        // 연속 파괴 카운트 증가 (프래그먼트가 아닌 경우에만)
+        if (objectProperties.GetFragmentLevel() == 0)
+        {
+            scoreManager.IncreaseConsecutiveDestroys();
+        }
     }
 
     // 5. 파편 초기화 최적화
