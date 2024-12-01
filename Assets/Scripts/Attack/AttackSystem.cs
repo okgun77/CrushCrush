@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
 {
-    [SerializeField] private float attackDamage = 10f;
+    [SerializeField] private float baseDamage = 10f;
+    [SerializeField] private float damageVariance = 0.3f;
+    [SerializeField] private float minDamageMultiplier = 0.7f;
     [SerializeField] private float attackCooldown = 0.1f;
     private float lastAttackTime;
     private AudioManager audioManager;
@@ -26,6 +28,13 @@ public class AttackSystem : MonoBehaviour
         random = new System.Random();
     }
 
+    private float CalculateDamage()
+    {
+        float minDamage = baseDamage * minDamageMultiplier;
+        float maxDamage = baseDamage * (1f + damageVariance);
+        return Random.Range(minDamage, maxDamage);
+    }
+
     public void Attack(IDamageable target)
     {
         if (target == null) return;
@@ -33,7 +42,8 @@ public class AttackSystem : MonoBehaviour
         float currentTime = Time.time;
         if (currentTime >= lastAttackTime + attackCooldown)
         {
-            Debug.Log($"Attacking target with damage: {attackDamage}");
+            float finalDamage = CalculateDamage();
+            Debug.Log($"Attacking target with damage: {finalDamage}");
             
             Vector3 targetPosition = (target as MonoBehaviour)?.transform.position ?? Vector3.zero;
             var targetTransform = (target as MonoBehaviour)?.transform;
@@ -43,31 +53,26 @@ public class AttackSystem : MonoBehaviour
             {
                 float currentHealth = objProps.GetHealth();
 
-                if (currentHealth <= attackDamage)
+                if (currentHealth <= finalDamage)
                 {
-                    // Break 랜덤 이펙트 재생
                     effectManager.PlayRandomEffect(EEffectType.BREAK, targetPosition, 0.5f, targetTransform);
                 }
                 else
                 {
-                    // Hit 랜덤 사운드 재생
                     int randomSound = random.Next(1, 11);
                     audioManager.PlaySFX($"Hit_{randomSound:D2}");
-                    
-                    // Hit 랜덤 이펙트 재생
                     effectManager.PlayRandomEffect(EEffectType.HIT, targetPosition, 0.5f, targetTransform);
                 }
             }
 
-            // 데미지 텍스트 생성
             if (damageTextPrefab != null)
             {
-                Vector3 textPosition = targetPosition + Vector3.up * 1f; // 타겟 위치보다 1유닛 위에 생성
+                Vector3 textPosition = targetPosition + Vector3.up * 1f;
                 GameObject damageTextObj = Instantiate(damageTextPrefab, textPosition, Quaternion.identity);
-                damageTextObj.GetComponent<DamageText>()?.Setup(attackDamage);
+                damageTextObj.GetComponent<DamageText>()?.Setup(finalDamage);
             }
 
-            target.TakeDamage(attackDamage);
+            target.TakeDamage(finalDamage);
             lastAttackTime = currentTime;
         }
         else
@@ -83,12 +88,22 @@ public class AttackSystem : MonoBehaviour
 
     public void SetAttackDamage(float damage)
     {
-        attackDamage = damage;
+        baseDamage = damage;
     }
 
     public void SetAttackCooldown(float cooldown)
     {
         attackCooldown = cooldown;
+    }
+
+    public void SetDamageVariance(float variance)
+    {
+        damageVariance = Mathf.Clamp(variance, 0f, 1f);
+    }
+
+    public void SetMinDamageMultiplier(float multiplier)
+    {
+        minDamageMultiplier = Mathf.Clamp(multiplier, 0f, 1f);
     }
 }
 

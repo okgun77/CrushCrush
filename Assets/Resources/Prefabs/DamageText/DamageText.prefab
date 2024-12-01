@@ -130,8 +130,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6
-  m_fontSizeBase: 6
+  m_fontSize: 5
+  m_fontSizeBase: 5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -193,3 +193,12 @@ MonoBehaviour:
   floatSpeed: 1
   fadeSpeed: 1
   destroyTime: 1
+  spreadRange: 0.5
+  bounceStrength: 0.3
+  minFontSize: 5
+  maxFontSize: 8
+  lowDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  mediumDamageColor: {r: 1, g: 0.8, b: 0.2, a: 1}
+  highDamageColor: {r: 1, g: 0.2, b: 0.2, a: 1}
+  mediumDamageThreshold: 20
+  highDamageThreshold: 50
