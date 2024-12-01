@@ -19290,9 +19290,67 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectList:
   - type: 0
-    prefab: {fileID: 2433282508537954060, guid: dc71021d4f24bb942bf08297d0c06ffb,
+    prefab: {fileID: 6649054028638981966, guid: 6bf4d6016b189c24999c7b11cb871985,
       type: 3}
-    poolSize: 100
+    poolSize: 3
+  - type: 0
+    prefab: {fileID: 3157370685969289855, guid: 6e6fe2cf0741b4f4a8d91434ad45211e,
+      type: 3}
+    poolSize: 3
+  - type: 0
+    prefab: {fileID: 4893767420844493718, guid: d3fe4316f4ed86a45b427ac4d163546b,
+      type: 3}
+    poolSize: 3
+  - type: 0
+    prefab: {fileID: 725748389856807714, guid: 1634276e4c1eb9743ab3292d1ffd1ae1, type: 3}
+    poolSize: 3
+  - type: 0
+    prefab: {fileID: 745864697251991867, guid: 6701078bbf298f14c9a6095486410653, type: 3}
+    poolSize: 3
+  - type: 0
+    prefab: {fileID: 8194992990867289339, guid: 23dc1f2e900a3f44d844e01a49da4116,
+      type: 3}
+    poolSize: 3
+  - type: 2
+    prefab: {fileID: 4021103657954561961, guid: f01a462bbd67a2b409f330c0487f53e8,
+      type: 3}
+    poolSize: 5
+  - type: 2
+    prefab: {fileID: 3308840082544497919, guid: 8d908e01e7a17d145a45bab88074166d,
+      type: 3}
+    poolSize: 5
+  - type: 2
+    prefab: {fileID: 6131278079450256903, guid: c71f3466c4b1d224e900238d89d02c5f,
+      type: 3}
+    poolSize: 5
+  - type: 2
+    prefab: {fileID: 2427786012956944610, guid: 0229099df40f0124785fcf38ac7e9cef,
+      type: 3}
+    poolSize: 5
+  - type: 2
+    prefab: {fileID: 9127653965126434405, guid: bf1f1f01c19ae6c4e80d6964c9195349,
+      type: 3}
+    poolSize: 5
+  - type: 2
+    prefab: {fileID: 5880797563127281583, guid: 8c23ba2f04ab2744094c895a780b072a,
+      type: 3}
+    poolSize: 5
+  - type: 2
+    prefab: {fileID: 8748687995501502678, guid: a7a4488d16bc51e428a1e77228bf67bd,
+      type: 3}
+    poolSize: 5
+  - type: 2
+    prefab: {fileID: 6213619859274339249, guid: 625fa4b0114bcc54983a56ca9b030aee,
+      type: 3}
+    poolSize: 5
+  - type: 2
+    prefab: {fileID: 1034935213373066521, guid: d8042be8dd20f8443a152f0aafabc003,
+      type: 3}
+    poolSize: 5
+  - type: 2
+    prefab: {fileID: 8827428901206200476, guid: 274a03f6409ba594cb5b57550ddf3934,
+      type: 3}
+    poolSize: 5
 --- !u!1 &1206816253
 GameObject:
   m_ObjectHideFlags: 0

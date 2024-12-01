@@ -6,6 +6,7 @@ public class AttackSystem : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.1f;
     private float lastAttackTime;
     private AudioManager audioManager;
+    private EffectManager effectManager;
     private System.Random random;
 
     private void Awake()
@@ -15,6 +16,11 @@ public class AttackSystem : MonoBehaviour
         if (audioManager == null)
         {
             Debug.LogError("AudioManager를 찾을 수 없습니다!");
+        }
+        effectManager = FindFirstObjectByType<EffectManager>();
+        if (effectManager == null)
+        {
+            Debug.LogError("EffectManager를 찾을 수 없습니다!");
         }
         random = new System.Random();
     }
@@ -32,10 +38,22 @@ public class AttackSystem : MonoBehaviour
             if (objProps != null)
             {
                 float currentHealth = objProps.GetHealth();
-                if (currentHealth > attackDamage)
+                Vector3 targetPosition = (target as MonoBehaviour)?.transform.position ?? Vector3.zero;
+                var targetTransform = (target as MonoBehaviour)?.transform;
+
+                if (currentHealth <= attackDamage)
                 {
+                    // Break 랜덤 이펙트 재생
+                    effectManager.PlayRandomEffect(EEffectType.BREAK, targetPosition, 0.5f, targetTransform);
+                }
+                else
+                {
+                    // Hit 랜덤 사운드 재생
                     int randomSound = random.Next(1, 11);
                     audioManager.PlaySFX($"Hit_{randomSound:D2}");
+                    
+                    // Hit 랜덤 이펙트 재생
+                    effectManager.PlayRandomEffect(EEffectType.HIT, targetPosition, 0.5f, targetTransform);
                 }
             }
 
