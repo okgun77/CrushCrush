@@ -2,29 +2,45 @@ using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
 {
-    [SerializeField] private float baseDamage = 10f;
-    [SerializeField] private float attackSpeed = 1f;
-
+    [SerializeField] private float attackDamage = 10f;
+    [SerializeField] private float attackCooldown = 0.1f;
     private float lastAttackTime;
 
-    public float GetDamage()
+    private void Awake()
     {
-        return baseDamage;
+        lastAttackTime = -attackCooldown;
+    }
+
+    public void Attack(IDamageable target)
+    {
+        if (target == null) return;
+
+        float currentTime = Time.time;
+        if (currentTime >= lastAttackTime + attackCooldown)
+        {
+            Debug.Log($"Attacking target with damage: {attackDamage}");
+            target.TakeDamage(attackDamage);
+            lastAttackTime = currentTime;
+        }
+        else
+        {
+            Debug.Log($"Cannot attack. Time remaining: {(lastAttackTime + attackCooldown) - currentTime}");
+        }
     }
 
     public bool CanAttack()
     {
-        return Time.time >= lastAttackTime + (1f / attackSpeed);
+        return Time.time >= lastAttackTime + attackCooldown;
     }
 
-    public void Attack(IDamageable _target)
+    public void SetAttackDamage(float damage)
     {
-        if (CanAttack() && _target != null)
-        {
-            _target.TakeDamage(GetDamage());
-            lastAttackTime = Time.time;
-        }
+        attackDamage = damage;
     }
 
-
+    public void SetAttackCooldown(float cooldown)
+    {
+        attackCooldown = cooldown;
+    }
 }
+

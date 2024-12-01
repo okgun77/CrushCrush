@@ -157,7 +157,16 @@ public class BreakObject : MonoBehaviour
 
     public void OnTouch()
     {
-        Break();
+        Debug.Log("BreakObject.OnTouch called");
+        if (rayfireRigid != null)
+        {
+            Debug.Log("Starting object destruction process");
+            HandleObjectDestruction();
+        }
+        else
+        {
+            Debug.LogError("RayfireRigid component is missing!");
+        }
     }
 
     // 파괴 처리를 수행하는 함수

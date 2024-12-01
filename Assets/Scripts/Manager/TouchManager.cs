@@ -10,6 +10,7 @@ public class TouchManager : MonoBehaviour
     [SerializeField] private GameObject touchPointPrefab;                               // 터치 지점을 표시할 Quad 프리팹
     [SerializeField] private Vector3 touchPointScale = new Vector3(0.1f, 0.1f, 0.1f);   // 터치 포인트의 크기 설정
     [SerializeField] private float rayDistance = 100f;  // 레이캐스트가 나아갈 거리
+    
 
     private AudioManager audioManager;
     private List<BreakObject> breakableObjects = new List<BreakObject>();   // List of BreakObject instead of BreakableObject
@@ -19,6 +20,8 @@ public class TouchManager : MonoBehaviour
     private bool isTouchDetected = false;
     private Vector3 lastInputPosition;
     private int currentTouchCheckFrame = 0;
+
+    private CombatManager combatManager;
 
     //public void Init(GameManager _gameManager)
     //{
@@ -34,7 +37,11 @@ public class TouchManager : MonoBehaviour
             return;
         }
 
-
+        combatManager = FindAnyObjectByType<CombatManager>();
+        if (combatManager == null)
+        {
+            Debug.LogWarning("CombatManager를 찾을 수 없습니다!");
+        }
     }
 
     private void Update()
@@ -56,51 +63,52 @@ public class TouchManager : MonoBehaviour
     private void DoRay(Vector3 _position)
     {
         audioManager.PlaySFX("Wpn_Laser_01");
-
         LogMessage($"pointer detected at position: {_position}");
-        // 카메라의 위치에서 레이 발사
+        
         Ray ray = Camera.main.ScreenPointToRay(_position);
         RaycastHit hit;
 
-        // 레이가 지정한 거리에 있는 오브젝트와 충돌했을 때
         if (Physics.Raycast(ray, out hit, rayDistance))
         {
             Debug.Log("부딪힌 물체 : " + hit.collider.gameObject.name);
 
-            // 충돌한 오브젝트에 ObjectProperties가 있는지 확인
+            // 충돌한 오브젝트에서 IDamageable과 ObjectProperties 모두 확인
+            IDamageable target = hit.collider.gameObject.GetComponent<IDamageable>();
             ObjectProperties objectProperties = hit.collider.gameObject.GetComponent<ObjectProperties>();
 
-            // ObjectProperties가 있고, IsBreakable이 true이면 BreakObject를 추가
-            if (objectProperties != null && objectProperties.IsBreakable())
+            if (target != null && objectProperties != null && objectProperties.IsBreakable())
             {
-                Debug.Log("Object is breakable!");
-
-                // BreakObject 컴포넌트를 동적으로 추가 (이미 추가되어 있지 않으면)
-                BreakObject breakObject = hit.collider.gameObject.GetComponent<BreakObject>();
-                if (breakObject == null)
+                // CombatManager를 통해 공격 처리
+                if (combatManager != null)
                 {
-                    breakObject = hit.collider.gameObject.AddComponent<BreakObject>();
-                    breakObject.Initialize(objectProperties.GetScoreType(), objectProperties.GetFragmentLevel(), 2.0f); // 초기화
+                    combatManager.ProcessTouchAttack(target);
                 }
-
-                breakObject.OnTouch();
-
+                else
+                {
+                    Debug.LogWarning("CombatManager is not assigned!");
+                    // CombatManager가 없는 경우 기존 로직으로 처리
+                    var breakObject = hit.collider.gameObject.GetComponent<BreakObject>();
+                    if (breakObject == null)
+                    {
+                        breakObject = hit.collider.gameObject.AddComponent<BreakObject>();
+                        breakObject.Initialize(objectProperties.GetScoreType(), 
+                                            objectProperties.GetFragmentLevel(), 
+                                            2.0f);
+                    }
+                    breakObject.OnTouch();
+                }
             }
             else
             {
-                Debug.Log("Object is not breakable or doesn't have ObjectProperties.");
+                Debug.Log("Object is not breakable or doesn't have required components.");
             }
 
-            // 레이가 부딪힌 위치까지의 선을 그린다
-            Debug.DrawLine(ray.origin, hit.point, Color.red, 1f); // 1초 동안 빨간색 선 표시
+            Debug.DrawLine(ray.origin, hit.point, Color.red, 1f);
         }
         else
         {
-            // 레이가 부딪힌 것이 없을 경우 최대 거리까지 선을 그린다
-            Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.red, 1f); // 1초 동안 빨간색 선 표시
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * rayDistance, Color.red, 1f);
         }
-
-        // ShowTouchPoint(_position);
     }
 
 

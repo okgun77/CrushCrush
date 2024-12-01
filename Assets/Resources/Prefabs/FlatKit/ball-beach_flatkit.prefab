@@ -638,8 +638,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eebccaa5dc92a54aa3f6a9ef3167b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultHealth: 200
-  health: 200
+  defaultHealth: 20
+  health: 20
   fragmentLevel: 3
   isBreakable: 1
   enemyData: {fileID: 11400000, guid: e113f5501c73068489b57b7d07fefe06, type: 2}
