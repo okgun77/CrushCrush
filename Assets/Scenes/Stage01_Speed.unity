@@ -15241,8 +15241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8145fbe01236a734ca034f416f052fab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 10
-  attackSpeed: 0.1
+  attackDamage: 10
+  attackCooldown: 0.1
 --- !u!114 &746779993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28035,6 +28035,26 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: f011af444ccf89d4a9da7df949b328d2, type: 3}
   - name: BreakingBones02-Mono
     clip: {fileID: 8300000, guid: 77a34ff1a609be64eb5dac179569ab5d, type: 3}
+  - name: Hit_01
+    clip: {fileID: 8300000, guid: 4c6dfef208fff4f44ac8d8721caba21e, type: 3}
+  - name: Hit_02
+    clip: {fileID: 8300000, guid: 43b9504714ca455479ba685aa5fe3495, type: 3}
+  - name: Hit_03
+    clip: {fileID: 8300000, guid: fe2a79be3e73ad949be71c5865ee7c67, type: 3}
+  - name: Hit_04
+    clip: {fileID: 8300000, guid: 45072588b9bad1f43aa2cf5b0ae7a1a2, type: 3}
+  - name: Hit_05
+    clip: {fileID: 8300000, guid: d65912aaf04636746b42d1ef2a612636, type: 3}
+  - name: Hit_06
+    clip: {fileID: 8300000, guid: 4af1bad471afdc4468c204965ccb5e43, type: 3}
+  - name: Hit_07
+    clip: {fileID: 8300000, guid: ddfe4970f6080dd43bac94bf9fda69dd, type: 3}
+  - name: Hit_08
+    clip: {fileID: 8300000, guid: 3334901c1009d1448b270f21634a82e6, type: 3}
+  - name: Hit_09
+    clip: {fileID: 8300000, guid: 26ae3a2257051304aa53965abacc5edf, type: 3}
+  - name: Hit_10
+    clip: {fileID: 8300000, guid: 97f9b037239f2d34f95515204e0559a0, type: 3}
   sfxSource: {fileID: 0}
 --- !u!4 &1711222206
 Transform:
