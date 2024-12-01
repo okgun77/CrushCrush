@@ -8,6 +8,7 @@ public class AttackSystem : MonoBehaviour
     private AudioManager audioManager;
     private EffectManager effectManager;
     private System.Random random;
+    [SerializeField] private GameObject damageTextPrefab;
 
     private void Awake()
     {
@@ -34,12 +35,13 @@ public class AttackSystem : MonoBehaviour
         {
             Debug.Log($"Attacking target with damage: {attackDamage}");
             
+            Vector3 targetPosition = (target as MonoBehaviour)?.transform.position ?? Vector3.zero;
+            var targetTransform = (target as MonoBehaviour)?.transform;
+            
             var objProps = (target as MonoBehaviour)?.GetComponent<ObjectProperties>();
             if (objProps != null)
             {
                 float currentHealth = objProps.GetHealth();
-                Vector3 targetPosition = (target as MonoBehaviour)?.transform.position ?? Vector3.zero;
-                var targetTransform = (target as MonoBehaviour)?.transform;
 
                 if (currentHealth <= attackDamage)
                 {
@@ -55,6 +57,14 @@ public class AttackSystem : MonoBehaviour
                     // Hit 랜덤 이펙트 재생
                     effectManager.PlayRandomEffect(EEffectType.HIT, targetPosition, 0.5f, targetTransform);
                 }
+            }
+
+            // 데미지 텍스트 생성
+            if (damageTextPrefab != null)
+            {
+                Vector3 textPosition = targetPosition + Vector3.up * 1f; // 타겟 위치보다 1유닛 위에 생성
+                GameObject damageTextObj = Instantiate(damageTextPrefab, textPosition, Quaternion.identity);
+                damageTextObj.GetComponent<DamageText>()?.Setup(attackDamage);
             }
 
             target.TakeDamage(attackDamage);

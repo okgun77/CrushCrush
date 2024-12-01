@@ -15243,6 +15243,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackDamage: 10
   attackCooldown: 0.1
+  damageTextPrefab: {fileID: 6456163395746996808, guid: 2afbe60478c10cc41ba165795d59880c,
+    type: 3}
 --- !u!114 &746779993
 MonoBehaviour:
   m_ObjectHideFlags: 0
