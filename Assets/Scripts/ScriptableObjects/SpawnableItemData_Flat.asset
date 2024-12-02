@@ -73,9 +73,6 @@ MonoBehaviour:
       type: 3}
     spawnWeight: 1
     objectType: 0
-  - prefab: {fileID: 1285125316066528, guid: bde6cdc2e995ef9489a9cf2926fb415b, type: 3}
-    spawnWeight: 1
-    objectType: 0
   - prefab: {fileID: 1266287516719372, guid: ffa0c58d872dc83469fc5d7462e06382, type: 3}
     spawnWeight: 1
     objectType: 0

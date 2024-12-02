@@ -33,7 +33,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       availablePatterns: 00000000
-      baseSpeed: 1
+      baseSpeed: 2
       maxSpeedMultiplier: 0.5
       speedCurve:
         serializedVersion: 2
@@ -45,8 +45,8 @@ MonoBehaviour:
       - 1
       patternAmplitude: 0.5
       patternFrequency: 0.5
-      baseRotationSpeed: {x: 5, y: 5, z: 5}
-      rotationSpeedMultiplier: 0.1
+      baseRotationSpeed: {x: 1, y: 1, z: 1}
+      rotationSpeedMultiplier: 1
       rotationSpeedCurve:
         serializedVersion: 2
         m_Curve: []
@@ -63,10 +63,10 @@ MonoBehaviour:
         spawnWeight: 10
       phaseDescription: 
     conditions:
-    - conditionName: Destroy 10 Objects
+    - conditionName: Destroy 30 Objects
       type: 1
-      targetValue: 10
-      isSatisfied: 1
+      targetValue: 30
+      isSatisfied: 0
     duration: 6000
     stageDescription: 
   - stageName: Phase 2

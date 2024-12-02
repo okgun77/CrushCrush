@@ -114,7 +114,7 @@ public class UIManager : MonoBehaviour
 
         if (hpText != null)
         {
-            hpText.text = $"HP: {currentHealth:F0}/{maxHealth:F0}";
+            hpText.text = $"{currentHealth:F0}/{maxHealth:F0}";
         }
 
         if (hpSlider != null)
