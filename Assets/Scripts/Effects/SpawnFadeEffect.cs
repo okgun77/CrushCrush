@@ -34,15 +34,33 @@ public class SpawnFadeEffect : MonoBehaviour
         {
             if (renderers[i] != null && renderers[i].material != null)
             {
-                renderers[i].material.SetFloat("_Mode", 2); // Fade 모드로 설정
-                renderers[i].material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                renderers[i].material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                renderers[i].material.SetInt("_ZWrite", 0);
-                renderers[i].material.DisableKeyword("_ALPHATEST_ON");
-                renderers[i].material.EnableKeyword("_ALPHABLEND_ON");
-                renderers[i].material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                renderers[i].material.renderQueue = 3000;
-                originalColors[i] = renderers[i].material.color;
+                Material mat = renderers[i].material;
+                
+                // 홀로그램 셰이더인지 확인
+                if (mat.shader.name.Contains("Hologram"))
+                {
+                    // 홀로그램 셰이더의 경우 다른 처리
+                    continue;
+                }
+
+                // 일반 셰이더의 경우
+                mat.SetFloat("_Mode", 2); // Fade 모드로 설정
+                mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                mat.SetInt("_ZWrite", 0);
+                mat.DisableKeyword("_ALPHATEST_ON");
+                mat.EnableKeyword("_ALPHABLEND_ON");
+                mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                mat.renderQueue = 3000;
+                
+                if (mat.HasProperty("_Color"))
+                {
+                    originalColors[i] = mat.color;
+                }
+                else
+                {
+                    originalColors[i] = Color.clear; // 변경하지 않도록 Color.clear 사용
+                }
             }
         }
     }
@@ -107,9 +125,12 @@ public class SpawnFadeEffect : MonoBehaviour
                 {
                     if (renderers[i] != null && renderers[i].material != null)
                     {
-                        Color newColor = originalColors[i];
-                        newColor.a = alpha;
-                        renderers[i].material.color = newColor;
+                        if (originalColors[i] != Color.clear) // Color.clear가 아닌 경우에만 변경
+                        {
+                            Color newColor = originalColors[i];
+                            newColor.a = alpha;
+                            renderers[i].material.color = newColor;
+                        }
                     }
                 }
             }
@@ -131,7 +152,10 @@ public class SpawnFadeEffect : MonoBehaviour
         {
             if (renderers[i] != null && renderers[i].material != null)
             {
-                renderers[i].material.color = originalColors[i];
+                if (originalColors[i] != Color.clear) // Color.clear가 아닌 경우에만 복원
+                {
+                    renderers[i].material.color = originalColors[i];
+                }
             }
         }
 
