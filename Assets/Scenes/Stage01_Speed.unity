@@ -15242,8 +15242,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseDamage: 10
-  damageVariance: 0.3
-  minDamageMultiplier: 0.7
+  damageVariance: 0.5
+  minDamageMultiplier: 0.2
   attackCooldown: 0.1
   damageTextPrefab: {fileID: 6456163395746996808, guid: 2afbe60478c10cc41ba165795d59880c,
     type: 3}
