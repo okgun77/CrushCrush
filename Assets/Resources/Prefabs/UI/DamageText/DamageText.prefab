@@ -189,16 +189,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b126318f208170943ad4406f0b0ae7cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageText: {fileID: 702823912105101977}
+  damageText: {fileID: 702823912105101977, guid: 435f818e2151e934b83b00e5e4c3acf2,
+    type: 3}
   floatSpeed: 1
   fadeSpeed: 1
   destroyTime: 1
   spreadRange: 0.5
   bounceStrength: 0.3
-  minFontSize: 5
-  maxFontSize: 8
-  lowDamageColor: {r: 0.44705883, g: 1, b: 0.5019608, a: 1}
-  mediumDamageColor: {r: 0.20784314, g: 0.2, b: 1, a: 1}
-  highDamageColor: {r: 1, g: 0.2, b: 0.26666668, a: 1}
+  minFontSize: 8
+  maxFontSize: 12
+  lowDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  mediumDamageColor: {r: 1, g: 0.8, b: 0.2, a: 1}
+  highDamageColor: {r: 1, g: 0.2, b: 0.2, a: 1}
   mediumDamageThreshold: 20
   highDamageThreshold: 50
