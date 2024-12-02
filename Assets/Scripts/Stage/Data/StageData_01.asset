@@ -15,7 +15,7 @@ MonoBehaviour:
   stages:
   - stageName: Phase 1
     spawnSettings:
-      spawnInterval: 1
+      spawnInterval: 2
       minimumSpawnInterval: 0.5
       spawnIntervalCurve:
         serializedVersion: 2
@@ -23,7 +23,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      maxObjectCount: 4
+      maxObjectCount: 2
       minSpawnCount: 1
       maxSpawnCount: 3
       spawnCountCurve:
@@ -32,8 +32,8 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      availablePatterns: 000000000100000002000000
-      baseSpeed: 3
+      availablePatterns: 00000000
+      baseSpeed: 2
       maxSpeedMultiplier: 2
       speedCurve:
         serializedVersion: 2
@@ -43,11 +43,9 @@ MonoBehaviour:
         m_RotationOrder: 4
       patternWeights:
       - 1
-      - 0.5
-      - 0.3
       patternAmplitude: 1
       patternFrequency: 1
-      baseRotationSpeed: {x: 30, y: 30, z: 30}
+      baseRotationSpeed: {x: 20, y: 20, z: 20}
       rotationSpeedMultiplier: 0.3
       rotationSpeedCurve:
         serializedVersion: 2
@@ -56,15 +54,15 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
     conditions:
-    - conditionName: Destroy 100 Objects
+    - conditionName: Destroy 10 Objects
       type: 1
-      targetValue: 100
+      targetValue: 10
       isSatisfied: 0
     duration: 6000
     StageDescription: 
   - stageName: Phase 2
     spawnSettings:
-      spawnInterval: 1
+      spawnInterval: 1.5
       minimumSpawnInterval: 0.5
       spawnIntervalCurve:
         serializedVersion: 2
@@ -72,7 +70,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      maxObjectCount: 0
+      maxObjectCount: 3
       minSpawnCount: 1
       maxSpawnCount: 3
       spawnCountCurve:
@@ -81,8 +79,8 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      availablePatterns: 02000000
-      baseSpeed: 5
+      availablePatterns: 0200000001000000
+      baseSpeed: 2
       maxSpeedMultiplier: 2
       speedCurve:
         serializedVersion: 2
@@ -93,7 +91,6 @@ MonoBehaviour:
       patternWeights:
       - 1
       - 0.5
-      - 0.3
       patternAmplitude: 1
       patternFrequency: 1
       baseRotationSpeed: {x: 50, y: 50, z: 50}
@@ -109,5 +106,5 @@ MonoBehaviour:
       type: 1
       targetValue: 10
       isSatisfied: 0
-    duration: 60
+    duration: 600
     StageDescription: 

@@ -4,8 +4,8 @@ using UnityEngine;
 public class ObjectProperties : MonoBehaviour, IDamageable
 {
     [Header("Health Settings")]
-    [SerializeField] private int defaultHealth = 100;
     [SerializeField] private int health;
+    private int? customHealth = null;
 
     [Header("Fragment Settings")]
     [SerializeField] private int fragmentLevel = 0;
@@ -16,7 +16,7 @@ public class ObjectProperties : MonoBehaviour, IDamageable
 
     [Header("Enemy Settings")]
     [SerializeField] private EnemyData enemyData;
-    [SerializeField] private EObjectType enemyType;
+    [SerializeField] private EObjectType enemyType = EObjectType.BASIC;
     private EObjectType objectType = EObjectType.BASIC;
 
     [Header("Attack Settings")]
@@ -24,12 +24,32 @@ public class ObjectProperties : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        if (enemyData != null)
+        InitializeHealth();
+    }
+
+    private void OnEnable()
+    {
+        InitializeHealth();
+    }
+
+    private void InitializeHealth()
+    {
+        if (customHealth.HasValue)
         {
-            defaultHealth = enemyData.GetBaseHealth(enemyType);
-            attackDamage = enemyData.GetAttackDamage(enemyType);
+            health = customHealth.Value;
+            Debug.Log($"[ObjectProperties] Using custom health: {health}");
+            return;
         }
-        health = defaultHealth;
+
+        if (enemyData == null)
+        {
+            health = 100;
+            Debug.Log($"[ObjectProperties] Using default health: {health}");
+            return;
+        }
+
+        health = enemyData.GetBaseHealth(enemyType);
+        Debug.Log($"[ObjectProperties] Using enemyData health for type {enemyType}: {health}");
     }
 
     // Getter 메서드들
@@ -38,7 +58,7 @@ public class ObjectProperties : MonoBehaviour, IDamageable
     public int GetHealth() => health;
     public int GetFragmentLevel() => fragmentLevel;
     public EScoreType GetScoreType() => scoreType;
-    public int GetDefaultHealth() => defaultHealth;
+    public int GetDefaultHealth() => health;
     public float GetAttackDamage() => attackDamage;
 
     // Setter 메서드들
@@ -47,18 +67,19 @@ public class ObjectProperties : MonoBehaviour, IDamageable
     public void SetScoreType(EScoreType type) => scoreType = type;
     public void SetBreakable(bool breakable) => isBreakable = breakable;
     public void SetAttackDamage(float damage) => attackDamage = damage;
-    public void SetHealth(int value) => health = value;
+    public void SetHealth(int value)
+    {
+        customHealth = value;
+        health = value;
+        Debug.Log($"[ObjectProperties] Health set to: {health}");
+    }
 
     // 속성 초기화
     public void ResetProperties()
     {
-        if (enemyData != null)
-        {
-            defaultHealth = enemyData.GetBaseHealth(enemyType);
-            attackDamage = enemyData.GetAttackDamage(enemyType);
-        }
+        customHealth = null;
+        InitializeHealth();
         
-        health = defaultHealth;
         fragmentLevel = 0;
         isBreakable = true;
         scoreType = EScoreType.NORMAL;
@@ -71,7 +92,7 @@ public class ObjectProperties : MonoBehaviour, IDamageable
         if (other == null) return;
         
         objectType = other.objectType;
-        defaultHealth = other.defaultHealth;
+        customHealth = other.customHealth;
         health = other.health;
         fragmentLevel = other.fragmentLevel;
         isBreakable = other.isBreakable;
@@ -82,17 +103,13 @@ public class ObjectProperties : MonoBehaviour, IDamageable
     // IDamageable 인터페이스 구현
     public void TakeDamage(float _damage)
     {
-        Debug.Log($"Before damage - Health: {health}, Damage received: {_damage}");
         health = Mathf.Max(0, health - Mathf.RoundToInt(_damage));
-        Debug.Log($"After damage - Health: {health}");
         
         if (health <= 0)
         {
-            Debug.Log("Health reached 0, attempting to break object");
             var breakObject = gameObject.AddComponent<BreakObject>();
             if (breakObject != null)
             {
-                Debug.Log("BreakObject created, calling HandleObjectDestruction");
                 breakObject.HandleObjectDestruction();
             }
         }

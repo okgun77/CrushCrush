@@ -14,6 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - prefab: {fileID: 1000010619989362, guid: f9ff6fbd79564874f9a85bdbace0ab31, type: 3}
+    spawnWeight: 70
+    objectType: 0
+  - prefab: {fileID: 8786425554820189424, guid: 5a317756797b49445be7fe40ae361cc3,
+      type: 3}
+    spawnWeight: 29
+    objectType: 0
+  - prefab: {fileID: 4982104264264128687, guid: b43b747e85e3c2c42a1f26e91903e518,
+      type: 3}
     spawnWeight: 1
     objectType: 0
   draggedPrefabs: []

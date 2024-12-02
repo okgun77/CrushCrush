@@ -14,6 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyTypes:
   - enemyType: 0
+    baseHealth: 10
+    scoreValue: 1
+    attackDamage: 10
+  - enemyType: 1
+    baseHealth: 20
+    scoreValue: 1
+    attackDamage: 10
+  - enemyType: 2
     baseHealth: 30
+    scoreValue: 1
+    attackDamage: 10
+  - enemyType: 3
+    baseHealth: 50
+    scoreValue: 1
+    attackDamage: 10
+  - enemyType: 4
+    baseHealth: 100
+    scoreValue: 1
+    attackDamage: 10
+  - enemyType: 5
+    baseHealth: 200
+    scoreValue: 1
+    attackDamage: 10
+  - enemyType: 6
+    baseHealth: 500
+    scoreValue: 1
+    attackDamage: 10
+  - enemyType: 7
+    baseHealth: 1000
     scoreValue: 1
     attackDamage: 10

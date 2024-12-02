@@ -10,13 +10,15 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         healthSystem = new HealthSystem();
         objectProperties = GetComponent<ObjectProperties>();
         
-        // ObjectProperties의 체력 값을 HealthSystem에 적용
-        healthSystem.SetMaxHealth(objectProperties.GetDefaultHealth());
+        // ObjectProperties의 체력값을 사용하도록 수정
+        healthSystem.SetMaxHealth(objectProperties.GetHealth());
     }
 
     public void TakeDamage(float _damage)
     {
         healthSystem.TakeDamage(_damage);
+        // ObjectProperties의 체력도 같이 감소
+        objectProperties.TakeDamage(_damage);
 
         if (!IsAlive())
         {

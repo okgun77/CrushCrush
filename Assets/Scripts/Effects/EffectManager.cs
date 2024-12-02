@@ -168,7 +168,7 @@ public class EffectManager : MonoBehaviour
     {
         var particleSystem = _effect.GetComponent<ParticleSystem>();
         
-        while (particleSystem.IsAlive(true))
+        while (_effect != null && _effect.activeInHierarchy && particleSystem != null && particleSystem.IsAlive(true))
         {
             yield return null;
         }

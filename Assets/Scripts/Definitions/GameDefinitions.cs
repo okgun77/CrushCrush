@@ -4,7 +4,14 @@ using UnityEngine;
 public enum EObjectType 
 { 
     NONE = -1,
-    BASIC,          
+    BASIC,
+    BASIC_20,
+    BASIC_30,
+    BASIC_50,
+    BASIC_100,
+    MIDBOSS_200,
+    MIDBOSS_500,
+    MIDBOSS_1000,          
     EXPLOSIVE,      
     INDESTRUCTIBLE,
     LENGTH

@@ -1,0 +1,180 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8238d05e2536004b9c6dfabc6295492, type: 3}
+  m_Name: StageData_Wave
+  m_EditorClassIdentifier: 
+  stages:
+  - stageName: Wave1_BASIC
+    spawnSettings:
+      spawnInterval: 2
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      maxObjectCount: 3
+      minSpawnCount: 1
+      maxSpawnCount: 3
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      availablePatterns: 00000000
+      baseSpeed: 2
+      maxSpeedMultiplier: 2
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      patternWeights:
+      - 1
+      patternAmplitude: 1
+      patternFrequency: 1
+      baseRotationSpeed: {x: 15, y: 15, z: 15}
+      rotationSpeedMultiplier: 0.3
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+    phases:
+    - phaseName: BASIC
+      duration: 0
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 100
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 10
+      type: 1
+      targetValue: 10
+      isSatisfied: 0
+    duration: 0
+    stageDescription: 
+  - stageName: Wave2_BASIC_20
+    spawnSettings:
+      spawnInterval: 2
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      maxObjectCount: 3
+      minSpawnCount: 1
+      maxSpawnCount: 3
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      availablePatterns: 0000000001000000
+      baseSpeed: 2
+      maxSpeedMultiplier: 2
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      patternWeights:
+      - 1
+      - 0.2
+      patternAmplitude: 1
+      patternFrequency: 1
+      baseRotationSpeed: {x: 20, y: 20, z: 20}
+      rotationSpeedMultiplier: 0.3
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+    phases:
+    - phaseName: BASIC_20
+      duration: 0
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 70
+      - enemyType: 1
+        spawnWeight: 30
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 20
+      type: 1
+      targetValue: 10
+      isSatisfied: 0
+    duration: 0
+    stageDescription: 
+  - stageName: Wave1_BASIC_20
+    spawnSettings:
+      spawnInterval: 2
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+      maxObjectCount: 1
+      minSpawnCount: 1
+      maxSpawnCount: 3
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+      availablePatterns: 00000000
+      baseSpeed: 1
+      maxSpeedMultiplier: 2
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+      patternWeights:
+      - 1
+      patternAmplitude: 1
+      patternFrequency: 1
+      baseRotationSpeed: {x: 10, y: 10, z: 10}
+      rotationSpeedMultiplier: 0.3
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+    phases:
+    - phaseName: MIDBOSS_200
+      duration: 0
+      enemyTypes:
+      - enemyType: 5
+        spawnWeight: 100
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 1
+      type: 1
+      targetValue: 1
+      isSatisfied: 0
+    duration: 0
+    stageDescription: 
