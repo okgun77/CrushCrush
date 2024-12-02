@@ -23,6 +23,66 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      maxObjectCount: 3
+      minSpawnCount: 1
+      maxSpawnCount: 3
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      availablePatterns: 000000000100000002000000
+      baseSpeed: 1
+      maxSpeedMultiplier: 0.5
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      patternWeights:
+      - 0.5
+      - 0.35
+      - 0.15
+      patternAmplitude: 0.5
+      patternFrequency: 0.5
+      baseRotationSpeed: {x: 5, y: 5, z: 5}
+      rotationSpeedMultiplier: 0.1
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    phases:
+    - phaseName: 10-20-200
+      duration: 100000
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 60
+      - enemyType: 1
+        spawnWeight: 35
+      - enemyType: 5
+        spawnWeight: 5
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 5 Objects
+      type: 1
+      targetValue: 5
+      isSatisfied: 1
+    duration: 6000
+    stageDescription: 
+  - stageName: Phase 2
+    spawnSettings:
+      spawnInterval: 2
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
       maxObjectCount: 2
       minSpawnCount: 1
       maxSpawnCount: 2
@@ -67,9 +127,429 @@ MonoBehaviour:
         spawnWeight: 5
       phaseDescription: 
     conditions:
-    - conditionName: Destroy 1000 Objects
+    - conditionName: Destroy 5 Objects
       type: 1
-      targetValue: 1000
-      isSatisfied: 0
+      targetValue: 5
+      isSatisfied: 1
+    duration: 6000
+    stageDescription: 
+  - stageName: Phase 3
+    spawnSettings:
+      spawnInterval: 1.5
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      maxObjectCount: 2
+      minSpawnCount: 1
+      maxSpawnCount: 2
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      availablePatterns: 000000000100000002000000
+      baseSpeed: 1
+      maxSpeedMultiplier: 0.5
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      patternWeights:
+      - 0.5
+      - 0.35
+      - 0.15
+      patternAmplitude: 0.5
+      patternFrequency: 0.5
+      baseRotationSpeed: {x: 5, y: 5, z: 5}
+      rotationSpeedMultiplier: 0.1
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    phases:
+    - phaseName: 10-20-200
+      duration: 100000
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 60
+      - enemyType: 1
+        spawnWeight: 35
+      - enemyType: 5
+        spawnWeight: 5
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 10 Objects
+      type: 1
+      targetValue: 10
+      isSatisfied: 1
+    duration: 6000
+    stageDescription: 
+  - stageName: Phase 4
+    spawnSettings:
+      spawnInterval: 1.2
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      maxObjectCount: 2
+      minSpawnCount: 1
+      maxSpawnCount: 2
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      availablePatterns: 000000000100000002000000
+      baseSpeed: 1
+      maxSpeedMultiplier: 0.5
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      patternWeights:
+      - 0.5
+      - 0.35
+      - 0.15
+      patternAmplitude: 0.5
+      patternFrequency: 0.5
+      baseRotationSpeed: {x: 5, y: 5, z: 5}
+      rotationSpeedMultiplier: 0.1
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    phases:
+    - phaseName: 10-20-200
+      duration: 100000
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 60
+      - enemyType: 1
+        spawnWeight: 35
+      - enemyType: 5
+        spawnWeight: 5
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 30 Objects
+      type: 1
+      targetValue: 30
+      isSatisfied: 1
+    duration: 6000
+    stageDescription: 
+  - stageName: Phase 5
+    spawnSettings:
+      spawnInterval: 1
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      maxObjectCount: 2
+      minSpawnCount: 1
+      maxSpawnCount: 2
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      availablePatterns: 000000000100000002000000
+      baseSpeed: 1.2
+      maxSpeedMultiplier: 0.5
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      patternWeights:
+      - 0.5
+      - 0.35
+      - 0.15
+      patternAmplitude: 0.5
+      patternFrequency: 0.5
+      baseRotationSpeed: {x: 5, y: 5, z: 5}
+      rotationSpeedMultiplier: 0.1
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    phases:
+    - phaseName: 10-20-200
+      duration: 100000
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 50
+      - enemyType: 1
+        spawnWeight: 40
+      - enemyType: 5
+        spawnWeight: 10
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 30 Objects
+      type: 1
+      targetValue: 30
+      isSatisfied: 1
+    duration: 6000
+    stageDescription: 
+  - stageName: Phase 6
+    spawnSettings:
+      spawnInterval: 0.8
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      maxObjectCount: 2
+      minSpawnCount: 1
+      maxSpawnCount: 2
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      availablePatterns: 000000000100000002000000
+      baseSpeed: 1.3
+      maxSpeedMultiplier: 0.5
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      patternWeights:
+      - 0.5
+      - 0.3
+      - 0.2
+      patternAmplitude: 0.5
+      patternFrequency: 0.5
+      baseRotationSpeed: {x: 5, y: 5, z: 5}
+      rotationSpeedMultiplier: 0.1
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    phases:
+    - phaseName: 10-20-200
+      duration: 100000
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 40
+      - enemyType: 1
+        spawnWeight: 40
+      - enemyType: 5
+        spawnWeight: 20
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 30 Objects
+      type: 1
+      targetValue: 30
+      isSatisfied: 1
+    duration: 6000
+    stageDescription: 
+  - stageName: Phase 6
+    spawnSettings:
+      spawnInterval: 0.7
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      maxObjectCount: 2
+      minSpawnCount: 1
+      maxSpawnCount: 2
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      availablePatterns: 000000000100000002000000
+      baseSpeed: 1.4
+      maxSpeedMultiplier: 0.5
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      patternWeights:
+      - 0.5
+      - 0.3
+      - 0.2
+      patternAmplitude: 0.5
+      patternFrequency: 0.5
+      baseRotationSpeed: {x: 5, y: 5, z: 5}
+      rotationSpeedMultiplier: 0.1
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    phases:
+    - phaseName: 10-20-200
+      duration: 100000
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 40
+      - enemyType: 1
+        spawnWeight: 40
+      - enemyType: 5
+        spawnWeight: 20
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 30 Objects
+      type: 1
+      targetValue: 30
+      isSatisfied: 1
+    duration: 6000
+    stageDescription: 
+  - stageName: Phase 7
+    spawnSettings:
+      spawnInterval: 0.6
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      maxObjectCount: 2
+      minSpawnCount: 1
+      maxSpawnCount: 2
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      availablePatterns: 000000000100000002000000
+      baseSpeed: 1.4
+      maxSpeedMultiplier: 0.5
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      patternWeights:
+      - 0.5
+      - 0.3
+      - 0.2
+      patternAmplitude: 0.5
+      patternFrequency: 0.5
+      baseRotationSpeed: {x: 5, y: 5, z: 5}
+      rotationSpeedMultiplier: 0.1
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    phases:
+    - phaseName: 10-20-200
+      duration: 100000
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 40
+      - enemyType: 1
+        spawnWeight: 40
+      - enemyType: 5
+        spawnWeight: 20
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 30 Objects
+      type: 1
+      targetValue: 30
+      isSatisfied: 1
+    duration: 6000
+    stageDescription: 
+  - stageName: Phase 7
+    spawnSettings:
+      spawnInterval: 0.5
+      minimumSpawnInterval: 1
+      spawnIntervalCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      maxObjectCount: 2
+      minSpawnCount: 1
+      maxSpawnCount: 2
+      spawnCountCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      availablePatterns: 000000000100000002000000
+      baseSpeed: 1.5
+      maxSpeedMultiplier: 0.5
+      speedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      patternWeights:
+      - 0.5
+      - 0.3
+      - 0.2
+      patternAmplitude: 0.5
+      patternFrequency: 0.5
+      baseRotationSpeed: {x: 5, y: 5, z: 5}
+      rotationSpeedMultiplier: 0.1
+      rotationSpeedCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    phases:
+    - phaseName: 10-20-200
+      duration: 100000
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 40
+      - enemyType: 1
+        spawnWeight: 40
+      - enemyType: 5
+        spawnWeight: 20
+      phaseDescription: 
+    conditions:
+    - conditionName: Destroy 30 Objects
+      type: 1
+      targetValue: 30
+      isSatisfied: 1
     duration: 6000
     stageDescription: 

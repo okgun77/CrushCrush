@@ -133,7 +133,7 @@ MonoBehaviour:
   objectType: 0
   demolitionType: 1
   physics:
-    mt: 9
+    mt: 1
     material: {fileID: 0}
     massBy: 0
     mass: 1
@@ -177,7 +177,7 @@ MonoBehaviour:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
   meshDemolition:
-    am: 4
+    am: 3
     var: 0
     dpf: 0.5
     bias: 0
@@ -396,7 +396,7 @@ MonoBehaviour:
   fragmentLevel: 3
   isBreakable: 1
   enemyData: {fileID: 11400000, guid: e113f5501c73068489b57b7d07fefe06, type: 2}
-  enemyType: 0
+  enemyType: 5
   attackDamage: 6
 --- !u!1 &1776732073256500789
 GameObject:

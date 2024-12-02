@@ -3,9 +3,9 @@ using System.Collections;
 
 public class SpawnFadeEffect : MonoBehaviour
 {
-    [SerializeField] private float fadeDuration = 2.0f;
-    [SerializeField] private float scaleDuration = 2.0f;
-    [SerializeField] private AnimationCurve scaleCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    private float fadeDuration = 4.0f;
+    private float scaleDuration = 4.0f;
+    private AnimationCurve scaleCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     
     private Renderer[] renderers;
     private Color[] originalColors;

@@ -502,5 +502,5 @@ MonoBehaviour:
   fragmentLevel: 3
   isBreakable: 1
   enemyData: {fileID: 11400000, guid: e113f5501c73068489b57b7d07fefe06, type: 2}
-  enemyType: 0
+  enemyType: 1
   attackDamage: 6

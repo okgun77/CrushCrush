@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  - {fileID: 21704438749789640, guid: 194c956b3d864664890e731c63fd4a02, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,14 +106,15 @@ MonoBehaviour:
   m_text: 123
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 194c956b3d864664890e731c63fd4a02, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 21704438749789640, guid: 194c956b3d864664890e731c63fd4a02,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 0.7019608, b: 0.83137256, a: 1}
+    rgba: 4292129791
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -130,8 +131,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5
-  m_fontSizeBase: 5
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -189,15 +190,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b126318f208170943ad4406f0b0ae7cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageText: {fileID: 702823912105101977, guid: 435f818e2151e934b83b00e5e4c3acf2,
-    type: 3}
+  damageText: {fileID: 702823912105101977}
   floatSpeed: 1
   fadeSpeed: 1
   destroyTime: 1
   spreadRange: 0.5
   bounceStrength: 0.3
-  minFontSize: 8
-  maxFontSize: 12
+  minFontSize: 16
+  maxFontSize: 28
   lowDamageColor: {r: 1, g: 1, b: 1, a: 1}
   mediumDamageColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   highDamageColor: {r: 1, g: 0.2, b: 0.2, a: 1}
