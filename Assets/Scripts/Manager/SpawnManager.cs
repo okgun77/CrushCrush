@@ -142,52 +142,85 @@ public class SpawnManager : MonoBehaviour
         Vector3 spawnPosition = CalculateSpawnPosition();
         Debug.Log($"Spawning {selectedItem.prefab.name} at {spawnPosition}");
         
-        GameObject spawnedObject = poolManager.GetObject(selectedItem.prefab);
-        if (spawnedObject == null)
+        if (selectedItem.prefab != null)
         {
-            Debug.LogWarning("Failed to get object from pool!");
-            return;
-        }
+            GameObject spawnedObject = poolManager.GetObject(selectedItem.prefab);
+            if (spawnedObject == null)
+            {
+                Debug.LogWarning("Failed to get object from pool!");
+                return;
+            }
 
-        spawnedObject.transform.position = spawnPosition;
-        
-        // 회전 컴포넌트 설정
-        RotateObject rotator = spawnedObject.GetComponent<RotateObject>();
-        if (rotator == null)
-        {
-            rotator = spawnedObject.AddComponent<RotateObject>();
-        }
-        
-        // 현재 스폰 설정에서 회전 속도 가져오기
-        if (currentMovementData.baseRotationSpeed != Vector3.zero)
-        {
-            rotator.SetBaseRotationSpeed(currentMovementData.baseRotationSpeed);
-        }
-        
-        // 스폰 효과 자동 적용
-        SpawnFadeEffect spawnEffect = spawnedObject.GetComponent<SpawnFadeEffect>();
-        if (spawnEffect == null)
-        {
-            spawnEffect = spawnedObject.AddComponent<SpawnFadeEffect>();
-        }
-        spawnEffect.StartEffect();
-        
-        spawnedObject.SetActive(true);
-        activeObjects.Add(spawnedObject);
+            spawnedObject.transform.position = spawnPosition;
+            spawnedObject.SetActive(true);
+            
+            // MIDBOSS_200 타입인 경우 OutlineEffect 설정 (디버그 로그 추가)
+            Debug.Log($"Spawned object type: {selectedItem.objectType}");
+            if (selectedItem.objectType == EObjectType.MIDBOSS_200)
+            {
+                Debug.Log("Attempting to add OutlineEffect to MIDBOSS_200");
+                OutlineEffect outlineEffect = spawnedObject.GetComponent<OutlineEffect>();
+                if (outlineEffect == null)
+                {
+                    outlineEffect = spawnedObject.AddComponent<OutlineEffect>();
+                    Debug.Log("Added new OutlineEffect component");
+                }
+                
+                // 아웃라인 효과 초기화 전에 약간의 지연
+                StartCoroutine(InitializeOutlineEffect(outlineEffect));
+            }
 
-        MovementType pattern = GetMovementTypeForObject(selectedItem.objectType);
-        Debug.Log($"Assigning movement pattern: {pattern} to {spawnedObject.name}");
+            activeObjects.Add(spawnedObject);
 
-        MovementData movementData = GenerateMovementData();
-        
-        if (movementManager != null)
-        {
-            Debug.Log($"Starting movement for {spawnedObject.name} with pattern {pattern}");
-            movementManager.StartMovement(spawnedObject, pattern, movementData, playerTransform.position);
+            // 회전 컴포넌트 설정
+            RotateObject rotator = spawnedObject.GetComponent<RotateObject>();
+            if (rotator == null)
+            {
+                rotator = spawnedObject.AddComponent<RotateObject>();
+            }
+            
+            // 현재 스폰 설정에서 회전 속도 가져오기
+            if (currentMovementData.baseRotationSpeed != Vector3.zero)
+            {
+                rotator.SetBaseRotationSpeed(currentMovementData.baseRotationSpeed);
+            }
+            
+            // 스폰 효과 자동 적용
+            SpawnFadeEffect spawnEffect = spawnedObject.GetComponent<SpawnFadeEffect>();
+            if (spawnEffect == null)
+            {
+                spawnEffect = spawnedObject.AddComponent<SpawnFadeEffect>();
+            }
+            spawnEffect.StartEffect();
+
+            MovementType pattern = GetMovementTypeForObject(selectedItem.objectType);
+            Debug.Log($"Assigning movement pattern: {pattern} to {spawnedObject.name}");
+
+            MovementData movementData = GenerateMovementData();
+            
+            if (movementManager != null)
+            {
+                Debug.Log($"Starting movement for {spawnedObject.name} with pattern {pattern}");
+                movementManager.StartMovement(spawnedObject, pattern, movementData, playerTransform.position);
+            }
+            else
+            {
+                Debug.LogError("MovementManager is null!");
+            }
         }
-        else
+    }
+
+    private IEnumerator InitializeOutlineEffect(OutlineEffect outlineEffect)
+    {
+        // 오브젝트가 완전히 활성화될 때까지 대기
+        yield return new WaitForEndOfFrame();
+        
+        if (outlineEffect != null)
         {
-            Debug.LogError("MovementManager is null!");
+            outlineEffect.SetOutlineColor(Color.red);
+            outlineEffect.SetOutlineWidth(5f);
+            outlineEffect.EnableBlinking(true);
+            Debug.Log("OutlineEffect initialized successfully");
         }
     }
 

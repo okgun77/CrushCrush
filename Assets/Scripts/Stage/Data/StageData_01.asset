@@ -32,7 +32,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      availablePatterns: 000000000100000002000000
+      availablePatterns: 00000000
       baseSpeed: 1
       maxSpeedMultiplier: 0.5
       speedCurve:
@@ -42,9 +42,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       patternWeights:
-      - 0.5
-      - 0.35
-      - 0.15
+      - 1
       patternAmplitude: 0.5
       patternFrequency: 0.5
       baseRotationSpeed: {x: 5, y: 5, z: 5}
@@ -60,16 +58,14 @@ MonoBehaviour:
       duration: 100000
       enemyTypes:
       - enemyType: 0
-        spawnWeight: 60
+        spawnWeight: 90
       - enemyType: 1
-        spawnWeight: 35
-      - enemyType: 5
-        spawnWeight: 5
+        spawnWeight: 10
       phaseDescription: 
     conditions:
-    - conditionName: Destroy 5 Objects
+    - conditionName: Destroy 10 Objects
       type: 1
-      targetValue: 5
+      targetValue: 10
       isSatisfied: 1
     duration: 6000
     stageDescription: 
@@ -130,7 +126,7 @@ MonoBehaviour:
     - conditionName: Destroy 5 Objects
       type: 1
       targetValue: 5
-      isSatisfied: 1
+      isSatisfied: 0
     duration: 6000
     stageDescription: 
   - stageName: Phase 3

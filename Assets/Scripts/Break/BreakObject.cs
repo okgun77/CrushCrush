@@ -27,6 +27,9 @@ public class BreakObject : MonoBehaviour
     private static readonly int SrcBlendProperty = Shader.PropertyToID("_SrcBlend");
     private static readonly int DstBlendProperty = Shader.PropertyToID("_DstBlend");
     private static readonly int ZWriteProperty = Shader.PropertyToID("_ZWrite");
+    private static readonly int AlphaClipProperty = Shader.PropertyToID("_AlphaClip");
+    private static readonly int MetallicProperty = Shader.PropertyToID("_Metallic");
+    private static readonly int SmoothnessProperty = Shader.PropertyToID("_Smoothness");
 
     // 2. 파편 설정 구조체 추가
     private struct FragmentSettings
@@ -40,7 +43,7 @@ public class BreakObject : MonoBehaviour
 
     private static readonly FragmentSettings DefaultFragmentSettings = new FragmentSettings
     {
-        alpha = 0.3f,
+        alpha = 0.8f,
         renderQueue = 3000,
         useGravity = false,
         collisionMode = CollisionDetectionMode.ContinuousSpeculative,
@@ -297,17 +300,22 @@ public class BreakObject : MonoBehaviour
     // 4. 머티리얼 설정 로직 분리
     private void SetupTransparentMaterial(Material material)
     {
+        // 셰이더 키워드 설정
         material.SetOverrideTag("RenderType", "Transparent");
-        material.SetFloat(SurfaceProperty, 1);
-        material.SetFloat(BlendProperty, 1);
-        material.SetInt(SrcBlendProperty, (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        material.SetInt(DstBlendProperty, (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        material.SetInt(ZWriteProperty, 0);
+        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        material.SetInt("_ZWrite", 0);
+        material.SetFloat("_Surface", 1);
+        material.SetFloat(AlphaClipProperty, 0);
+
+        // 렌더 큐 설정
+        material.renderQueue = DefaultFragmentSettings.renderQueue;
+
+        // 키워드 설정
         material.DisableKeyword("_ALPHATEST_ON");
         material.EnableKeyword("_ALPHABLEND_ON");
         material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
         material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-        material.renderQueue = DefaultFragmentSettings.renderQueue;
     }
 
     private void SetupMaterial(RayfireRigid _fragment)
@@ -315,23 +323,47 @@ public class BreakObject : MonoBehaviour
         var renderer = _fragment.GetComponent<Renderer>();
         if (renderer == null) return;
 
-        // 3. 배열 재할당 최소화
-        var materials = renderer.materials;
-        var newMaterials = new Material[materials.Length];
+        // 원본 렌더러에서 재질 속성 가져오기
+        var originalRenderer = GetComponent<Renderer>();
+        if (originalRenderer == null) return;
 
-        for (int i = 0; i < materials.Length; i++)
+        var originalMaterials = originalRenderer.sharedMaterials;
+        var newMaterials = new Material[originalMaterials.Length];
+
+        for (int i = 0; i < originalMaterials.Length; i++)
         {
-            var newMat = new Material(materials[i]);
+            if (originalMaterials[i] == null) continue;
+
+            // 원본 재질을 정확하게 복제
+            var newMat = new Material(originalMaterials[i].shader);
+            newMat.CopyPropertiesFromMaterial(originalMaterials[i]);
+
+            // 원본 색상 및 재질 속성 보존
             if (newMat.HasProperty(BaseColorProperty))
             {
-                var color = newMat.GetColor(BaseColorProperty);
-                color.a = DefaultFragmentSettings.alpha;
-                newMat.SetColor(BaseColorProperty, color);
-
-                SetupTransparentMaterial(newMat);
+                Color originalColor = originalMaterials[i].GetColor(BaseColorProperty);
+                originalColor.a = DefaultFragmentSettings.alpha;
+                newMat.SetColor(BaseColorProperty, originalColor);
             }
+
+            // 메탈릭/스무스니스 속성 보존
+            if (newMat.HasProperty(MetallicProperty))
+            {
+                float metallic = originalMaterials[i].GetFloat(MetallicProperty);
+                newMat.SetFloat(MetallicProperty, metallic);
+            }
+
+            if (newMat.HasProperty(SmoothnessProperty))
+            {
+                float smoothness = originalMaterials[i].GetFloat(SmoothnessProperty);
+                newMat.SetFloat(SmoothnessProperty, smoothness);
+            }
+
+            // 투명도 설정
+            SetupTransparentMaterial(newMat);
             newMaterials[i] = newMat;
         }
+
         renderer.materials = newMaterials;
     }
 

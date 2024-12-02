@@ -34,14 +34,14 @@ MonoBehaviour:
     scoreValue: 1
     attackDamage: 10
   - enemyType: 5
-    baseHealth: 200
+    baseHealth: 50
     scoreValue: 1
     attackDamage: 10
   - enemyType: 6
-    baseHealth: 500
+    baseHealth: 50
     scoreValue: 1
     attackDamage: 10
   - enemyType: 7
-    baseHealth: 1000
+    baseHealth: 200
     scoreValue: 1
     attackDamage: 10
