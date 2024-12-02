@@ -124,7 +124,7 @@ MonoBehaviour:
       isSatisfied: 0
     duration: 0
     stageDescription: 
-  - stageName: Wave1_BASIC_20
+  - stageName: Wave3_BOSS_200
     spawnSettings:
       spawnInterval: 2
       minimumSpawnInterval: 1

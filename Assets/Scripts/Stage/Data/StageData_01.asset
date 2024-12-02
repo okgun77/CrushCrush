@@ -32,7 +32,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      availablePatterns: 00000000
+      availablePatterns: 000000000100000002000000
       baseSpeed: 2
       maxSpeedMultiplier: 2
       speedCurve:
@@ -42,10 +42,12 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       patternWeights:
-      - 1
-      patternAmplitude: 1
-      patternFrequency: 1
-      baseRotationSpeed: {x: 20, y: 20, z: 20}
+      - 50
+      - 30
+      - 20
+      patternAmplitude: 2
+      patternFrequency: 2
+      baseRotationSpeed: {x: 5, y: 5, z: 5}
       rotationSpeedMultiplier: 0.3
       rotationSpeedCurve:
         serializedVersion: 2
@@ -53,58 +55,21 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+    phases:
+    - phaseName: 10-20-200
+      duration: 100000
+      enemyTypes:
+      - enemyType: 0
+        spawnWeight: 60
+      - enemyType: 1
+        spawnWeight: 35
+      - enemyType: 5
+        spawnWeight: 5
+      phaseDescription: 
     conditions:
-    - conditionName: Destroy 10 Objects
+    - conditionName: Destroy 1000 Objects
       type: 1
-      targetValue: 10
+      targetValue: 1000
       isSatisfied: 0
     duration: 6000
-    StageDescription: 
-  - stageName: Phase 2
-    spawnSettings:
-      spawnInterval: 1.5
-      minimumSpawnInterval: 0.5
-      spawnIntervalCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      maxObjectCount: 3
-      minSpawnCount: 1
-      maxSpawnCount: 3
-      spawnCountCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      availablePatterns: 0200000001000000
-      baseSpeed: 2
-      maxSpeedMultiplier: 2
-      speedCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      patternWeights:
-      - 1
-      - 0.5
-      patternAmplitude: 1
-      patternFrequency: 1
-      baseRotationSpeed: {x: 50, y: 50, z: 50}
-      rotationSpeedMultiplier: 1
-      rotationSpeedCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-    conditions:
-    - conditionName: Destroy 10 Objects
-      type: 1
-      targetValue: 10
-      isSatisfied: 0
-    duration: 600
-    StageDescription: 
+    stageDescription: 

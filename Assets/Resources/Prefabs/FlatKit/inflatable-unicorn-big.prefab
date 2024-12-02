@@ -71,15 +71,15 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 11a8c080607cf47c299aff53087e0334, type: 2}
-  - {fileID: 2100000, guid: 42caffe1132386f4daa037a9663088b9, type: 2}
-  - {fileID: 2100000, guid: 0d337a70f9e175348909eb917056c239, type: 2}
-  - {fileID: 2100000, guid: 52410f6a55176644687c0eddd00feddb, type: 2}
-  - {fileID: 2100000, guid: cc039e4bd41a440f793d0b9f704387d3, type: 2}
-  - {fileID: 2100000, guid: 66c05709e04ed42a3a537ad26aca9cb8, type: 2}
-  - {fileID: 2100000, guid: 700ae469e5be9ac4095d29b97116027a, type: 2}
-  - {fileID: 2100000, guid: 1d41f8c57e738e44f9f12fc053be388c, type: 2}
-  - {fileID: 2100000, guid: fb045539f4b18a242aca8e57e88c5cd7, type: 2}
+  - {fileID: 2100000, guid: f17a76056d40d6f40bb73e65de162525, type: 2}
+  - {fileID: 2100000, guid: d478bb1f3a9e85244821c48250e31e75, type: 2}
+  - {fileID: 2100000, guid: 7457d3596e3200c45848efb9a8551115, type: 2}
+  - {fileID: 2100000, guid: 402b0dadbfa53cd4c80d66a179db63cb, type: 2}
+  - {fileID: 2100000, guid: 02dc57b9b4cca55439b9e9c08d3d3cdc, type: 2}
+  - {fileID: 2100000, guid: e5a3433cd83750748910c29efe3e5fa6, type: 2}
+  - {fileID: 2100000, guid: d478bb1f3a9e85244821c48250e31e75, type: 2}
+  - {fileID: 2100000, guid: 402b0dadbfa53cd4c80d66a179db63cb, type: 2}
+  - {fileID: 2100000, guid: d6448458b7a1a124fbd3e2e4498efe59, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -670,4 +670,4 @@ MonoBehaviour:
   isBreakable: 1
   enemyData: {fileID: 11400000, guid: e113f5501c73068489b57b7d07fefe06, type: 2}
   enemyType: 5
-  attackDamage: 10
+  attackDamage: 9
